@@ -1,0 +1,564 @@
+<!-- css/style.css -->
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-color: #4364f7;
+  --secondary-color: #6fb1fc;
+  --accent-color: #ffdd57;
+  --text-color: #333;
+  --bg-color: #f0f4f8;
+  --menu-width: 250px;
+  --header-height: 60px;
+  --animation-speed: 0.3s;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+.container {
+  width: 90%;
+  max-width: 1100px;
+  margin: 0 auto;
+  transition: margin-left 0.3s ease;
+}
+
+header {
+  background: linear-gradient(90deg, #0052d4, var(--primary-color), var(--secondary-color));
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 1002;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.nav-container {
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+}
+
+.nav-container h1 {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+}
+
+nav a::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 2px;
+  background: #ffdd57;
+  transition: width 0.3s;
+}
+
+nav a:hover::after,
+nav a.active::after {
+  width: 100%;
+}
+
+#menu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  cursor: pointer;
+  color: white;
+  z-index: 1002;
+  border-radius: 50%;
+  transition: all var(--animation-speed);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+#menu-toggle:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+#menu-toggle.active {
+  transform: rotate(90deg);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.hero {
+  background: url('../images/presion.jpg') center/cover no-repeat;
+  padding: 6rem 0;
+  text-align: center;
+  color: #fff;
+  position: relative;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.hero .container {
+  position: relative;
+  z-index: 1;
+}
+
+.hero h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: var(--primary-color);
+  color: white;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all var(--animation-speed);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(67, 100, 247, 0.2);
+}
+
+.btn:hover {
+  background: #3451c6;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(67, 100, 247, 0.3);
+}
+
+main {
+  padding: 2rem 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 1rem 0;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+table th {
+  background: var(--primary-color);
+  color: white;
+  padding: 1rem;
+  text-align: left;
+  font-weight: 500;
+}
+
+table td {
+  padding: 1rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+table tr:last-child td {
+  border-bottom: none;
+}
+
+table tr:nth-child(even) {
+  background: rgba(240, 244, 248, 0.5);
+}
+
+figure {
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+figure img {
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+figcaption {
+  margin-top: 0.5rem;
+  font-style: italic;
+  color: #666;
+}
+
+.properties-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.properties-grid article {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  text-align: center;
+}
+
+.properties-grid img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+form {
+  display: grid;
+  gap: 1rem;
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  transition: all var(--animation-speed);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(67, 100, 247, 0.1);
+}
+
+.result {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+footer {
+  background: var(--primary-color);
+  color: white;
+  padding: 2rem 0;
+  margin-top: 3rem;
+}
+
+footer .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  #menu-toggle { display: flex; }
+  nav ul { display: none; flex-direction: column; background: rgba(0,0,0,0.8); position: absolute; top: 100%; right: 0; width: 200px; }
+  nav ul.show { display: flex; }
+  .container {
+    width: 95%;
+    padding: 1rem 0;
+  }
+  section {
+    padding: 1.5rem;
+  }
+  .nav-container h1 {
+    font-size: 1.2rem;
+  }
+}
+
+/* Añadir al final de style.css */
+.page-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #000; /* ahora negro para mejor contraste */
+  border-bottom: 4px solid #ffdd57;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.conversion-detail,
+.conversion-tips {
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.conversion-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.conversion-grid article {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.conversion-grid h3 {
+  margin-bottom: 1rem;
+}
+
+/* Estilos para la calculadora de densidad */
+.interactive-demo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin: 2rem 0;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.demo-container, .theory-container {
+  padding: 1rem;
+}
+
+.calculator-form {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+}
+
+.formula {
+  background: #e9ecef;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  margin: 1rem 0;
+  font-family: 'Courier New', monospace;
+  text-align: center;
+}
+
+.density-table {
+  margin-top: 2rem;
+  width: 100%;
+  border: 1px solid #dee2e6;
+}
+
+.density-table th {
+  background: #4364f7;
+  color: white;
+  padding: 1rem;
+}
+
+.density-table td {
+  padding: 0.75rem;
+  border: 1px solid #dee2e6;
+}
+
+.density-table tr:nth-child(even) {
+  background: #f8f9fa;
+}
+
+@media (max-width: 768px) {
+  .interactive-demo {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Estilos del menú principal */
+.main-menu {
+  display: none;
+  position: fixed;
+  left: calc(-1 * var(--menu-width));
+  top: 0;
+  height: 100vh;
+  width: var(--menu-width);
+  background: white;
+  flex-direction: column;
+  padding: calc(var(--header-height) + 20px) 0 20px;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  z-index: 1001;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: all var(--animation-speed) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.main-menu.show {
+  display: flex;
+  left: 0;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.main-menu > li > a,
+.menu-trigger {
+  padding: 15px 25px;
+  display: block;
+  color: var(--text-color);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  text-decoration: none;
+  transition: all var(--animation-speed);
+  position: relative;
+  overflow: hidden;
+}
+
+.main-menu > li > a::before,
+.menu-trigger::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 3px;
+  background: var(--primary-color);
+  transform: scaleY(0);
+  transition: transform var(--animation-speed);
+}
+
+.main-menu > li > a:hover::before,
+.menu-trigger:hover::before,
+.main-menu > li > a.active::before {
+  transform: scaleY(1);
+}
+
+.main-menu > li > a:hover,
+.menu-trigger:hover {
+  background: rgba(67, 100, 247, 0.05);
+  padding-left: 30px;
+}
+
+.submenu {
+  display: none;
+  background: rgba(240, 244, 248, 0.5);
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height var(--animation-speed) cubic-bezier(0, 1, 0, 1);
+}
+
+.has-submenu.active .submenu {
+  display: block;
+  max-height: 500px;
+  transition: max-height var(--animation-speed) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.submenu a {
+  padding: 12px 40px;
+  display: block;
+  color: #666;
+  text-decoration: none;
+  transition: all var(--animation-speed);
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.submenu a:hover {
+  background: rgba(67, 100, 247, 0.05);
+  color: var(--primary-color);
+  padding-left: 45px;
+}
+
+.menu-trigger {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu-trigger::after {
+  content: '▾';
+  transition: transform var(--animation-speed);
+}
+
+.has-submenu.active .menu-trigger::after {
+  transform: rotate(180deg);
+}
+
+.menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0);
+  z-index: 1000;
+  backdrop-filter: blur(0px);
+  transition: all var(--animation-speed);
+}
+
+.menu-overlay.show {
+  display: block;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
+}
+
+/* Ajustar el contenido principal */
+.container {
+  width: 90%;
+  max-width: 1100px;
+  margin: 0 auto;
+  transition: margin-left 0.3s ease;
+}
+
+/* Asegurar que el header esté por encima del overlay */
+header {
+  position: relative;
+  z-index: 1002;
+}
+
+/* Estilos de secciones */
+section {
+  background: white;
+  border-radius: 10px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: transform var(--animation-speed), box-shadow var(--animation-speed);
+}
+
+section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+section h2 {
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+section h2::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 50px;
+  height: 3px;
+  background: var(--accent-color);
+}
+
+/* ... rest of existing code ... */

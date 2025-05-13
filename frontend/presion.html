@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presión</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container nav-container">
+      <h1>Presión</h1>
+      <nav id="navbar">
+        <ul class="main-menu">
+          <li><a href="index.html">Introducción</a></li>
+          <li class="has-submenu">
+            <a href="#" class="menu-trigger">Curso 1 ▾</a>
+            <ul class="submenu">
+              <li><a href="conversion.html">Conversión de Unidades</a></li>
+              <li><a href="propiedades.html">Propiedades</a></li>
+              <li><a href="presion.html" class="active">Presión</a></li>
+            </ul>
+          </li>
+          <li><a href="#curso2">Curso 2</a></li>
+          <li><a href="#curso3">Curso 3</a></li>
+          <li><a href="#ejercicios">Ejercicios Prácticos</a></li>
+          <li><a href="#multimedia">Multimedia</a></li>
+        </ul>
+      </nav>
+      <div id="menu-toggle">☰</div>
+    </div>
+  </header>
+  <main>
+    <div class="container">
+      <section class="theory">
+        <h2>Teoría de la Presión</h2>
+        <p>La presión es la fuerza ejercida perpendicularmente sobre una superficie, por unidad de área. Matemáticamente:
+          <strong>P = F / A</strong>, donde:</p>
+        <ul>
+          <li><strong>P:</strong> Presión (Pa, N/m²).</li>
+          <li><strong>F:</strong> Fuerza normal (N).</li>
+          <li><strong>A:</strong> Área de la superficie (m²).</li>
+        </ul>
+        <h3>Tipos de presión</h3>
+        <ul>
+          <li><strong>Presión absoluta:</strong> medida respecto al vacío absoluto (P_abs = P_man + P_atm).</li>
+          <li><strong>Presión manométrica:</strong> diferencia respecto a la presión atmosférica.</li>
+          <li><strong>Presión diferencial:</strong> diferencia entre dos puntos en un fluido.</li>
+        </ul>
+        <h3>Ley de Pascal</h3>
+        <p>Establece que un cambio de presión aplicado a un fluido confinado se transmite íntegramente en todas las direcciones. Principio básico de sistemas hidráulicos y prensas.</p>
+        <h3>Presión hidrostática</h3>
+        <p>En un punto sumergido a profundidad h en un fluido de densidad ρ bajo gravedad g:
+          <em>P = ρ g h</em>. Esta ecuación explica fenómenos como la variación de presión con la profundidad en estanques y océanos.</p>
+        <h3>Manometría</h3>
+        <p>Los manómetros (de tubo en U, de columna) permiten medir presión relativa observando la diferencia de alturas de columnas de líquido manométrico.</p>
+        <h3>Unidades y conversión</h3>
+        <p>Además del Pa, se usan atm (1 atm = 101325 Pa), bar (1 bar = 10^5 Pa), psi (lbf/in²). Es clave convertir correctamente para cálculos en ingeniería.</p>
+        <h3>Ejemplos prácticos</h3>
+        <ol>
+          <li>Cálculo de la presión en el fondo de un tanque de agua de 10 m: P = 1000 kg/m³·9.81 m/s²·10 m ≈ 98100 Pa.</li>
+          <li>Sistema de elevador hidráulico: relación de áreas y fuerzas según la Ley de Pascal.</li>
+        </ol>
+      </section>
+      <section class="exercise">
+        <h2>Ejercicio Interactivo Avanzado</h2>
+        <p>Calcula la presión hidrostática <em>P = ρ · g · h</em> introduciendo:</p>
+        <form id="formPresion">
+          <div class="form-group">
+            <label for="densidad">Densidad ρ (kg/m³):</label>
+            <input type="number" id="densidad" required step="any">
+          </div>
+          <div class="form-group">
+            <label for="gravedad">Gravedad g (m/s²):</label>
+            <input type="number" id="gravedad" required step="any" value="9.81">
+          </div>
+          <div class="form-group">
+            <label for="altura">Altura h (m):</label>
+            <input type="number" id="altura" required step="any">
+          </div>
+          <button type="submit" class="btn">Calcular P</button>
+        </form>
+        <div id="resultado" class="result"></div>
+      </section>
+    </div>
+  </main>
+  <footer>
+    <div class="container">
+      <p>Grupo 4 Mecánica de Fluidos</p>
+    </div>
+  </footer>
+  <script src="js/main.js"></script>
+  <script src="js/presion.js"></script>
+</body>
+</html>

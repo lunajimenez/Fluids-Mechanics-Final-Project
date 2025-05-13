@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulación de Flujo en Tubería</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .simulation-container {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+
+    .canvas-container {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+      background: #f8f9fa;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    #flowCanvas {
+      width: 100%;
+      height: 300px;
+      background: #fff;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .control-group label {
+      font-weight: 500;
+      color: var(--text-color);
+    }
+
+    .control-group select,
+    .control-group input[type="range"] {
+      width: 100%;
+      padding: 0.5rem;
+      border: 2px solid #e9ecef;
+      border-radius: 4px;
+      background: white;
+    }
+
+    .control-group input[type="range"] {
+      -webkit-appearance: none;
+      height: 8px;
+      background: #e9ecef;
+      border-radius: 4px;
+      outline: none;
+    }
+
+    .control-group input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      background: var(--primary-color);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .control-group input[type="range"]::-webkit-slider-thumb:hover {
+      background: #3451c6;
+    }
+
+    .info-panel {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: white;
+      border-radius: 8px;
+      border-left: 4px solid var(--primary-color);
+    }
+
+    .reynolds-number {
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: var(--primary-color);
+    }
+
+    .flow-type {
+      font-weight: 500;
+      margin-top: 0.5rem;
+    }
+
+    .laminar {
+      color: #2ecc71;
+    }
+
+    .turbulent {
+      color: #e74c3c;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav-container">
+      <h1>Simulación de Flujo</h1>
+      <nav id="navbar">
+        <ul class="main-menu">
+          <li><a href="index.html">Introducción</a></li>
+          <li class="has-submenu">
+            <a href="#" class="menu-trigger">Curso 1 ▾</a>
+            <ul class="submenu">
+              <li><a href="conversion.html">Conversión de Unidades</a></li>
+              <li><a href="propiedades.html">Propiedades</a></li>
+              <li><a href="presion.html">Presión</a></li>
+            </ul>
+          </li>
+          <li><a href="#curso2">Curso 2</a></li>
+          <li><a href="#curso3">Curso 3</a></li>
+          <li><a href="#ejercicios">Ejercicios Prácticos</a></li>
+          <li><a href="simulacion-flujo.html" class="active">Multimedia</a></li>
+        </ul>
+      </nav>
+      <div id="menu-toggle">☰</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <section class="simulation-container">
+        <h2>Simulación de Flujo en Tubería</h2>
+        <p>Observa cómo cambia el comportamiento del flujo según el número de Reynolds y las propiedades del fluido.</p>
+        
+        <div class="canvas-container">
+          <canvas id="flowCanvas"></canvas>
+        </div>
+
+        <div class="controls">
+          <div class="control-group">
+            <label for="fluidType">Tipo de Fluido:</label>
+            <select id="fluidType">
+              <option value="water">Agua</option>
+              <option value="oil">Aceite</option>
+              <option value="honey">Miel</option>
+              <option value="glycerin">Glicerina</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <label for="velocity">Velocidad (m/s):</label>
+            <input type="range" id="velocity" min="0.1" max="10" step="0.1" value="1">
+            <span id="velocityValue">1 m/s</span>
+          </div>
+
+          <div class="control-group">
+            <label for="diameter">Diámetro de tubería (mm):</label>
+            <input type="range" id="diameter" min="10" max="500" step="10" value="100">
+            <span id="diameterValue">100 mm</span>
+          </div>
+        </div>
+
+        <div class="info-panel">
+          <div class="reynolds-number">Número de Reynolds: <span id="reynoldsNumber">0</span></div>
+          <div class="flow-type">Tipo de flujo: <span id="flowType">-</span></div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Información sobre el Flujo</h2>
+        <p>El número de Reynolds (Re) es un número adimensional que nos ayuda a predecir el tipo de flujo en una tubería:</p>
+        <ul>
+          <li><strong>Re < 2300:</strong> Flujo Laminar - Las partículas del fluido siguen trayectorias paralelas</li>
+          <li><strong>2300 < Re < 4000:</strong> Flujo de Transición</li>
+          <li><strong>Re > 4000:</strong> Flujo Turbulento - Movimiento caótico y mezcla intensa</li>
+        </ul>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Grupo 4 Mecánica de Fluidos</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/flow-simulation.js"></script>
+</body>
+</html> 

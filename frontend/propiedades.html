@@ -1,0 +1,158 @@
+<!-- propiedades.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Propiedades de los Fluidos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <div class="container nav-container">
+      <h1>Propiedades de Fluidos</h1>
+      <nav id="navbar">
+        <ul class="main-menu">
+          <li><a href="index.html">Introducción</a></li>
+          <li class="has-submenu">
+            <a href="#" class="menu-trigger">Curso 1 ▾</a>
+            <ul class="submenu">
+              <li><a href="conversion.html">Conversión de Unidades</a></li>
+              <li><a href="propiedades.html" class="active">Propiedades</a></li>
+              <li><a href="presion.html">Presión</a></li>
+            </ul>
+          </li>
+          <li><a href="#curso2">Curso 2</a></li>
+          <li><a href="#curso3">Curso 3</a></li>
+          <li><a href="#ejercicios">Ejercicios Prácticos</a></li>
+          <li><a href="#multimedia">Multimedia</a></li>
+        </ul>
+      </nav>
+      <div id="menu-toggle">☰</div>
+    </div>
+  </header>
+  <main>
+    <div class="container">
+      <section class="properties-detail">
+        <h2>Viscosidad</h2>
+        <figure>
+          <img src="images/viscosidad.jpg" alt="Viscosidad" height="300" width="400">
+          <figcaption>Comparativa de líquidos con diferentes viscosidades.</figcaption>
+        </figure>
+        <p>La viscosidad mide la resistencia interna de un fluido al flujo. Se distinguen dos tipos:</p>
+        <ul>
+          <li><strong>Viscosidad dinámica</strong> (μ): relación entre el esfuerzo cortante y el gradiente de velocidad. Unidades: Pa·s.</li>
+          <li><strong>Viscosidad cinemática</strong> (ν): cociente entre la dinámica y la densidad ρ, ν = μ/ρ. Unidades: m²/s.</li>
+        </ul>
+        <h3>Fluidos newtonianos vs no newtonianos</h3>
+        <p>En los newtonianos, la viscosidad permanece constante (agua, aceite mineral). En los no newtonianos, cambia con la velocidad de corte (p. ej., pintura, fluidos tixotrópicos, pseudoplásticos y dilatantes).</p>
+        <h3>Factores que influyen</h3>
+        <p>La temperatura, la presión y la composición química alteran la viscosidad. Normalmente, al aumentar la temperatura, disminuye μ.</p>
+        <h3>Aplicaciones prácticas</h3>
+        <p>Diseño de tuberías, lubricación de máquinas y procesos industriales (petróleo, alimentos), donde el control de viscosidad es crítico.</p>
+      </section>
+      <section class="properties-detail">
+        <h2>Tensión Superficial</h2>
+        <figure>
+          <img src="images/tension_superficial.jpg" alt="Tensión Superficial" height="300" width="400">
+          <figcaption>Diagrama de fuerzas en la superficie de un líquido.</figcaption>
+        </figure>
+        <p>Es la energía necesaria para aumentar la superficie de un líquido en una unidad de área. Fórmula: <em>γ = F / L</em> (N/m).</p>
+        <h3>Origen molecular</h3>
+        <p>Las moléculas en la superficie están desbalanceadas y ejercen fuerzas de cohesión que generan una «piel» superficial.</p>
+        <h3>Variaciones con la temperatura</h3>
+        <p>γ disminuye al elevar la temperatura porque las moléculas adquieren más energía cinética y reducen la cohesión.</p>
+        <h3>Ejemplos cotidianos</h3>
+        <ul>
+          <li>Formación de gotas en agua y mercurio.</li>
+          <li>Capacidad de algunos insectos para caminar sobre el agua.</li>
+        </ul>
+      </section>
+      <section class="properties-detail">
+        <h2>Capilaridad</h2>
+        <figure>
+          <img src="images/capilaridad.jpg" alt="Capilaridad" height="300" width="450">
+          <figcaption>Elevación del líquido en un tubo capilar.</figcaption>
+        </figure>
+        <p>Movimiento de un líquido en tubos finos por fuerzas de cohesión y adhesión. Ecuación: <em>h = (2 γ cos θ) / (ρ g r)</em>.</p>
+        <h3>Derivación breve</h3>
+        <p>Equilibrio entre la presión hidrostática ρgh y la presión debida a la curvatura de la superficie. θ es el ángulo de contacto.</p>
+        <h3>Importancia en la naturaleza</h3>
+        <p>Transporte de agua en plantas, suelos y rocas porosos. Influye en la ingeniería civil (consolidación de suelos) y extracción petrolera.</p>
+        <h3>Efectos asociados</h3>
+        <ul>
+          <li><strong>Histeresis capilar</strong>: diferencia entre ascenso y descenso del líquido.</li>
+          <li><strong>Estructuras porosas</strong>: distribución de humedad en materiales.</li>
+        </ul>
+      </section>
+      <section class="properties-detail">
+        <h2>Densidad y Peso Específico</h2>
+        <div class="interactive-demo">
+          <div class="demo-container">
+            <h3>Calculadora de Densidad y Peso Específico</h3>
+            <form id="density-calculator" class="calculator-form">
+              <div class="form-group">
+                <label for="mass">Masa (kg):</label>
+                <input type="number" id="mass" step="0.1" required>
+              </div>
+              <div class="form-group">
+                <label for="volume">Volumen (m³):</label>
+                <input type="number" id="volume" step="0.001" required>
+              </div>
+              <button type="submit" class="btn">Calcular</button>
+              <div id="density-result" class="result"></div>
+            </form>
+          </div>
+          <div class="theory-container">
+            <h3>Conceptos Fundamentales</h3>
+            <p>La densidad (ρ) es la masa por unidad de volumen:</p>
+            <div class="formula">ρ = m/V [kg/m³]</div>
+            <p>El peso específico (γ) es el peso por unidad de volumen:</p>
+            <div class="formula">γ = ρg [N/m³]</div>
+            <p>donde g es la aceleración de la gravedad (9.81 m/s²)</p>
+          </div>
+        </div>
+        <h3>Tabla de Densidades Comunes</h3>
+        <table class="density-table">
+          <thead>
+            <tr>
+              <th>Material</th>
+              <th>Densidad (kg/m³)</th>
+              <th>Peso Específico (N/m³)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Agua (4°C)</td>
+              <td>1000</td>
+              <td>9810</td>
+            </tr>
+            <tr>
+              <td>Aire (20°C, 1 atm)</td>
+              <td>1.2</td>
+              <td>11.8</td>
+            </tr>
+            <tr>
+              <td>Aceite</td>
+              <td>920</td>
+              <td>9025</td>
+            </tr>
+            <tr>
+              <td>Mercurio</td>
+              <td>13600</td>
+              <td>133416</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </main>
+  <footer>
+    <div class="container">
+      <p>Grupo 4 Mecánica de Fluidos</p>
+    </div>
+  </footer>
+  <script src="js/main.js"></script>
+</body>
+</html>
