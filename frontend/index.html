@@ -11,167 +11,227 @@
   <link rel="stylesheet" href="css/style.css">
   <style>
     .pipe-simulation {
-      background: linear-gradient(to bottom, #ffffff, #f8f9fa);
-      padding: 2rem;
-      border-radius: 15px;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+      background: linear-gradient(135deg, #f8f9fa, #ffffff);
+      padding: 3rem;
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
       margin: 2rem 0;
     }
 
     .pipe-container {
       width: 100%;
-      height: 250px;
+      height: 300px;
       position: relative;
-      background: linear-gradient(to bottom, #e9ecef, #f8f9fa);
-      border-radius: 12px;
+      background: linear-gradient(135deg, #e9ecef, #f8f9fa);
+      border-radius: 20px;
       overflow: hidden;
       margin: 2rem 0;
       border: 1px solid rgba(67,100,247,0.2);
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+      box-shadow: 
+        inset 0 4px 8px rgba(0,0,0,0.05),
+        0 0 30px rgba(67,100,247,0.1);
+      perspective: 1000px;
+      transform-style: preserve-3d;
     }
 
     .pipe {
       position: absolute;
       top: 50%;
-      left: 0;
-      right: 0;
-      height: 80px;
+      left: -5%;
+      right: -5%;
+      height: 100px;
       background: linear-gradient(to bottom,
-        #5472f7 0%,
-        #4364f7 50%,
-        #3b5ae0 100%);
-      transform: translateY(-50%);
-      border-radius: 40px;
+        rgba(84,114,247,0.9) 0%,
+        rgba(67,100,247,1) 50%,
+        rgba(59,90,224,0.9) 100%);
+      transform: translateY(-50%) rotateX(10deg);
+      border-radius: 50px;
       box-shadow: 
-        inset 0 4px 8px rgba(255,255,255,0.3),
-        inset 0 -4px 8px rgba(0,0,0,0.2);
+        inset 0 8px 16px rgba(255,255,255,0.4),
+        inset 0 -8px 16px rgba(0,0,0,0.4),
+        0 0 30px rgba(67,100,247,0.2);
+      overflow: hidden;
     }
 
     .pipe::before {
       content: '';
       position: absolute;
-      top: 8px;
+      top: 0;
       left: 0;
       right: 0;
-      height: 2px;
-      background: rgba(255,255,255,0.3);
-      border-radius: 1px;
+      height: 50%;
+      background: linear-gradient(to bottom,
+        rgba(255,255,255,0.2) 0%,
+        transparent 100%);
+      border-radius: 50px 50px 0 0;
     }
 
     .pipe::after {
       content: '';
       position: absolute;
-      bottom: 8px;
+      bottom: 0;
       left: 0;
       right: 0;
-      height: 2px;
-      background: rgba(0,0,0,0.1);
-      border-radius: 1px;
+      height: 50%;
+      background: linear-gradient(to top,
+        rgba(0,0,0,0.2) 0%,
+        transparent 100%);
+      border-radius: 0 0 50px 50px;
+    }
+
+    .pipe-texture {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 20px,
+          rgba(255,255,255,0.1) 20px,
+          rgba(255,255,255,0.1) 40px
+        );
+      animation: moveTexture 2s linear infinite;
+    }
+
+    @keyframes moveTexture {
+      from { transform: translateX(0); }
+      to { transform: translateX(40px); }
     }
 
     .particle {
-      width: 15px;
-      height: 15px;
+      width: 12px;
+      height: 12px;
       position: absolute;
       border-radius: 50%;
       pointer-events: none;
       background: radial-gradient(circle at 30% 30%,
         rgba(255,255,255,0.95) 0%,
-        rgba(255,255,255,0.7) 50%,
-        rgba(255,255,255,0.3) 100%);
-      box-shadow: 0 0 10px rgba(255,255,255,0.5);
+        rgba(255,255,255,0.7) 30%,
+        rgba(255,255,255,0.3) 70%,
+        transparent 100%);
+      box-shadow: 
+        0 0 10px rgba(255,255,255,0.8),
+        0 0 20px rgba(255,255,255,0.4);
+      transform: translateZ(0);
+      will-change: transform;
+    }
+
+    .particle::before {
+      content: '';
+      position: absolute;
+      top: 20%;
+      left: 20%;
+      width: 30%;
+      height: 30%;
+      background: rgba(255,255,255,0.9);
+      border-radius: 50%;
     }
 
     .control-panel {
       background: white;
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-      margin-top: 1.5rem;
+      padding: 2.5rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      margin-top: 2rem;
       border: 1px solid rgba(67,100,247,0.1);
     }
 
     .slider-container {
       display: flex;
       align-items: center;
-      gap: 1.5rem;
-      margin: 1rem 0;
+      gap: 2rem;
+      margin: 1.5rem 0;
     }
 
     .slider-container label {
-      min-width: 100px;
-      font-weight: 500;
+      min-width: 120px;
+      font-weight: 600;
       color: #2d3748;
     }
 
     .slider-container input[type="range"] {
       flex: 1;
-      height: 8px;
+      height: 10px;
       -webkit-appearance: none;
       background: linear-gradient(to right,
-        #4364f7 0%,
-        #6fb1fc 100%);
-      border-radius: 4px;
+        rgba(67,100,247,0.2) 0%,
+        rgba(67,100,247,1) 100%);
+      border-radius: 5px;
       outline: none;
-      box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
     }
 
     .slider-container input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 24px;
-      height: 24px;
+      width: 28px;
+      height: 28px;
       background: white;
-      border: 2px solid #4364f7;
+      border: 3px solid #4364f7;
       border-radius: 50%;
       cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 6px rgba(67,100,247,0.3);
       transition: all 0.2s ease;
     }
 
     .slider-container input[type="range"]::-webkit-slider-thumb:hover {
-      transform: scale(1.1);
-      box-shadow: 0 2px 8px rgba(67,100,247,0.3);
+      transform: scale(1.2);
+      box-shadow: 0 4px 10px rgba(67,100,247,0.4);
     }
 
     .slider-value {
-      min-width: 90px;
+      min-width: 100px;
       text-align: center;
       font-weight: 600;
       color: #4364f7;
       background: rgba(67,100,247,0.1);
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
+      padding: 0.75rem 1.25rem;
+      border-radius: 25px;
+      box-shadow: 0 2px 4px rgba(67,100,247,0.1);
     }
 
     .flow-info {
       display: flex;
       justify-content: center;
-      gap: 2rem;
-      margin-top: 1.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid #e9ecef;
+      gap: 3rem;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 2px solid rgba(67,100,247,0.1);
     }
 
     .info-item {
       text-align: center;
+      padding: 1rem 2rem;
+      background: rgba(67,100,247,0.05);
+      border-radius: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .info-item:hover {
+      transform: translateY(-2px);
+      background: rgba(67,100,247,0.1);
     }
 
     .info-label {
       font-size: 0.9rem;
       color: #718096;
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
     }
 
     .info-value {
-      font-size: 1.1rem;
-      font-weight: 600;
+      font-size: 1.25rem;
+      font-weight: 700;
       color: #4364f7;
+      text-shadow: 0 1px 2px rgba(67,100,247,0.1);
     }
 
     @keyframes glow {
-      0% { box-shadow: 0 0 5px rgba(255,255,255,0.5); }
-      50% { box-shadow: 0 0 15px rgba(255,255,255,0.8); }
-      100% { box-shadow: 0 0 5px rgba(255,255,255,0.5); }
+      0% { box-shadow: 0 0 5px rgba(67,100,247,0.5); }
+      50% { box-shadow: 0 0 20px rgba(67,100,247,0.8); }
+      100% { box-shadow: 0 0 5px rgba(67,100,247,0.5); }
     }
 
     .hero {

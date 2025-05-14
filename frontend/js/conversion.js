@@ -10,9 +10,9 @@ const conversionFactors = {
     },
     velocity: {
         'm/s': 1,
-        'km/h': 0.277778,
-        'ft/s': 0.3048,
-        'mph': 0.44704
+        'km/h': 3.6,
+        'ft/s': 3.2808399,
+        'mph': 2.23693629
     },
     viscosity: {
         'Pa·s': 1,
