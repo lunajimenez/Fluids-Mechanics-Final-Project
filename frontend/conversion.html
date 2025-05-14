@@ -52,13 +52,32 @@
       background: white;
       border-radius: 20px;
       padding: 2rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-      transition: all 0.3s ease;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .calculator-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(to right, #4364f7, #6fb1fc);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
     }
 
     .calculator-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 15px 35px rgba(67,100,247,0.1);
+      box-shadow: 0 20px 40px rgba(67,100,247,0.15);
+    }
+
+    .calculator-card:hover::before {
+      transform: scaleX(1);
     }
 
     .calculator-header {
@@ -80,6 +99,13 @@
       font-size: 1.5rem;
       margin-right: 1rem;
       color: #4364f7;
+      transition: all 0.3s ease;
+    }
+
+    .calculator-card:hover .calculator-icon {
+      background: #4364f7;
+      color: white;
+      transform: scale(1.1) rotate(10deg);
     }
 
     .calculator-title {
@@ -90,6 +116,7 @@
 
     .input-group {
       margin-bottom: 1.5rem;
+      position: relative;
     }
 
     .input-group label {
@@ -97,35 +124,46 @@
       font-weight: 500;
       color: #4a5568;
       margin-bottom: 0.5rem;
+      transition: all 0.3s ease;
     }
 
     .input-group select,
     .input-group input {
       width: 100%;
-      padding: 0.75rem;
+      padding: 0.85rem;
       border: 2px solid #e2e8f0;
-      border-radius: 10px;
+      border-radius: 12px;
       font-size: 1rem;
       transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      background-color: #f8fafc;
     }
 
     .input-group select:focus,
     .input-group input:focus {
       border-color: #4364f7;
-      box-shadow: 0 0 0 3px rgba(67,100,247,0.1);
+      box-shadow: 0 0 0 3px rgba(67,100,247,0.2);
       outline: none;
+      background-color: white;
+    }
+
+    .input-group:focus-within label {
+      color: #4364f7;
+      font-weight: 600;
     }
 
     .result-display {
-      background: #f8fafc;
-      padding: 1rem;
-      border-radius: 10px;
-      margin-top: 1rem;
+      background: linear-gradient(135deg, #f3f6ff, #e6edff);
+      padding: 1.25rem;
+      border-radius: 12px;
+      margin-top: 1.5rem;
       text-align: center;
-      font-size: 1.25rem;
-      font-weight: 600;
+      font-size: 1.5rem;
+      font-weight: 700;
       color: #4364f7;
       transition: all 0.3s ease;
+      box-shadow: inset 0 2px 5px rgba(67,100,247,0.05);
+      border: 1px solid rgba(67,100,247,0.1);
     }
 
     .conversion-table {
@@ -133,13 +171,13 @@
       background: white;
       border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
     }
 
     .conversion-table h2 {
       padding: 1.5rem;
       margin: 0;
-      background: #4364f7;
+      background: linear-gradient(135deg, #4364f7, #6fb1fc);
       color: white;
     }
 
@@ -163,6 +201,8 @@
       font-weight: 600;
       color: #2d3748;
       background: #f8fafc;
+      position: sticky;
+      top: 0;
     }
 
     tr:last-child td {
@@ -170,7 +210,7 @@
     }
 
     tr:hover td {
-      background: #f8fafc;
+      background: #f3f6ff;
     }
 
     .quick-convert {
@@ -179,17 +219,23 @@
       right: 2rem;
       background: #4364f7;
       color: white;
-      padding: 1rem;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
       border-radius: 50%;
-      box-shadow: 0 5px 15px rgba(67,100,247,0.3);
+      box-shadow: 0 10px 20px rgba(67,100,247,0.3);
       cursor: pointer;
       transition: all 0.3s ease;
       z-index: 1000;
+      border: none;
     }
 
     .quick-convert:hover {
-      transform: scale(1.1);
-      box-shadow: 0 8px 20px rgba(67,100,247,0.4);
+      transform: scale(1.1) rotate(15deg);
+      box-shadow: 0 15px 30px rgba(67,100,247,0.4);
     }
 
     @media (max-width: 768px) {
@@ -208,12 +254,13 @@
     }
 
     .update-flash {
-      animation: flash 0.3s ease-out;
+      animation: flash 0.5s ease-out;
     }
 
     @keyframes flash {
-      0% { background-color: rgba(67,100,247,0.2); }
-      100% { background-color: transparent; }
+      0% { transform: scale(1); background-color: rgba(67,100,247,0.3); }
+      50% { transform: scale(1.05); background-color: rgba(67,100,247,0.1); }
+      100% { transform: scale(1); background-color: transparent; }
     }
 
     .common-conversions {
@@ -221,12 +268,14 @@
       padding: 2rem;
       background: white;
       border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
     }
 
     .common-conversions h3 {
       color: #2d3748;
       margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid rgba(67,100,247,0.1);
     }
 
     .conversion-chips {
@@ -238,16 +287,214 @@
     .conversion-chip {
       background: rgba(67,100,247,0.1);
       color: #4364f7;
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      font-size: 0.9rem;
+      padding: 0.75rem 1.25rem;
+      border-radius: 50px;
+      font-size: 0.95rem;
+      font-weight: 500;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
 
     .conversion-chip:hover {
-      background: rgba(67,100,247,0.2);
+      background: #4364f7;
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(67,100,247,0.2);
+    }
+
+    /* Swap Button Styles */
+    .swap-btn {
+      position: absolute;
+      right: -10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #4364f7;
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+      box-shadow: 0 4px 8px rgba(67,100,247,0.2);
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+
+    .swap-btn:hover {
+      background: #6fb1fc;
+      transform: translateY(-50%) scale(1.1);
+      box-shadow: 0 6px 12px rgba(67,100,247,0.3);
+    }
+
+    /* Highlight Animation */
+    .highlight {
+      animation: highlight-pulse 1.5s ease;
+    }
+
+    @keyframes highlight-pulse {
+      0% { box-shadow: 0 0 0 0 rgba(67,100,247,0.4); }
+      70% { box-shadow: 0 0 0 15px rgba(67,100,247,0); }
+      100% { box-shadow: 0 0 0 0 rgba(67,100,247,0); }
+    }
+
+    /* Toast Notification */
+    .toast-notification {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #4364f7;
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      z-index: 9999;
+      font-weight: 500;
+      opacity: 1;
+      transition: all 0.3s ease;
+    }
+
+    .toast-notification.fade-out {
+      opacity: 0;
+      transform: translateX(-50%) translateY(20px);
+    }
+
+    /* Historial de Conversiones */
+    .conversion-history {
+      margin-top: 3rem;
+      padding: 2rem;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
+
+    .conversion-history h3 {
+      color: #2d3748;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid rgba(67,100,247,0.1);
+    }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-height: 400px;
+      overflow-y: auto;
+      padding-right: 1rem;
+    }
+
+    .history-item {
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 1.25rem;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+      border-left: 4px solid #4364f7;
+    }
+
+    .history-item:hover {
+      transform: translateX(5px);
+      box-shadow: 0 8px 15px rgba(67,100,247,0.15);
+    }
+
+    .history-item-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+      font-size: 0.9rem;
+    }
+
+    .history-type {
+      background: rgba(67,100,247,0.1);
+      color: #4364f7;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+
+    .history-time {
+      color: #718096;
+    }
+
+    .history-conversion {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #2d3748;
+    }
+
+    .reuse-conversion {
+      background: #4364f7;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .reuse-conversion:hover {
+      background: #6fb1fc;
       transform: translateY(-2px);
+    }
+
+    .empty-history {
+      text-align: center;
+      color: #718096;
+      padding: 2rem;
+      font-style: italic;
+    }
+
+    .clear-history-btn {
+      background: #f56565;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 20px;
+      margin-top: 1.5rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: block;
+      margin-left: auto;
+    }
+
+    .clear-history-btn:hover {
+      background: #e53e3e;
+      transform: translateY(-2px);
+    }
+
+    /* Botón de Guardar Conversión */
+    .save-conversion-btn {
+      background: linear-gradient(135deg, #4364f7, #6fb1fc);
+      color: white;
+      border: none;
+      padding: 0.75rem;
+      border-radius: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(67,100,247,0.2);
+    }
+
+    .save-conversion-btn:hover {
+      background: linear-gradient(135deg, #3b5ae0, #4364f7);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(67,100,247,0.3);
+    }
+
+    .save-conversion-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(67,100,247,0.2);
     }
   </style>
 </head>
@@ -324,7 +571,7 @@
     <div class="calculator-grid">
       <div class="calculator-card">
         <div class="calculator-header">
-          <div class="calculator-icon">��️</div>
+          <div class="calculator-icon">🔄️</div>
           <h2 class="calculator-title">Presión</h2>
         </div>
         <div class="input-group">
@@ -340,6 +587,7 @@
           <select id="pressureTo"></select>
         </div>
         <div class="result-display" id="pressureResult">---</div>
+        <button class="save-conversion-btn" data-type="pressure">Guardar Conversión</button>
       </div>
 
       <div class="calculator-card">
@@ -360,6 +608,7 @@
           <select id="velocityTo"></select>
         </div>
         <div class="result-display" id="velocityResult">---</div>
+        <button class="save-conversion-btn" data-type="velocity">Guardar Conversión</button>
       </div>
 
       <div class="calculator-card">
@@ -380,6 +629,7 @@
           <select id="viscosityTo"></select>
         </div>
         <div class="result-display" id="viscosityResult">---</div>
+        <button class="save-conversion-btn" data-type="viscosity">Guardar Conversión</button>
       </div>
 
       <div class="calculator-card">
@@ -400,6 +650,7 @@
           <select id="densityTo"></select>
         </div>
         <div class="result-display" id="densityResult">---</div>
+        <button class="save-conversion-btn" data-type="density">Guardar Conversión</button>
       </div>
     </div>
 
@@ -411,6 +662,94 @@
         <div class="conversion-chip">1 m/s = 3.6 km/h</div>
         <div class="conversion-chip">1 cP = 0.001 Pa·s</div>
         <div class="conversion-chip">1 g/cm³ = 1000 kg/m³</div>
+        <div class="conversion-chip">1 psi = 6.895 kPa</div>
+        <div class="conversion-chip">1 mph = 0.447 m/s</div>
+        <div class="conversion-chip">1 knot = 0.514 m/s</div>
+      </div>
+    </div>
+
+    <div class="conversion-history">
+      <h3>Historial de Conversiones</h3>
+      <div class="history-list" id="historyList">
+        <p class="empty-history">No hay conversiones guardadas</p>
+      </div>
+      <button id="clearHistory" class="clear-history-btn">Limpiar Historial</button>
+    </div>
+
+    <div class="conversion-table">
+      <h2>Tabla de Factores de Conversión</h2>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Tipo</th>
+              <th>Unidad</th>
+              <th>Equivalencia en SI</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td rowspan="4">Presión</td>
+              <td>atm</td>
+              <td>101,325 Pa</td>
+            </tr>
+            <tr>
+              <td>bar</td>
+              <td>100,000 Pa</td>
+            </tr>
+            <tr>
+              <td>mmHg</td>
+              <td>133.322 Pa</td>
+            </tr>
+            <tr>
+              <td>psi</td>
+              <td>6,894.76 Pa</td>
+            </tr>
+            <tr>
+              <td rowspan="4">Velocidad</td>
+              <td>km/h</td>
+              <td>0.277778 m/s</td>
+            </tr>
+            <tr>
+              <td>mph</td>
+              <td>0.44704 m/s</td>
+            </tr>
+            <tr>
+              <td>ft/s</td>
+              <td>0.3048 m/s</td>
+            </tr>
+            <tr>
+              <td>knot</td>
+              <td>0.514444 m/s</td>
+            </tr>
+            <tr>
+              <td rowspan="3">Viscosidad</td>
+              <td>cP</td>
+              <td>0.001 Pa·s</td>
+            </tr>
+            <tr>
+              <td>P</td>
+              <td>0.1 Pa·s</td>
+            </tr>
+            <tr>
+              <td>mPa·s</td>
+              <td>0.001 Pa·s</td>
+            </tr>
+            <tr>
+              <td rowspan="3">Densidad</td>
+              <td>g/cm³</td>
+              <td>1000 kg/m³</td>
+            </tr>
+            <tr>
+              <td>lb/ft³</td>
+              <td>16.0185 kg/m³</td>
+            </tr>
+            <tr>
+              <td>g/mL</td>
+              <td>1000 kg/m³</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
