@@ -25,7 +25,7 @@
           <li><a href="#curso2">Curso 2</a></li>
           <li><a href="#curso3">Curso 3</a></li>
           <li><a href="#ejercicios">Ejercicios Prácticos</a></li>
-          <li><a href="#multimedia">Multimedia</a></li>
+          <li><a href="simulacion-flujo.html">Multimedia</a></li>
         </ul>
       </nav>
       <div id="menu-toggle">☰</div>
@@ -64,7 +64,41 @@
           <p>Clave en análisis de flujo laminar y turbulento.</p>
         </article>
       </section>
+      <section class="unit-converter">
+        <h2>Conversor Interactivo</h2>
       
+        <label for="dimension">Selecciona una dimensión:</label>
+        <select id="dimension">
+          <option value="longitud">Longitud</option>
+          <option value="masa">Masa</option>
+          <option value="area">Área</option>
+          <option value="tiempo">Tiempo</option>
+          <option value="corriente">Intensidad de Corriente</option>
+          <option value="temperatura">Temperatura</option>
+          <option value="sustancia">Cantidad de Sustancia</option>
+          <option value="luminosa">Intensidad Luminosa</option>
+          <option value="volumen">Volumen</option>
+          <option value="velocidad">Velocidad</option>
+          <option value="aceleracion">Aceleración</option>
+          <option value="fuerza">Fuerza</option>
+          <option value="presion">Presión</option>
+          <option value="trabajo">Trabajo</option>
+          <option value="potencia">Potencia</option>
+        </select>
+      
+        <label for="inputValue">Ingresa un valor:</label>
+        <input type="number" id="inputValue" placeholder="Ej. 1">
+      
+        <label for="fromUnit">Unidad de entrada:</label>
+        <select id="fromUnit"></select>
+      
+        <label for="toUnit">Unidad de salida:</label>
+        <select id="toUnit"></select>
+      
+        <button onclick="convert()">Convertir</button>
+      
+        <p id="result">Resultado: —</p>
+      </section>
     </div>
   </main>
   <footer>

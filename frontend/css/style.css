@@ -561,4 +561,36 @@ section h2::after {
   background: var(--accent-color);
 }
 
+.unit-converter {
+  margin-top: 2rem;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background: #f9f9f9;
+  max-width: 600px;
+}
+
+.unit-converter label,
+.unit-converter select,
+.unit-converter input,
+.unit-converter button {
+  display: block;
+  margin: 0.5rem 0;
+  width: 100%;
+  max-width: 400px;
+}
+
+.unit-converter button {
+  padding: 0.5rem;
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.unit-converter button:hover {
+  background-color: #005fa3;
+}
+
 /* ... rest of existing code ... */

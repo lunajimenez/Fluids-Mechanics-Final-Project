@@ -149,4 +149,173 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
     }
   });
+  
+  const units = {
+    longitud: {
+      metro: 1,
+      pie: 0.3048,
+      pulgada: 0.0254,
+      kilometro: 1000,
+      milla: 1609.34
+    },
+    masa: {
+      kilogramo: 1,
+      gramo: 0.001,
+      libra: 0.453592,
+      tonelada: 1000
+    },
+    area: {
+      "m²": 1,
+      "ft²": 0.092903,
+      "cm²": 0.0001,
+      "in²": 0.00064516
+    },
+    tiempo: {
+      segundo: 1,
+      minuto: 60,
+      hora: 3600,
+      día: 86400
+    },
+    corriente: {
+      amperio: 1,
+      miliamperio: 0.001
+    },
+    temperatura: {
+      celsius: "C",
+      fahrenheit: "F",
+      kelvin: "K"
+    },
+    sustancia: {
+      mol: 1
+    },
+    luminosa: {
+      candela: 1
+    },
+    volumen: {
+      "m³": 1,
+      litro: 0.001,
+      galón: 0.00378541,
+      "ft³": 0.0283168
+    },
+    velocidad: {
+      "m/s": 1,
+      "km/h": 0.277778,
+      "mph": 0.44704
+    },
+    aceleracion: {
+      "m/s²": 1,
+      "ft/s²": 0.3048
+    },
+    fuerza: {
+      newton: 1,
+      kilopondio: 9.80665,
+      libra_fuerza: 4.44822
+    },
+    presion: {
+      pascal: 1,
+      atm: 101325,
+      bar: 100000,
+      psi: 6894.76
+    },
+    trabajo: {
+      julio: 1,
+      caloria: 4.184,
+      kilojulio: 1000,
+      BTU: 1055.06
+    },
+    potencia: {
+      watt: 1,
+      kilowatt: 1000,
+      caballo_de_fuerza: 745.7
+    }
+  };
+  
+  const dimensionSelect = document.getElementById("dimension");
+  const fromUnit = document.getElementById("fromUnit");
+  const toUnit = document.getElementById("toUnit");
+  const resultDisplay = document.getElementById("result");
+  
+  dimensionSelect.addEventListener("change", updateUnitOptions);
+  
+  function updateUnitOptions() {
+    const dimension = dimensionSelect.value;
+    const unitSet = units[dimension];
+  
+    if (!unitSet) return;
+  
+    let options = "";
+    for (const unit in unitSet) {
+      options += `<option value="${unit}">${unit}</option>`;
+    }
+  
+    fromUnit.innerHTML = options;
+    toUnit.innerHTML = options;
+  }
+  
+  function convert() {
+    const dimension = dimensionSelect.value;
+    const value = parseFloat(document.getElementById("inputValue").value);
+    const from = fromUnit.value;
+    const to = toUnit.value;
+  
+    if (isNaN(value)) {
+      resultDisplay.innerText = "Por favor ingresa un número válido.";
+      return;
+    }
+  
+    if (dimension === "temperatura") {
+      const tempResult = convertTemperature(value, from, to);
+      if (tempResult === null) {
+        resultDisplay.innerText = "Conversión de temperatura no válida.";
+      } else {
+        resultDisplay.innerText = `Resultado: ${tempResult.toFixed(2)} ${to}`;
+      }
+      return;
+    }
+  
+    const unitSet = units[dimension];
+    if (!unitSet || !(from in unitSet) || !(to in unitSet)) {
+      resultDisplay.innerText = "Conversión no válida.";
+      return;
+    }
+  
+    const valueInBase = value * unitSet[from];
+    const converted = valueInBase / unitSet[to];
+  
+    resultDisplay.innerText = `Resultado: ${converted.toFixed(4)} ${to}`;
+  }
+  
+  function convertTemperature(value, from, to) {
+    if (from === to) return value;
+  
+    let celsius;
+    switch (from) {
+      case "celsius":
+        celsius = value;
+        break;
+      case "fahrenheit":
+        celsius = (value - 32) * 5 / 9;
+        break;
+      case "kelvin":
+        celsius = value - 273.15;
+        break;
+      default:
+        return null;
+    }
+  
+    switch (to) {
+      case "celsius":
+        return celsius;
+      case "fahrenheit":
+        return (celsius * 9 / 5) + 32;
+      case "kelvin":
+        return celsius + 273.15;
+      default:
+        return null;
+    }
+  }
+  
+  // Inicializar al cargar
+  updateUnitOptions();
+  
 });
