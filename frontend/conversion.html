@@ -3,14 +3,258 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Conversión de Unidades</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <title>Conversión de Unidades - Mecánica de Fluidos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .conversion-hero {
+      background: linear-gradient(135deg, #4364f7, #6fb1fc);
+      padding: 4rem 0;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .conversion-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><path d="M30 0v60M0 30h60" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></svg>') repeat;
+      opacity: 0.3;
+    }
+
+    .conversion-hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    .conversion-hero p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .calculator-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+    }
+
+    .calculator-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(67,100,247,0.1);
+    }
+
+    .calculator-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid rgba(67,100,247,0.1);
+    }
+
+    .calculator-icon {
+      width: 50px;
+      height: 50px;
+      background: rgba(67,100,247,0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-right: 1rem;
+      color: #4364f7;
+    }
+
+    .calculator-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #2d3748;
+    }
+
+    .input-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .input-group label {
+      display: block;
+      font-weight: 500;
+      color: #4a5568;
+      margin-bottom: 0.5rem;
+    }
+
+    .input-group select,
+    .input-group input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .input-group select:focus,
+    .input-group input:focus {
+      border-color: #4364f7;
+      box-shadow: 0 0 0 3px rgba(67,100,247,0.1);
+      outline: none;
+    }
+
+    .result-display {
+      background: #f8fafc;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #4364f7;
+      transition: all 0.3s ease;
+    }
+
+    .conversion-table {
+      margin-top: 3rem;
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    .conversion-table h2 {
+      padding: 1.5rem;
+      margin: 0;
+      background: #4364f7;
+      color: white;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+      padding: 1.5rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    th {
+      font-weight: 600;
+      color: #2d3748;
+      background: #f8fafc;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: #f8fafc;
+    }
+
+    .quick-convert {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #4364f7;
+      color: white;
+      padding: 1rem;
+      border-radius: 50%;
+      box-shadow: 0 5px 15px rgba(67,100,247,0.3);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .quick-convert:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 20px rgba(67,100,247,0.4);
+    }
+
+    @media (max-width: 768px) {
+      .calculator-grid {
+        grid-template-columns: 1fr;
+        padding: 1rem;
+      }
+
+      .conversion-hero h1 {
+        font-size: 2rem;
+      }
+
+      .conversion-hero p {
+        font-size: 1rem;
+      }
+    }
+
+    .update-flash {
+      animation: flash 0.3s ease-out;
+    }
+
+    @keyframes flash {
+      0% { background-color: rgba(67,100,247,0.2); }
+      100% { background-color: transparent; }
+    }
+
+    .common-conversions {
+      margin-top: 3rem;
+      padding: 2rem;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    .common-conversions h3 {
+      color: #2d3748;
+      margin-bottom: 1.5rem;
+    }
+
+    .conversion-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .conversion-chip {
+      background: rgba(67,100,247,0.1);
+      color: #4364f7;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .conversion-chip:hover {
+      background: rgba(67,100,247,0.2);
+      transform: translateY(-2px);
+    }
+  </style>
 </head>
 <body>
   <header>
     <div class="container nav-container">
-      <h1>Conversión de Unidades</h1>
+      <h1>Mecánica de Fluidos</h1>
       <nav id="navbar">
         <ul class="main-menu">
           <li><a href="index.html">Introducción</a></li>
@@ -31,81 +275,120 @@
       <div id="menu-toggle">☰</div>
     </div>
   </header>
+
   <main>
-    <div class="container">
-      <section class="conversion-detail">
-        <h2>Fundamentos</h2>
-        <p>En mecánica de fluidos trabajamos con sistemas de unidades diversos. Convertir correctamente es esencial para garantizar la coherencia de cálculos de presión, caudal y energía.</p>
-      </section>
-      <section class="conversion-grid">
-        <article>
-          <h3>Longitud</h3>
-          <p><strong>1 metro (m)</strong> equivale a <em>3.2808 pies (ft)</em>.</p>
-          <p>Usado para medir diámetros de tubería, alturas y longitudes de canalizaciones.</p>
-        </article>
-        <article>
-          <h3>Área</h3>
-          <p><strong>1 m²</strong> = <em>10.7639 ft²</em>.</p>
-          <p>Importante en cálculo de secciones transversales y coeficientes de fricción.</p>
-        </article>
-        <article>
-          <h3>Volumen</h3>
-          <p><strong>1 m³</strong> = <em>35.3147 ft³</em>.</p>
-          <p>Cálculo de almacenamiento en tanques y caudales.</p>
-        </article>
-        <article>
-          <h3>Presión</h3>
-          <p><strong>1 Pa</strong> = <em>0.000145 psi</em>.</p>
-          <p>Conversión crítica en sistemas hidráulicos y neumáticos.</p>
-        </article>
-        <article>
-          <h3>Viscosidad</h3>
-          <p><strong>1 Pa·s</strong> = <em>0.020885 lb·s/ft²</em>.</p>
-          <p>Clave en análisis de flujo laminar y turbulento.</p>
-        </article>
-      </section>
-      <section class="unit-converter">
-        <h2>Conversor Interactivo</h2>
-      
-        <label for="dimension">Selecciona una dimensión:</label>
-        <select id="dimension">
-          <option value="longitud">Longitud</option>
-          <option value="masa">Masa</option>
-          <option value="area">Área</option>
-          <option value="tiempo">Tiempo</option>
-          <option value="corriente">Intensidad de Corriente</option>
-          <option value="temperatura">Temperatura</option>
-          <option value="sustancia">Cantidad de Sustancia</option>
-          <option value="luminosa">Intensidad Luminosa</option>
-          <option value="volumen">Volumen</option>
-          <option value="velocidad">Velocidad</option>
-          <option value="aceleracion">Aceleración</option>
-          <option value="fuerza">Fuerza</option>
-          <option value="presion">Presión</option>
-          <option value="trabajo">Trabajo</option>
-          <option value="potencia">Potencia</option>
-        </select>
-      
-        <label for="inputValue">Ingresa un valor:</label>
-        <input type="number" id="inputValue" placeholder="Ej. 1">
-      
-        <label for="fromUnit">Unidad de entrada:</label>
-        <select id="fromUnit"></select>
-      
-        <label for="toUnit">Unidad de salida:</label>
-        <select id="toUnit"></select>
-      
-        <button onclick="convert()">Convertir</button>
-      
-        <p id="result">Resultado: —</p>
-      </section>
+    <section class="conversion-hero">
+      <div class="container" style="text-align: center;">
+        <h1>Conversión de Unidades</h1>
+        <p>Herramienta precisa y fácil de usar para convertir entre diferentes unidades utilizadas en mecánica de fluidos.</p>
+      </div>
+    </section>
+
+    <div class="calculator-grid">
+      <div class="calculator-card">
+        <div class="calculator-header">
+          <div class="calculator-icon">��️</div>
+          <h2 class="calculator-title">Presión</h2>
+        </div>
+        <div class="input-group">
+          <label>Valor:</label>
+          <input type="number" id="pressureInput" placeholder="Ingrese el valor">
+        </div>
+        <div class="input-group">
+          <label>De:</label>
+          <select id="pressureFrom"></select>
+        </div>
+        <div class="input-group">
+          <label>A:</label>
+          <select id="pressureTo"></select>
+        </div>
+        <div class="result-display" id="pressureResult">---</div>
+      </div>
+
+      <div class="calculator-card">
+        <div class="calculator-header">
+          <div class="calculator-icon">🏃</div>
+          <h2 class="calculator-title">Velocidad</h2>
+        </div>
+        <div class="input-group">
+          <label>Valor:</label>
+          <input type="number" id="velocityInput" placeholder="Ingrese el valor">
+        </div>
+        <div class="input-group">
+          <label>De:</label>
+          <select id="velocityFrom"></select>
+        </div>
+        <div class="input-group">
+          <label>A:</label>
+          <select id="velocityTo"></select>
+        </div>
+        <div class="result-display" id="velocityResult">---</div>
+      </div>
+
+      <div class="calculator-card">
+        <div class="calculator-header">
+          <div class="calculator-icon">💧</div>
+          <h2 class="calculator-title">Viscosidad</h2>
+        </div>
+        <div class="input-group">
+          <label>Valor:</label>
+          <input type="number" id="viscosityInput" placeholder="Ingrese el valor">
+        </div>
+        <div class="input-group">
+          <label>De:</label>
+          <select id="viscosityFrom"></select>
+        </div>
+        <div class="input-group">
+          <label>A:</label>
+          <select id="viscosityTo"></select>
+        </div>
+        <div class="result-display" id="viscosityResult">---</div>
+      </div>
+
+      <div class="calculator-card">
+        <div class="calculator-header">
+          <div class="calculator-icon">⚖️</div>
+          <h2 class="calculator-title">Densidad</h2>
+        </div>
+        <div class="input-group">
+          <label>Valor:</label>
+          <input type="number" id="densityInput" placeholder="Ingrese el valor">
+        </div>
+        <div class="input-group">
+          <label>De:</label>
+          <select id="densityFrom"></select>
+        </div>
+        <div class="input-group">
+          <label>A:</label>
+          <select id="densityTo"></select>
+        </div>
+        <div class="result-display" id="densityResult">---</div>
+      </div>
     </div>
+
+    <div class="common-conversions">
+      <h3>Conversiones Comunes</h3>
+      <div class="conversion-chips">
+        <div class="conversion-chip">1 atm = 101.325 kPa</div>
+        <div class="conversion-chip">1 bar = 100 kPa</div>
+        <div class="conversion-chip">1 m/s = 3.6 km/h</div>
+        <div class="conversion-chip">1 cP = 0.001 Pa·s</div>
+        <div class="conversion-chip">1 g/cm³ = 1000 kg/m³</div>
+      </div>
+    </div>
+
+    <button class="quick-convert">
+      <span class="material-icons">calculate</span>
+    </button>
   </main>
+
   <footer>
     <div class="container">
       <p>Grupo 4 Mecánica de Fluidos</p>
     </div>
   </footer>
+
   <script src="js/main.js"></script>
+  <script src="js/conversion.js"></script>
 </body>
 </html>

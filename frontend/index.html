@@ -9,6 +9,373 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .pipe-simulation {
+      background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+      margin: 2rem 0;
+    }
+
+    .pipe-container {
+      width: 100%;
+      height: 250px;
+      position: relative;
+      background: linear-gradient(to bottom, #e9ecef, #f8f9fa);
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 2rem 0;
+      border: 1px solid rgba(67,100,247,0.2);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .pipe {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 80px;
+      background: linear-gradient(to bottom,
+        #5472f7 0%,
+        #4364f7 50%,
+        #3b5ae0 100%);
+      transform: translateY(-50%);
+      border-radius: 40px;
+      box-shadow: 
+        inset 0 4px 8px rgba(255,255,255,0.3),
+        inset 0 -4px 8px rgba(0,0,0,0.2);
+    }
+
+    .pipe::before {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 1px;
+    }
+
+    .pipe::after {
+      content: '';
+      position: absolute;
+      bottom: 8px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: rgba(0,0,0,0.1);
+      border-radius: 1px;
+    }
+
+    .particle {
+      width: 15px;
+      height: 15px;
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      background: radial-gradient(circle at 30% 30%,
+        rgba(255,255,255,0.95) 0%,
+        rgba(255,255,255,0.7) 50%,
+        rgba(255,255,255,0.3) 100%);
+      box-shadow: 0 0 10px rgba(255,255,255,0.5);
+    }
+
+    .control-panel {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      margin-top: 1.5rem;
+      border: 1px solid rgba(67,100,247,0.1);
+    }
+
+    .slider-container {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin: 1rem 0;
+    }
+
+    .slider-container label {
+      min-width: 100px;
+      font-weight: 500;
+      color: #2d3748;
+    }
+
+    .slider-container input[type="range"] {
+      flex: 1;
+      height: 8px;
+      -webkit-appearance: none;
+      background: linear-gradient(to right,
+        #4364f7 0%,
+        #6fb1fc 100%);
+      border-radius: 4px;
+      outline: none;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .slider-container input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 24px;
+      height: 24px;
+      background: white;
+      border: 2px solid #4364f7;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: all 0.2s ease;
+    }
+
+    .slider-container input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.1);
+      box-shadow: 0 2px 8px rgba(67,100,247,0.3);
+    }
+
+    .slider-value {
+      min-width: 90px;
+      text-align: center;
+      font-weight: 600;
+      color: #4364f7;
+      background: rgba(67,100,247,0.1);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+    }
+
+    .flow-info {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e9ecef;
+    }
+
+    .info-item {
+      text-align: center;
+    }
+
+    .info-label {
+      font-size: 0.9rem;
+      color: #718096;
+      margin-bottom: 0.3rem;
+    }
+
+    .info-value {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #4364f7;
+    }
+
+    @keyframes glow {
+      0% { box-shadow: 0 0 5px rgba(255,255,255,0.5); }
+      50% { box-shadow: 0 0 15px rgba(255,255,255,0.8); }
+      100% { box-shadow: 0 0 5px rgba(255,255,255,0.5); }
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #4364f7, #6fb1fc);
+      position: relative;
+      padding: 6rem 0;
+      overflow: hidden;
+      margin-bottom: 4rem;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M10,50 Q25,25 40,50 T70,50" stroke="rgba(255,255,255,0.1)" fill="none" stroke-width="2"/></svg>') repeat;
+      opacity: 0.2;
+      animation: flow-pattern 20s linear infinite;
+    }
+
+    @keyframes flow-pattern {
+      from { transform: translateX(0); }
+      to { transform: translateX(100%); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .hero h2 {
+      font-size: 3.5rem;
+      color: white;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      animation: fadeInDown 1s ease-out;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 2rem;
+      line-height: 1.6;
+      animation: fadeInUp 1s ease-out 0.3s backwards;
+    }
+
+    .hero .btn {
+      font-size: 1.1rem;
+      padding: 1rem 2.5rem;
+      border-radius: 50px;
+      background: white;
+      color: #4364f7;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      animation: fadeInUp 1s ease-out 0.6s backwards;
+    }
+
+    .hero .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+      background: #ffdd57;
+      color: #333;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 4rem auto;
+      max-width: 1200px;
+      padding: 0 2rem;
+    }
+
+    .feature-card {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(to right, #4364f7, #6fb1fc);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+
+    .feature-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+      color: #4364f7;
+      background: rgba(67,100,247,0.1);
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover .feature-icon {
+      transform: scale(1.1) rotate(10deg);
+      background: #4364f7;
+      color: white;
+    }
+
+    .feature-card h3 {
+      font-size: 1.5rem;
+      color: #2d3748;
+      margin-bottom: 1rem;
+    }
+
+    .feature-card p {
+      color: #718096;
+      line-height: 1.6;
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .wave-divider {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      overflow: hidden;
+      line-height: 0;
+      transform: rotate(180deg);
+    }
+
+    .wave-divider svg {
+      position: relative;
+      display: block;
+      width: calc(100% + 1.3px);
+      height: 60px;
+    }
+
+    .wave-divider .shape-fill {
+      fill: #FFFFFF;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .hero h2 {
+        font-size: 2.5rem;
+      }
+
+      .hero p {
+        font-size: 1.1rem;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+        padding: 0 1rem;
+      }
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -34,20 +401,194 @@
       <div id="menu-toggle">☰</div>
     </div>
   </header>
+
   <main>
     <section class="hero">
-      <div class="container">
-        <h2>Bienvenido a Mecánica de Fluidos</h2>
-        <p>Explora los fundamentos de la mecánica de fluidos a través de nuestros cursos interactivos.</p>
-        <a href="#curso1" class="btn">Comenzar</a>
+      <div class="hero-content">
+        <h2>Descubre el Poder de la Mecánica de Fluidos</h2>
+        <p>Explora los principios fundamentales que gobiernan el movimiento de líquidos y gases. Desde la hidrostática hasta la dinámica de fluidos computacional, te guiaremos en este fascinante viaje de aprendizaje.</p>
+        <a href="#comenzar" class="btn">Iniciar Exploración</a>
+      </div>
+      <div class="wave-divider">
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+          <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+        </svg>
       </div>
     </section>
+
+    <div class="container">
+      <section class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📚</div>
+          <h3>Fundamentos Sólidos</h3>
+          <p>Domina los conceptos esenciales de la mecánica de fluidos a través de explicaciones claras y ejemplos prácticos del mundo real.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔬</div>
+          <h3>Experimentos Virtuales</h3>
+          <p>Interactúa con simulaciones realistas que te ayudarán a comprender mejor los fenómenos físicos de los fluidos.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💡</div>
+          <h3>Aplicaciones Prácticas</h3>
+          <p>Descubre cómo la mecánica de fluidos se aplica en la ingeniería moderna, desde la aerodinámica hasta la biomedicina.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3>Ejercicios Prácticos</h3>
+          <p>Pon a prueba tus conocimientos con ejercicios interactivos y problemas del mundo real que te ayudarán a consolidar tu aprendizaje.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Análisis Avanzado</h3>
+          <p>Explora técnicas modernas de análisis de fluidos, incluyendo dinámica computacional y visualización de flujos.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌐</div>
+          <h3>Recursos Multimedia</h3>
+          <p>Accede a una amplia biblioteca de recursos multimedia, incluyendo videos, animaciones y casos de estudio detallados.</p>
+        </div>
+      </section>
+
+      <section class="pipe-simulation" id="comenzar">
+        <h2>Simulación de Flujo en Tubería</h2>
+        <p>Observa cómo el caudal afecta la velocidad del flujo en una tubería. Ajusta el caudal para ver los cambios en tiempo real.</p>
+        
+        <div class="pipe-container">
+          <div class="pipe" id="pipe"></div>
+        </div>
+
+        <div class="control-panel">
+          <div class="slider-container">
+            <label for="flowRate">Caudal:</label>
+            <input type="range" id="flowRate" min="1" max="10" value="5" step="0.1">
+            <span class="slider-value" id="flowRateValue">5.0 m³/s</span>
+          </div>
+
+          <div class="flow-info">
+            <div class="info-item">
+              <div class="info-label">Velocidad</div>
+              <div class="info-value" id="velocityValue">2.5 m/s</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Partículas</div>
+              <div class="info-value" id="particleCount">0</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   </main>
+
   <footer>
     <div class="container">
       <p>Grupo 4 Mecánica de Fluidos</p>
     </div>
   </footer>
+
   <script src="js/main.js"></script>
+  <script>
+    const pipe = document.getElementById('pipe');
+    const flowRateInput = document.getElementById('flowRate');
+    const flowRateValue = document.getElementById('flowRateValue');
+    const velocityValue = document.getElementById('velocityValue');
+    const particleCount = document.getElementById('particleCount');
+    let particles = [];
+    let animationFrameId;
+    let lastTime = 0;
+    let particleInterval;
+
+    // Constantes de la simulación
+    const PIPE_DIAMETER = 0.5; // metros
+    const PIPE_AREA = Math.PI * (PIPE_DIAMETER/2) ** 2;
+    
+    function createParticle() {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      
+      // Posición vertical aleatoria dentro de la tubería
+      const yPos = Math.random() * 60 + 10;
+      particle.style.top = `${yPos}px`;
+      particle.style.left = '-20px';
+      
+      // Tamaño aleatorio para dar sensación de profundidad
+      const size = Math.random() * 5 + 10;
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+      
+      // Opacidad basada en el tamaño
+      const opacity = 0.4 + (size - 10) / 5 * 0.6;
+      particle.style.opacity = opacity;
+      
+      pipe.appendChild(particle);
+      
+      const particleObj = {
+        element: particle,
+        x: -20,
+        y: yPos,
+        speed: (parseFloat(flowRateInput.value) / PIPE_AREA) * 50,
+        size: size
+      };
+      
+      particles.push(particleObj);
+      updateParticleCount();
+    }
+
+    function updateParticles(timestamp) {
+      if (!lastTime) lastTime = timestamp;
+      const deltaTime = (timestamp - lastTime) / 1000;
+      lastTime = timestamp;
+      
+      particles.forEach((particle, index) => {
+        particle.x += particle.speed * deltaTime;
+        particle.element.style.transform = `translate(${particle.x}px, 0)`;
+        
+        // Eliminar partículas fuera de la vista
+        if (particle.x > window.innerWidth) {
+          particle.element.remove();
+          particles.splice(index, 1);
+          updateParticleCount();
+        }
+      });
+      
+      animationFrameId = requestAnimationFrame(updateParticles);
+    }
+
+    function updateFlow() {
+      const flowRate = parseFloat(flowRateInput.value);
+      flowRateValue.textContent = flowRate.toFixed(1) + ' m³/s';
+      
+      // Calcular y mostrar la velocidad
+      const velocity = flowRate / PIPE_AREA;
+      velocityValue.textContent = velocity.toFixed(1) + ' m/s';
+      
+      // Actualizar velocidad de las partículas existentes
+      particles.forEach(particle => {
+        particle.speed = (flowRate / PIPE_AREA) * 50;
+      });
+      
+      // Ajustar la frecuencia de generación de partículas
+      clearInterval(particleInterval);
+      const interval = Math.max(50, 200 / flowRate);
+      particleInterval = setInterval(createParticle, interval);
+    }
+
+    function updateParticleCount() {
+      particleCount.textContent = particles.length;
+    }
+
+    // Iniciar la simulación
+    updateFlow();
+    animationFrameId = requestAnimationFrame(updateParticles);
+    
+    // Eventos
+    flowRateInput.addEventListener('input', updateFlow);
+    
+    // Limpieza al salir
+    window.addEventListener('beforeunload', () => {
+      cancelAnimationFrame(animationFrameId);
+      clearInterval(particleInterval);
+    });
+  </script>
 </body>
 </html>
