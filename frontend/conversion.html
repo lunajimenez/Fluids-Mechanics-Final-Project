@@ -496,6 +496,50 @@
       transform: translateY(0);
       box-shadow: 0 2px 4px rgba(67,100,247,0.2);
     }
+
+    .conversion-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    .units-container {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 1rem;
+      position: relative;
+    }
+    
+    .convert-btn {
+      background: linear-gradient(135deg, #4364f7, #6fb1fc);
+      color: white;
+      border: none;
+      padding: 0.85rem;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(67,100,247,0.2);
+      margin-top: 1rem;
+    }
+    
+    .convert-btn:hover {
+      background: linear-gradient(135deg, #3b5ae0, #4364f7);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(67,100,247,0.3);
+    }
+    
+    .convert-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(67,100,247,0.2);
+    }
+    
+    #dimension {
+      font-weight: 600;
+      color: #4364f7;
+    }
   </style>
 </head>
 <body>
@@ -569,88 +613,58 @@
     </section>
 
     <div class="calculator-grid">
-      <div class="calculator-card">
+      <div class="calculator-card" style="grid-column: 1 / -1; max-width: 800px; margin: 0 auto;">
         <div class="calculator-header">
           <div class="calculator-icon">🔄️</div>
-          <h2 class="calculator-title">Presión</h2>
+          <h2 class="calculator-title">Convertidor Universal de Unidades</h2>
         </div>
+        
         <div class="input-group">
-          <label>Valor:</label>
-          <input type="number" id="pressureInput" placeholder="Ingrese el valor">
+          <label for="dimension">Dimensión:</label>
+          <select id="dimension">
+            <option value="longitud">Longitud</option>
+            <option value="masa">Masa</option>
+            <option value="area">Área</option>
+            <option value="tiempo">Tiempo</option>
+            <option value="corriente">Intensidad de Corriente Eléctrica</option>
+            <option value="temperatura">Temperatura</option>
+            <option value="sustancia">Cantidad de Sustancia</option>
+            <option value="luminosa">Intensidad Luminosa</option>
+            <option value="volumen">Volumen</option>
+            <option value="velocidad">Velocidad</option>
+            <option value="aceleracion">Aceleración</option>
+            <option value="fuerza">Fuerza</option>
+            <option value="presion" selected>Presión</option>
+            <option value="trabajo">Trabajo/Energía</option>
+            <option value="potencia">Potencia</option>
+          </select>
         </div>
-        <div class="input-group">
-          <label>De:</label>
-          <select id="pressureFrom"></select>
+        
+        <div class="conversion-form">
+          <div class="input-group">
+            <label for="inputValue">Valor:</label>
+            <input type="number" id="inputValue" placeholder="Ingrese el valor a convertir" step="any">
+          </div>
+          
+          <div class="units-container">
+            <div class="input-group">
+              <label for="fromUnit">De:</label>
+              <select id="fromUnit"></select>
+            </div>
+            
+            <button class="swap-btn" id="swapUnits" title="Intercambiar unidades">⇄</button>
+            
+            <div class="input-group">
+              <label for="toUnit">A:</label>
+              <select id="toUnit"></select>
+            </div>
+          </div>
+          
+          <button class="convert-btn" id="convertBtn">Convertir</button>
         </div>
-        <div class="input-group">
-          <label>A:</label>
-          <select id="pressureTo"></select>
-        </div>
-        <div class="result-display" id="pressureResult">---</div>
-        <button class="save-conversion-btn" data-type="pressure">Guardar Conversión</button>
-      </div>
-
-      <div class="calculator-card">
-        <div class="calculator-header">
-          <div class="calculator-icon">🏃</div>
-          <h2 class="calculator-title">Velocidad</h2>
-        </div>
-        <div class="input-group">
-          <label>Valor:</label>
-          <input type="number" id="velocityInput" placeholder="Ingrese el valor">
-        </div>
-        <div class="input-group">
-          <label>De:</label>
-          <select id="velocityFrom"></select>
-        </div>
-        <div class="input-group">
-          <label>A:</label>
-          <select id="velocityTo"></select>
-        </div>
-        <div class="result-display" id="velocityResult">---</div>
-        <button class="save-conversion-btn" data-type="velocity">Guardar Conversión</button>
-      </div>
-
-      <div class="calculator-card">
-        <div class="calculator-header">
-          <div class="calculator-icon">💧</div>
-          <h2 class="calculator-title">Viscosidad</h2>
-        </div>
-        <div class="input-group">
-          <label>Valor:</label>
-          <input type="number" id="viscosityInput" placeholder="Ingrese el valor">
-        </div>
-        <div class="input-group">
-          <label>De:</label>
-          <select id="viscosityFrom"></select>
-        </div>
-        <div class="input-group">
-          <label>A:</label>
-          <select id="viscosityTo"></select>
-        </div>
-        <div class="result-display" id="viscosityResult">---</div>
-        <button class="save-conversion-btn" data-type="viscosity">Guardar Conversión</button>
-      </div>
-
-      <div class="calculator-card">
-        <div class="calculator-header">
-          <div class="calculator-icon">⚖️</div>
-          <h2 class="calculator-title">Densidad</h2>
-        </div>
-        <div class="input-group">
-          <label>Valor:</label>
-          <input type="number" id="densityInput" placeholder="Ingrese el valor">
-        </div>
-        <div class="input-group">
-          <label>De:</label>
-          <select id="densityFrom"></select>
-        </div>
-        <div class="input-group">
-          <label>A:</label>
-          <select id="densityTo"></select>
-        </div>
-        <div class="result-display" id="densityResult">---</div>
-        <button class="save-conversion-btn" data-type="density">Guardar Conversión</button>
+        
+        <div class="result-display" id="result">Resultado de la conversión</div>
+        <button class="save-conversion-btn" id="saveConversion">Guardar Conversión</button>
       </div>
     </div>
 

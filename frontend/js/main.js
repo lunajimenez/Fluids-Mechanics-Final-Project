@@ -1,4 +1,4 @@
-<!-- js/main.js -->
+// js/main.js
 document.addEventListener('DOMContentLoaded', () => {
   // Crear overlay para el menú
   const overlay = document.createElement('div');
