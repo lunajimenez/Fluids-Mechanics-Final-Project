@@ -355,6 +355,44 @@
           </div>
         </div>
         
+        <h3>Densidad por Método de Inmersión</h3>
+        <p>Este método permite calcular la densidad de un fluido desconocido mediante la comparación de las fuerzas necesarias para sumergir un objeto en agua y en el fluido desconocido.</p>
+        
+        <div class="interactive-demo">
+          <div class="demo-container">
+            <h3>Calculadora de Densidad por Inmersión</h3>
+            <form id="immersion-density-calculator" class="calculator-form">
+              <div class="form-group">
+                <label for="body-volume">Volumen del cuerpo (dm³):</label>
+                <input type="number" id="body-volume" step="0.01" required>
+              </div>
+              <div class="form-group">
+                <label for="water-force">Fuerza en agua (N):</label>
+                <input type="number" id="water-force" step="0.01" required>
+              </div>
+              <div class="form-group">
+                <label for="fluid-force">Fuerza en fluido desconocido (N):</label>
+                <input type="number" id="fluid-force" step="0.01" required>
+              </div>
+              <div class="form-group">
+                <label for="water-density">Densidad del agua (kg/m³):</label>
+                <input type="number" id="water-density" value="1000" step="1">
+              </div>
+              <button type="submit" class="btn">Calcular Densidad</button>
+              <div id="immersion-result" class="result"></div>
+            </form>
+          </div>
+          <div class="theory-container">
+            <h3>Principio de Arquímedes</h3>
+            <p>Cuando un cuerpo se sumerge en un fluido, éste experimenta un empuje hacia arriba igual al peso del fluido desplazado:</p>
+            <div class="formula">E = ρ<sub>fluido</sub> · V · g</div>
+            <p>Al comparar la fuerza necesaria para sumergir un cuerpo en dos fluidos diferentes, podemos determinar la densidad del fluido desconocido:</p>
+            <div class="formula">F<sub>fluido</sub> - F<sub>agua</sub> = (ρ<sub>fluido</sub> - ρ<sub>agua</sub>) · V · g</div>
+            <p>Despejando:</p>
+            <div class="formula">ρ<sub>fluido</sub> = ρ<sub>agua</sub> + (F<sub>fluido</sub> - F<sub>agua</sub>) / (V · g)</div>
+          </div>
+        </div>
+        
         <h3>Tabla de Densidades Comunes</h3>
         <table class="density-table">
           <thead>

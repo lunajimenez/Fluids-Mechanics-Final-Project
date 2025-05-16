@@ -150,6 +150,51 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Calculadora de densidad por inmersión (si existe en la página)
+  const immersionCalculator = document.getElementById('immersion-density-calculator');
+  
+  immersionCalculator?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Obtener valores del formulario
+    const bodyVolume = parseFloat(document.getElementById('body-volume').value);
+    const waterForce = parseFloat(document.getElementById('water-force').value);
+    const fluidForce = parseFloat(document.getElementById('fluid-force').value);
+    const waterDensity = parseFloat(document.getElementById('water-density').value) || 1000;
+    const g = 9.81;
+    
+    if (bodyVolume && waterForce !== undefined && fluidForce !== undefined) {
+      // Convertir volumen de dm^3 a m^3
+      const volumeM3 = bodyVolume * 1e-3;
+      
+      // Calcular densidad del fluido desconocido
+      // Fórmula: densidad_fluido = densidad_agua + (F_fluido - F_agua) / (V * g)
+      const fluidDensity = waterDensity + (fluidForce - waterForce) / (volumeM3 * g);
+      
+      const resultDiv = document.getElementById('immersion-result');
+      resultDiv.style.opacity = '0';
+      
+      setTimeout(() => {
+        if (fluidDensity <= 0) {
+          resultDiv.innerHTML = `
+            <p class="error">El resultado es físicamente imposible. Por favor, revise los valores ingresados.</p>
+          `;
+        } else {
+          resultDiv.innerHTML = `
+            <p><strong>Densidad del fluido:</strong> ${fluidDensity.toFixed(2)} kg/m³</p>
+            <p><strong>Empuje en agua:</strong> ${(waterDensity * volumeM3 * g).toFixed(2)} N</p>
+            <p><strong>Empuje en fluido:</strong> ${(fluidDensity * volumeM3 * g).toFixed(2)} N</p>
+          `;
+        }
+        resultDiv.style.opacity = '1';
+      }, 150);
+    } else {
+      document.getElementById('immersion-result').innerHTML = `
+        <p class="error">Por favor, ingrese todos los valores requeridos.</p>
+      `;
+    }
+  });
+
   // Calculadora de viscosidad (si existe en la página)
   const viscosityCalculator = document.getElementById('viscosity-calculator');
   
