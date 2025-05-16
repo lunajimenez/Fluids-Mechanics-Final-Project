@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flotación y Estabilidad - Mecánica de Fluidos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .hero-section {
+      background: linear-gradient(135deg, #0c4a6e, #0ea5e9);
+      padding: 4rem 0;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><path d="M30 0v60M0 30h60" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></svg>') repeat;
+      opacity: 0.3;
+    }
+    
+    .hero-section h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      position: relative;
+      text-align: center;
+    }
+    
+    .hero-section p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    .content-section {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .content-section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(14,165,233,0.15);
+    }
+    
+    .content-section h2 {
+      color: #0c4a6e;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid rgba(14,165,233,0.1);
+      display: flex;
+      align-items: center;
+    }
+    
+    .content-section h3 {
+      color: #0ea5e9;
+      margin: 1.5rem 0 0.75rem;
+    }
+    
+    .two-column {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+    
+    .info-card {
+      padding: 1.5rem;
+      background: #f0f9ff;
+      border-radius: 10px;
+      margin: 1rem 0;
+      border-left: 4px solid #0ea5e9;
+    }
+    
+    .info-card h4 {
+      color: #0ea5e9;
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+    }
+    
+    .formula {
+      background: rgba(14,165,233,0.05);
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1rem 0;
+      text-align: center;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      color: #0c4a6e;
+      border-left: 4px solid #0ea5e9;
+    }
+    
+    .interactive-container {
+      background: #f0f9ff;
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      margin: 1.5rem 0;
+    }
+    
+    .demo-image {
+      width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      margin: 1rem 0;
+    }
+    
+    .btn {
+      background: #0ea5e9;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+    }
+    
+    .btn:hover {
+      background: #0c4a6e;
+      transform: translateY(-2px);
+    }
+    
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .control-group label {
+      font-weight: 500;
+      color: #4a5568;
+    }
+    
+    .control-group select,
+    .control-group input[type="number"] {
+      padding: 0.5rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 4px;
+    }
+    
+    @media (max-width: 768px) {
+      .two-column {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav-container">
+      <h1>Mecánica de Fluidos</h1>
+      <nav id="navbar">
+        <ul class="main-menu">
+          <li><a href="index.html">Introducción</a></li>
+          <li class="has-submenu">
+            <a href="#" class="menu-trigger">Propiedades de los Fluidos ▾</a>
+            <ul class="submenu">
+              <li><a href="conversion.html">Conversión de Unidades</a></li>
+              <li><a href="propiedades.html">Propiedades</a></li>
+              <li><a href="viscosidad.html">Viscosidad en Fluidos</a></li>
+            </ul>
+          </li>
+          <li class="has-submenu">
+            <a href="#" class="menu-trigger">Presión e Introducción a la Estática de Fluidos ▾</a>
+            <ul class="submenu">
+              <li><a href="presion.html">Presión</a></li>
+              <li><a href="ejercicios.html">Ejercicios Interactivos</a></li>
+              <li><a href="flotacion.html" class="active">Flotación y Estabilidad</a></li>
+            </ul>
+          </li>
+          <li class="has-submenu">
+            <a href="#" class="menu-trigger">Cinemática de Fluidos ▾</a>
+            <ul class="submenu">
+              <li><a href="#cinematica-1">Descripción del Flujo</a></li>
+              <li><a href="#cinematica-2">Ecuación de Continuidad</a></li>
+              <li><a href="#cinematica-3">Patrones de Flujo</a></li>
+            </ul>
+          </li>
+          <li class="has-submenu">
+            <a href="#" class="menu-trigger">Flujo en Tuberías ▾</a>
+            <ul class="submenu">
+              <li><a href="simulacion-flujo.html">Simulación de Flujo</a></li>
+              <li><a href="#tuberias-2">Pérdidas por Fricción</a></li>
+              <li><a href="#tuberias-3">Sistemas de Tuberías</a></li>
+            </ul>
+          </li>
+          <li class="has-submenu">
+            <a href="#" class="menu-trigger">Potencia y Eficiencia de Máquinas de Flujo ▾</a>
+            <ul class="submenu">
+              <li><a href="#maquinas-1">Bombas</a></li>
+              <li><a href="#maquinas-2">Turbinas</a></li>
+              <li><a href="#maquinas-3">Compresores</a></li>
+            </ul>
+          </li>
+          <li class="has-submenu">
+            <a href="#" class="menu-trigger">Análisis Dimensional ▾</a>
+            <ul class="submenu">
+              <li><a href="#dimensional-1">Teorema Pi de Buckingham</a></li>
+              <li><a href="#dimensional-2">Números Adimensionales</a></li>
+              <li><a href="#dimensional-3">Análisis de Modelos</a></li>
+            </ul>
+          </li>
+          <li><a href="simulacion-flujo.html">Multimedia</a></li>
+        </ul>
+      </nav>
+      <div id="menu-toggle">☰</div>
+    </div>
+  </header>
+  
+  <main>
+    <section class="hero-section">
+      <div class="container">
+        <h1>Flotación y Estabilidad</h1>
+        <p>Principio de Arquímedes, cálculo de fuerzas de flotación y análisis de estabilidad en cuerpos flotantes.</p>
+      </div>
+    </section>
+    
+    <div class="container">
+      <section class="content-section">
+        <h2>Flotación y Estabilidad</h2>
+        
+        <p>Estudio del principio de Arquímedes, la flotabilidad y la estabilidad de cuerpos sumergidos y flotantes.</p>
+        
+        <div class="two-column">
+          <div>
+            <h3>Principio de Arquímedes</h3>
+            <p>El principio de Arquímedes establece que todo cuerpo sumergido total o parcialmente en un fluido experimenta un empuje vertical hacia arriba igual al peso del fluido desplazado.</p>
+            <div class="formula">F<sub>empuje</sub> = ρ<sub>fluido</sub> × g × V<sub>desplazado</sub></div>
+            <p>Donde:</p>
+            <ul>
+              <li>F<sub>empuje</sub> = Fuerza de empuje [N]</li>
+              <li>ρ<sub>fluido</sub> = Densidad del fluido [kg/m³]</li>
+              <li>g = Aceleración gravitatoria (9.81 m/s²)</li>
+              <li>V<sub>desplazado</sub> = Volumen de fluido desplazado [m³]</li>
+            </ul>
+          </div>
+          <div>
+            <div class="info-card">
+              <h4>Consecuencias del Principio de Arquímedes</h4>
+              <ul>
+                <li><strong>Si ρ<sub>objeto</sub> > ρ<sub>fluido</sub>:</strong> El objeto se hunde (peso > empuje)</li>
+                <li><strong>Si ρ<sub>objeto</sub> = ρ<sub>fluido</sub>:</strong> El objeto flota en equilibrio a cualquier nivel (peso = empuje)</li>
+                <li><strong>Si ρ<sub>objeto</sub> < ρ<sub>fluido</sub>:</strong> El objeto flota parcialmente sumergido (peso = empuje)</li>
+              </ul>
+            </div>
+            <div class="demo-image">
+              <img src="images/principio-arquimedes.jpg" alt="Ilustración del principio de Arquímedes" style="max-width: 100%; height: auto;">
+            </div>
+          </div>
+        </div>
+        
+        <div class="interactive-container">
+          <h3>Calculadora de Flotabilidad</h3>
+          
+          <div class="two-column">
+            <div>
+              <form id="buoyancy-calculator" class="calculator-form">
+                <div class="control-group">
+                  <label for="object-mass">Masa del objeto (kg):</label>
+                  <input type="number" id="object-mass" step="0.1" min="0.1" value="10">
+                </div>
+                
+                <div class="control-group">
+                  <label for="object-volume">Volumen del objeto (m³):</label>
+                  <input type="number" id="object-volume" step="0.001" min="0.001" value="0.01">
+                </div>
+                
+                <div class="control-group">
+                  <label for="fluid-density-buoyancy">Densidad del fluido (kg/m³):</label>
+                  <select id="fluid-density-buoyancy">
+                    <option value="1000">Agua dulce (1000 kg/m³)</option>
+                    <option value="1025">Agua de mar (1025 kg/m³)</option>
+                    <option value="1.225">Aire a nivel del mar (1.225 kg/m³)</option>
+                    <option value="custom">Personalizado</option>
+                  </select>
+                </div>
+                
+                <div class="control-group" id="custom-fluid-density" style="display: none;">
+                  <label for="custom-fluid-density-value">Densidad personalizada (kg/m³):</label>
+                  <input type="number" id="custom-fluid-density-value" step="0.1" min="0.1" value="1000">
+                </div>
+                
+                <button type="submit" class="btn">Calcular Flotabilidad</button>
+                
+                <div id="buoyancy-result" class="result-panel" style="display: none; margin-top: 1rem; padding: 1rem; background: rgba(14,165,233,0.1); border-radius: 8px;">
+                  <p><strong>Densidad del objeto:</strong> <span id="object-density">0</span> kg/m³</p>
+                  <p><strong>Fuerza de empuje:</strong> <span id="buoyancy-force">0</span> N</p>
+                  <p><strong>Peso del objeto:</strong> <span id="object-weight">0</span> N</p>
+                  <p><strong>Fuerza resultante:</strong> <span id="net-force">0</span> N <span id="force-direction">(hacia arriba/abajo)</span></p>
+                  <p><strong>Estado:</strong> <span id="buoyancy-state">Flotando/Hundido/Neutro</span></p>
+                  <p><strong>Porcentaje sumergido:</strong> <span id="submerged-percentage">0</span>%</p>
+                </div>
+              </form>
+            </div>
+            
+            <div>
+              <div id="buoyancy-visualization" style="width: 100%; height: 250px; background: linear-gradient(to bottom, #7dd3fc, #0c4a6e); border-radius: 10px; position: relative; overflow: hidden; margin-bottom: 1rem;">
+                <!-- La línea del agua -->
+                <div style="position: absolute; left: 0; width: 100%; height: 1px; background-color: white; top: 40%;">
+                  <div style="position: absolute; right: 10px; top: -15px; color: white;">Superficie del agua</div>
+                </div>
+                
+                <!-- El objeto flotante (se ajustará con JavaScript) -->
+                <div id="floating-object" style="position: absolute; left: 50%; top: 40%; width: 60px; height: 60px; background-color: #fcd34d; transform: translate(-50%, -50%); transition: all 0.5s ease;"></div>
+                
+                <!-- Flechas de fuerza -->
+                <div id="weight-arrow" style="position: absolute; left: 50%; top: 50%; width: 2px; height: 40px; background-color: red; transform: translate(-50%, 0%);">
+                  <div style="position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); color: red; font-weight: bold;">Peso</div>
+                </div>
+                
+                <div id="buoyancy-arrow" style="position: absolute; left: 50%; top: 50%; width: 2px; height: 40px; background-color: #22c55e; transform: translate(-50%, -100%);">
+                  <div style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); color: #22c55e; font-weight: bold;">Empuje</div>
+                </div>
+              </div>
+              
+              <div class="info-card">
+                <h4>¿Cómo funciona la calculadora?</h4>
+                <p>Esta calculadora aplica el principio de Arquímedes para determinar si un objeto flotará, se hundirá o permanecerá en equilibrio neutro. También calcula el porcentaje de volumen sumergido para objetos flotantes.</p>
+                <p>Para objetos flotantes, el porcentaje sumergido se determina por la relación entre la densidad del objeto y la del fluido:</p>
+                <div class="formula">% Sumergido = (ρ<sub>objeto</sub> / ρ<sub>fluido</sub>) × 100%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <h3>Estabilidad de Cuerpos Flotantes</h3>
+        <p>La estabilidad de un cuerpo flotante depende de la relación entre el centro de gravedad (CG) y el centro de empuje o centro de carena (CC).</p>
+        
+        <div class="two-column">
+          <div>
+            <div class="info-card">
+              <h4>Conceptos Clave</h4>
+              <ul>
+                <li><strong>Centro de gravedad (CG):</strong> Punto donde se puede considerar concentrado todo el peso del cuerpo.</li>
+                <li><strong>Centro de empuje o carena (CC):</strong> Centro de gravedad del volumen de fluido desplazado.</li>
+                <li><strong>Metacentro (M):</strong> Punto de intersección de la línea de acción del empuje con el plano de simetría del cuerpo cuando este se inclina un ángulo infinitesimal.</li>
+                <li><strong>Altura metacéntrica (GM):</strong> Distancia entre el centro de gravedad y el metacentro. Si GM > 0, el cuerpo es estable.</li>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <div class="demo-image">
+              <img src="images/estabilidad-flotacion.jpg" alt="Estabilidad de cuerpos flotantes" style="max-width: 100%; height: auto;">
+            </div>
+            <div class="info-card">
+              <h4>Condiciones de Estabilidad</h4>
+              <ul>
+                <li><strong>Estable:</strong> M está por encima de G (GM > 0)</li>
+                <li><strong>Inestable:</strong> M está por debajo de G (GM < 0)</li>
+                <li><strong>Neutralmente estable:</strong> M coincide con G (GM = 0)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <h3>Aplicaciones del Principio de Arquímedes</h3>
+        
+        <div class="two-column">
+          <div>
+            <div class="info-card">
+              <h4>Navegación y Diseño Naval</h4>
+              <p>El principio de Arquímedes es fundamental en:</p>
+              <ul>
+                <li>Diseño de barcos y submarinos</li>
+                <li>Cálculo de la capacidad de carga de embarcaciones</li>
+                <li>Determinación de la línea de flotación</li>
+                <li>Estabilidad de embarcaciones</li>
+              </ul>
+            </div>
+            
+            <div class="info-card">
+              <h4>Aerostática</h4>
+              <p>Aplicaciones en sistemas que flotan en el aire:</p>
+              <ul>
+                <li>Globos aerostáticos</li>
+                <li>Dirigibles</li>
+                <li>Globos meteorológicos</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div>
+            <div class="info-card">
+              <h4>Medición de Densidad</h4>
+              <p>El principio de Arquímedes permite medir la densidad de sólidos y líquidos mediante:</p>
+              <ul>
+                <li>Densímetros o areómetros</li>
+                <li>Picnómetros</li>
+                <li>Balanzas hidrostáticas</li>
+              </ul>
+            </div>
+            
+            <div class="info-card">
+              <h4>Otras Aplicaciones</h4>
+              <ul>
+                <li>Separación de minerales por flotación</li>
+                <li>Determinación de la composición de aleaciones (método de Arquímedes)</li>
+                <li>Diseño de boyas oceanográficas</li>
+                <li>Funcionamiento de dispositivos como carburadores y flotadores de inodoros</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  
+  <footer>
+    <div class="container">
+      <p>Grupo 4 Mecánica de Fluidos</p>
+    </div>
+  </footer>
+  
+  <script src="js/main.js"></script>
+  <script src="js/presion.js"></script>
+</body>
+</html> 

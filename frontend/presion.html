@@ -3,14 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Viscosidad en Fluidos Newtonianos y no Newtonianos</title>
+  <title>Presión - Mecánica de Fluidos</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
   <style>
-    .viscosity-hero {
-      background: linear-gradient(135deg, #6b46c1, #9f7aea);
+    .hero-section {
+      background: linear-gradient(135deg, #0c4a6e, #0ea5e9);
       padding: 4rem 0;
       color: white;
       position: relative;
@@ -18,7 +16,7 @@
       margin-bottom: 2rem;
     }
     
-    .viscosity-hero::before {
+    .hero-section::before {
       content: '';
       position: absolute;
       top: 0;
@@ -29,14 +27,14 @@
       opacity: 0.3;
     }
     
-    .viscosity-hero h1 {
+    .hero-section h1 {
       font-size: 2.5rem;
       margin-bottom: 1rem;
       position: relative;
       text-align: center;
     }
     
-    .viscosity-hero p {
+    .hero-section p {
       font-size: 1.2rem;
       opacity: 0.9;
       max-width: 800px;
@@ -44,7 +42,7 @@
       text-align: center;
     }
     
-    .viscosity-section {
+    .content-section {
       background: white;
       border-radius: 20px;
       padding: 2rem;
@@ -53,200 +51,130 @@
       transition: all 0.3s ease;
     }
     
-    .viscosity-section:hover {
+    .content-section:hover {
       transform: translateY(-5px);
-      box-shadow: 0 15px 35px rgba(107,70,193,0.15);
+      box-shadow: 0 15px 35px rgba(14,165,233,0.15);
     }
     
-    .viscosity-section h2 {
-      color: #2d3748;
+    .content-section h2 {
+      color: #0c4a6e;
       margin-bottom: 1rem;
       padding-bottom: 0.5rem;
-      border-bottom: 2px solid rgba(107,70,193,0.1);
+      border-bottom: 2px solid rgba(14,165,233,0.1);
       display: flex;
       align-items: center;
     }
     
-    .viscosity-section h2::before {
-      content: '💧';
-      margin-right: 0.5rem;
-      font-size: 1.5rem;
-    }
-    
-    .viscosity-section h3 {
-      color: #6b46c1;
+    .content-section h3 {
+      color: #0ea5e9;
       margin: 1.5rem 0 0.75rem;
-    }
-    
-    .interactive-demo {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-      margin: 2rem 0;
-    }
-    
-    .simulator-container, .theory-container {
-      background: #f8fafc;
-      padding: 1.5rem;
-      border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    }
-    
-    .chart-container {
-      width: 100%;
-      height: 300px;
-      position: relative;
-      margin: 1.5rem 0;
-    }
-    
-    .simulator-controls {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-    
-    .control-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-    
-    .control-group label {
-      font-weight: 500;
-      color: #4a5568;
-    }
-    
-    .control-group input[type="range"] {
-      width: 100%;
-      accent-color: #6b46c1;
-    }
-    
-    .control-value {
-      font-size: 0.9rem;
-      color: #6b46c1;
-      font-weight: 500;
-    }
-    
-    .fluid-type-selector {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
-    
-    .fluid-option {
-      flex: 1;
-      padding: 0.75rem;
-      background: #edf2f7;
-      border-radius: 8px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-weight: 500;
-    }
-    
-    .fluid-option.active {
-      background: #6b46c1;
-      color: white;
-    }
-    
-    .formula {
-      background: rgba(107,70,193,0.05);
-      padding: 1rem;
-      border-radius: 10px;
-      margin: 1rem 0;
-      text-align: center;
-      font-family: 'Courier New', monospace;
-      font-weight: bold;
-      color: #6b46c1;
-      border-left: 4px solid #6b46c1;
-    }
-    
-    .comparison-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 1.5rem 0;
-    }
-    
-    .comparison-table th, .comparison-table td {
-      padding: 0.75rem;
-      text-align: left;
-      border-bottom: 1px solid #e2e8f0;
-    }
-    
-    .comparison-table th {
-      background: #f8fafc;
-      font-weight: 600;
-      color: #2d3748;
-    }
-    
-    .comparison-table tr:hover td {
-      background: rgba(107,70,193,0.05);
-    }
-    
-    .fluid-animation {
-      width: 100%;
-      height: 300px;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      margin: 1.5rem 0;
-    }
-    
-    .btn {
-      background: #6b46c1;
-      color: white;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin-top: 1rem;
-    }
-    
-    .btn:hover {
-      background: #553c9a;
-      transform: translateY(-2px);
-    }
-    
-    .result-panel {
-      margin-top: 1.5rem;
-      padding: 1rem;
-      background: rgba(107,70,193,0.1);
-      border-radius: 8px;
-      transition: all 0.3s ease;
-    }
-    
-    .result-panel p {
-      margin: 0.5rem 0;
     }
     
     .two-column {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 2rem;
-      align-items: center;
+      align-items: start;
     }
     
     .info-card {
       padding: 1.5rem;
-      background: #f8fafc;
+      background: #f0f9ff;
       border-radius: 10px;
       margin: 1rem 0;
-      border-left: 4px solid #6b46c1;
+      border-left: 4px solid #0ea5e9;
     }
     
     .info-card h4 {
-      color: #6b46c1;
+      color: #0ea5e9;
       margin-top: 0;
       margin-bottom: 0.5rem;
     }
     
+    .formula {
+      background: rgba(14,165,233,0.05);
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1rem 0;
+      text-align: center;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      color: #0c4a6e;
+      border-left: 4px solid #0ea5e9;
+    }
+    
+    .demo-image {
+      width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      margin: 1rem 0;
+    }
+    
     @media (max-width: 768px) {
-      .interactive-demo, .two-column {
+      .two-column {
         grid-template-columns: 1fr;
       }
+    }
+
+    /* Estilos para el ejercicio del manómetro */
+    .calculator-form {
+      background-color: #f0f9ff;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+
+    .calculator-form .form-group {
+      margin-bottom: 15px;
+    }
+
+    .calculator-form label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: #0c4a6e;
+    }
+
+    .calculator-form input, .calculator-form select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    .calculator-form button {
+      background-color: #0ea5e9;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .calculator-form button:hover {
+      background-color: #0c4a6e;
+    }
+
+    .result-panel {
+      background-color: #f0f9ff;
+      border-left: 4px solid #0ea5e9;
+      padding: 15px;
+      border-radius: 5px;
+      margin-top: 20px;
+      display: none;
+    }
+
+    #manometer-visualization {
+      position: relative;
+      width: 100%;
+      height: 300px;
+      background-color: #f0f9ff;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 20px 0;
     }
   </style>
 </head>
@@ -262,15 +190,15 @@
             <ul class="submenu">
               <li><a href="conversion.html">Conversión de Unidades</a></li>
               <li><a href="propiedades.html">Propiedades</a></li>
-              <li><a href="presion.html" class="active">Viscosidad en Fluidos</a></li>
+              <li><a href="viscosidad.html">Viscosidad en Fluidos</a></li>
             </ul>
           </li>
           <li class="has-submenu">
             <a href="#" class="menu-trigger">Presión e Introducción a la Estática de Fluidos ▾</a>
             <ul class="submenu">
-              <li><a href="presion.html">Viscosidad en Fluidos</a></li>
-              <li><a href="#estatica-fluidos">Estática de Fluidos</a></li>
-              <li><a href="#principio-pascal">Principio de Pascal</a></li>
+              <li><a href="presion.html" class="active">Presión</a></li>
+              <li><a href="ejercicios.html">Ejercicios Interactivos</a></li>
+              <li><a href="flotacion.html">Flotación y Estabilidad</a></li>
             </ul>
           </li>
           <li class="has-submenu">
@@ -313,251 +241,260 @@
   </header>
   
   <main>
-    <section class="viscosity-hero">
+    <section class="hero-section">
       <div class="container">
-        <h1>Viscosidad en Fluidos Newtonianos y no Newtonianos</h1>
-        <p>La viscosidad es una propiedad física fundamental que determina cómo los fluidos resisten el flujo cuando se les aplica una fuerza. Esta característica varía enormemente entre diferentes fluidos y condiciones, afectando directamente cómo interactuamos con ellos en la vida cotidiana y en aplicaciones de ingeniería.</p>
+        <h1>Presión</h1>
+        <p>Conceptos básicos, presión hidrostática e instrumentos de medición.</p>
       </div>
     </section>
     
     <div class="container">
-      <section class="viscosity-section">
-        <h2>Fundamentos de la Viscosidad</h2>
-        <p>La viscosidad es la resistencia interna de un fluido al movimiento o al flujo. Representa la fricción interna entre las capas moleculares del fluido cuando estas se deslizan una sobre otra.</p>
+      <section class="content-section">
+        <h2>Presión</h2>
+        
+        <p>La presión en un fluido se define como la fuerza normal por unidad de área ejercida sobre una superficie real o imaginaria dentro del fluido.</p>
         
         <div class="two-column">
           <div>
-            <h3>Esfuerzo Cortante y Velocidad de Corte</h3>
-            <p>Para entender la viscosidad, es fundamental comprender la relación entre:</p>
+            <h3>Concepto de Presión</h3>
+            <p>La presión (P) se define matemáticamente como la relación entre la fuerza normal (F) aplicada y el área (A) sobre la que actúa:</p>
+            <div class="formula">P = F / A</div>
+            <p>Unidades en el Sistema Internacional (SI): Pascal (Pa) = N/m²</p>
+            <p>Otras unidades comunes:</p>
             <ul>
-              <li><strong>Esfuerzo cortante (τ):</strong> La fuerza por unidad de área aplicada tangencialmente al fluido.</li>
-              <li><strong>Velocidad de corte (γ̇):</strong> El gradiente de velocidad perpendicular a la dirección del esfuerzo cortante.</li>
+              <li>1 bar = 10⁵ Pa</li>
+              <li>1 atm = 101,325 Pa</li>
+              <li>1 psi = 6,895 Pa</li>
+              <li>1 mmHg = 133,322 Pa</li>
             </ul>
-            <div class="formula">τ = μ · γ̇</div>
-            <p>Donde μ es el coeficiente de viscosidad (dinámica), medido en Pa·s o Poise.</p>
           </div>
           <div>
-            <div id="viscosity-concept" class="fluid-animation"></div>
+            <div class="info-card">
+              <h4>Características de la presión en fluidos</h4>
+              <ul>
+                <li>Es una magnitud escalar (no tiene dirección)</li>
+                <li>Actúa uniformemente en todas las direcciones (en fluidos en reposo)</li>
+                <li>Siempre actúa perpendicularmente a cualquier superficie</li>
+                <li>Aumenta con la profundidad en un fluido estático</li>
+              </ul>
+            </div>
+            <div class="demo-image">
+              <img src="images/presion-fluido.jpg" alt="Ilustración de presión en fluidos" style="max-width: 100%; height: auto;">
+            </div>
           </div>
         </div>
-      </section>
-      
-      <section class="viscosity-section">
-        <h2>Fluidos Newtonianos vs. No Newtonianos</h2>
+        
+        <h3>Presión Hidrostática</h3>
+        <p>La presión en un fluido en reposo aumenta con la profundidad debido al peso del fluido que se encuentra por encima.</p>
         
         <div class="two-column">
           <div>
             <div class="info-card">
-              <h4>Fluidos Newtonianos</h4>
-              <p>En los fluidos newtonianos, la viscosidad permanece constante independientemente de la fuerza aplicada. La relación entre el esfuerzo cortante y la velocidad de corte es lineal, pasando por el origen, siendo la constante de proporcionalidad el coeficiente de viscosidad.</p>
-              <p><strong>Ejemplos:</strong> Agua, aire, aceite mineral, gasolina.</p>
+              <h4>Ecuación de la Presión Hidrostática</h4>
+              <div class="formula">P = P₀ + ρgh</div>
+              <p>Donde:</p>
+              <ul>
+                <li>P = Presión a una profundidad h</li>
+                <li>P₀ = Presión en la superficie (generalmente presión atmosférica)</li>
+                <li>ρ = Densidad del fluido</li>
+                <li>g = Aceleración de la gravedad (9.81 m/s²)</li>
+                <li>h = Profundidad medida desde la superficie libre</li>
+              </ul>
             </div>
           </div>
           <div>
             <div class="info-card">
-              <h4>Fluidos No Newtonianos</h4>
-              <p>Los fluidos no newtonianos tienen viscosidades que cambian según la fuerza aplicada. La relación entre el esfuerzo cortante y la velocidad de corte es no lineal o dependiente del tiempo. No es posible definir un coeficiente de viscosidad constante como ocurre con los fluidos newtonianos.</p>
-              <p><strong>Ejemplos:</strong> Ketchup, maicena con agua, sangre, pintura.</p>
+              <h4>Variación de la presión con la profundidad</h4>
+              <p>La presión en un fluido estático aumenta linealmente con la profundidad. Este incremento es directamente proporcional a la densidad del fluido y a la aceleración de la gravedad.</p>
+              <p>Para profundidades relativamente pequeñas, donde la densidad del fluido puede considerarse constante, la presión aumenta aproximadamente 1 atm por cada 10 metros de agua.</p>
             </div>
           </div>
         </div>
         
-        <h3>Comparación de Comportamientos</h3>
-        <table class="comparison-table">
-          <thead>
-            <tr>
-              <th>Característica</th>
-              <th>Fluidos Newtonianos</th>
-              <th>Fluidos No Newtonianos</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Relación esfuerzo-velocidad</td>
-              <td>Lineal</td>
-              <td>No lineal o dependiente del tiempo</td>
-            </tr>
-            <tr>
-              <td>Coeficiente de viscosidad</td>
-              <td>Constante</td>
-              <td>Variable</td>
-            </tr>
-            <tr>
-              <td>Dependencia de la fuerza</td>
-              <td>Independiente</td>
-              <td>La viscosidad cambia con la fuerza aplicada</td>
-            </tr>
-            <tr>
-              <td>Medición</td>
-              <td>Relativamente simple</td>
-              <td>Requiere reómetros especializados</td>
-            </tr>
-            <tr>
-              <td>Modelado matemático</td>
-              <td>Simple (ecuaciones lineales)</td>
-              <td>Complejo (ecuaciones no lineales)</td>
-            </tr>
-          </tbody>
-        </table>
+        <h3>Presión en Diferentes Puntos de un Fluido</h3>
+        <p>La naturaleza de la presión en un fluido es una de las propiedades más fundamentales en la mecánica de fluidos. En un fluido en reposo, la presión tiene características particulares que determinan su comportamiento:</p>
+        
+        <div class="info-card">
+          <h4>Propiedades Fundamentales de la Presión en Fluidos</h4>
+          <ul>
+            <li><strong>La presión actúa en todas direcciones:</strong> A diferencia de los sólidos, donde la fuerza se transmite en la dirección de aplicación, en los fluidos la presión se transmite por igual en todas las direcciones.</li>
+            <li><strong>La presión es perpendicular a cualquier superficie:</strong> La fuerza que ejerce un fluido sobre una superficie siempre es perpendicular a dicha superficie, independientemente de la orientación de la misma.</li>
+            <li><strong>La presión depende solo de la profundidad:</strong> En un fluido homogéneo en reposo, la presión en un punto solo depende de la profundidad y no de la forma del recipiente que lo contiene.</li>
+          </ul>
+        </div>
+        
+        <div class="demo-image" style="text-align: center;">
+          <div id="pressure-diagram" style="position: relative; max-width: 800px; margin: 0 auto;">
+            <img src="images/presion-puntos.png" alt="Presión en diferentes puntos de un fluido" style="width: 100%; height: auto; display: block;">
+            <div id="point-tooltips" style="margin-top: 20px; padding: 10px; background-color: #f0f9ff; border-left: 4px solid #0ea5e9; border-radius: 5px; display: none;"></div>
+          </div>
+          <div style="font-style: italic; margin-top: 10px; color: #666; font-size: 0.9em;">
+            <p>Pasa el cursor sobre la imagen para obtener más información sobre los puntos.</p>
+          </div>
+        </div>
+        
+        <div class="info-card">
+          <h4>Ley Fundamental de la Hidrostática: Presión a la misma profundidad</h4>
+          <p>Como se observa en la imagen, los puntos B, C, D, E, F y G están a la misma profundidad desde la superficie libre del fluido. Aunque estos puntos se encuentran en diferentes posiciones horizontales, todos experimentan exactamente la misma presión:</p>
+          <div class="formula">P<sub>B</sub> = P<sub>C</sub> = P<sub>D</sub> = P<sub>E</sub> = P<sub>F</sub> = P<sub>G</sub> = P<sub>atm</sub> + ρgh</div>
+          <p>Donde:</p>
+          <ul>
+            <li>P<sub>atm</sub> = Presión atmosférica en la superficie</li>
+            <li>ρ = Densidad del fluido (agua)</li>
+            <li>g = Aceleración de la gravedad (9.81 m/s²)</li>
+            <li>h = Profundidad desde la superficie libre</li>
+          </ul>
+          <p>La línea roja discontinua marca el nivel donde los puntos B-G tienen la misma presión. La línea roja continua conecta los puntos A y G para enfatizar que se encuentran a la misma profundidad.</p>
+        </div>
+        
+        <div class="info-card">
+          <h4>Puntos a diferentes profundidades</h4>
+          <p>En la imagen también se observan los puntos H e I, que están a una profundidad mayor que los puntos anteriores. Para estos puntos:</p>
+          <div class="formula">P<sub>H</sub> ≠ P<sub>I</sub></div>
+          <p>Aunque ambos están a la misma profundidad entre sí, pueden tener presiones distintas debido a su ubicación en diferentes puntos del fluido o si se encuentran en fluidos de distintas densidades.</p>
+          <p>La presión en cualquier punto aumenta con la profundidad según la ley P = P<sub>atm</sub> + ρgh, por lo que los puntos H e I tienen mayor presión que los puntos B-G debido a su mayor profundidad.</p>
+        </div>
+        
+        <script>
+          document.addEventListener('DOMContentLoaded', function() {
+            const pressureDiagram = document.getElementById('pressure-diagram');
+            const tooltips = document.getElementById('point-tooltips');
+            
+            if (pressureDiagram && tooltips) {
+              // Definir las coordenadas aproximadas de los puntos (en porcentaje)
+              const points = [
+                { id: 'B', x: 10, y: 50, info: 'Punto B: A esta profundidad, la presión es P<sub>B</sub> = P<sub>atm</sub> + ρgh' },
+                { id: 'C', x: 20, y: 50, info: 'Punto C: Misma presión que B, P<sub>C</sub> = P<sub>B</sub>' },
+                { id: 'D', x: 30, y: 50, info: 'Punto D: Misma presión que B y C, P<sub>D</sub> = P<sub>B</sub> = P<sub>C</sub>' },
+                { id: 'E', x: 50, y: 50, info: 'Punto E: Misma presión que B, C y D, P<sub>E</sub> = P<sub>B</sub> = P<sub>C</sub> = P<sub>D</sub>' },
+                { id: 'F', x: 70, y: 50, info: 'Punto F: Misma presión que B, C, D y E, P<sub>F</sub> = P<sub>B</sub> = P<sub>C</sub> = P<sub>D</sub> = P<sub>E</sub>' },
+                { id: 'G', x: 80, y: 50, info: 'Punto G: Misma presión que todos los puntos a este nivel, P<sub>G</sub> = P<sub>B</sub> = P<sub>C</sub> = P<sub>D</sub> = P<sub>E</sub> = P<sub>F</sub>' },
+                { id: 'H', x: 10, y: 83, info: 'Punto H: Mayor profundidad que los puntos B-G, por lo que P<sub>H</sub> > P<sub>B-G</sub>' },
+                { id: 'I', x: 90, y: 83, info: 'Punto I: También a mayor profundidad, pero P<sub>H</sub> ≠ P<sub>I</sub> debido a su ubicación o densidad del fluido' },
+                { id: 'A', x: 10, y: 42, info: 'Punto A: Marca el inicio de la línea horizontal de referencia' },
+                { id: 'G2', x: 90, y: 42, info: 'Punto G: Marca el final de la línea horizontal de referencia' }
+              ];
+              
+              // Crear áreas interactivas sobre la imagen
+              points.forEach(point => {
+                const area = document.createElement('div');
+                area.style.position = 'absolute';
+                area.style.left = `${point.x - 3}%`;
+                area.style.top = `${point.y - 3}%`;
+                area.style.width = '6%';
+                area.style.height = '6%';
+                area.style.cursor = 'pointer';
+                area.style.borderRadius = '50%';
+                area.style.zIndex = '10';
+                
+                area.addEventListener('mouseover', function() {
+                  tooltips.innerHTML = point.info;
+                  tooltips.style.display = 'block';
+                  this.style.backgroundColor = 'rgba(14, 165, 233, 0.3)';
+                });
+                
+                area.addEventListener('mouseout', function() {
+                  this.style.backgroundColor = 'transparent';
+                });
+                
+                pressureDiagram.appendChild(area);
+              });
+              
+              // Mostrar un mensaje de inicio
+              pressureDiagram.addEventListener('mouseover', function() {
+                if (tooltips.style.display === 'none' || tooltips.innerHTML === '') {
+                  tooltips.innerHTML = 'Pasa el cursor sobre los puntos para ver información detallada.';
+                  tooltips.style.display = 'block';
+                }
+              });
+              
+              pressureDiagram.addEventListener('mouseout', function(e) {
+                // Comprobar si el cursor salió del diagrama y no entró en un área de punto
+                if (!e.relatedTarget || !e.relatedTarget.closest('#pressure-diagram')) {
+                  tooltips.style.display = 'none';
+                }
+              });
+            }
+          });
+        </script>
+        
+        <p>Esta propiedad fundamental de la presión hidrostática es la base del funcionamiento de sistemas hidráulicos, vasos comunicantes y muchas aplicaciones prácticas en ingeniería de fluidos.</p>
+        
+        <h3>Instrumentos de Medición de Presión</h3>
+        <div class="two-column">
+          <div>
+            <div class="info-card">
+              <h4>Manómetros</h4>
+              <p>Los manómetros son instrumentos utilizados para medir la presión de fluidos. Los más comunes son:</p>
+              <ul>
+                <li><strong>Manómetro de tubo abierto:</strong> Mide la presión usando la altura de una columna de líquido.</li>
+                <li><strong>Manómetro de Bourdon:</strong> Utiliza un tubo curvo que se endereza bajo presión.</li>
+                <li><strong>Manómetro digital:</strong> Utiliza sensores electrónicos para medir y mostrar la presión.</li>
+              </ul>
+            </div>
+          </div>
+          <div>
+            <div class="info-card">
+              <h4>Barómetros</h4>
+              <p>Los barómetros miden la presión atmosférica. Los más comunes son:</p>
+              <ul>
+                <li><strong>Barómetro de mercurio:</strong> Utiliza una columna de mercurio para medir la presión atmosférica.</li>
+                <li><strong>Barómetro aneroide:</strong> Usa una cámara de metal que se expande o contrae con los cambios de presión.</li>
+                <li><strong>Barómetro digital:</strong> Usa sensores electrónicos para medir la presión atmosférica.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </section>
       
-      <section class="viscosity-section">
-        <h2>Simulador Interactivo de Viscosidad</h2>
-        <p>Explora cómo se comportan diferentes tipos de fluidos bajo distintas condiciones de esfuerzo cortante y velocidad de corte.</p>
+      <section class="content-section">
+        <h2>Ejercicio Interactivo: Manómetro</h2>
+        <p>Calcula la presión hidrostática a diferentes profundidades en distintos fluidos.</p>
         
-        <div class="fluid-type-selector">
-          <div class="fluid-option active" data-type="newtonian">Fluido Newtoniano</div>
-          <div class="fluid-option" data-type="pseudoplastic">Pseudoplástico</div>
-          <div class="fluid-option" data-type="dilatant">Dilatante</div>
-          <div class="fluid-option" data-type="bingham">Plástico de Bingham</div>
-        </div>
-        
-        <div class="interactive-demo">
-          <div class="simulator-container">
-            <div class="chart-container">
-              <canvas id="viscosity-chart"></canvas>
-            </div>
-            
-            <div class="simulator-controls">
-              <div class="control-group">
-                <label for="shear-rate">Velocidad de Corte (γ̇) [s⁻¹]:</label>
-                <input type="range" id="shear-rate" min="0" max="100" value="50">
-                <div class="control-value">Valor: <span id="shear-rate-value">50</span> s⁻¹</div>
-              </div>
-              
-              <div class="control-group">
-                <label for="viscosity-coef">Coeficiente de Viscosidad Base (μ₀) [Pa·s]:</label>
-                <input type="range" id="viscosity-coef" min="0.1" max="10" step="0.1" value="1">
-                <div class="control-value">Valor: <span id="viscosity-coef-value">1</span> Pa·s</div>
-              </div>
-              
-              <div class="control-group" id="yield-stress-control" style="display: none;">
-                <label for="yield-stress">Esfuerzo de Fluencia (τ₀) [Pa]:</label>
-                <input type="range" id="yield-stress" min="0" max="50" value="10">
-                <div class="control-value">Valor: <span id="yield-stress-value">10</span> Pa</div>
-              </div>
-              
-              <div class="control-group" id="flow-index-control">
-                <label for="flow-index">Índice de Comportamiento de Flujo (n):</label>
-                <input type="range" id="flow-index" min="0.1" max="1.9" step="0.1" value="1">
-                <div class="control-value">Valor: <span id="flow-index-value">1</span></div>
-              </div>
-              
-              <button id="calc-viscosity" class="btn">Calcular Viscosidad Aparente</button>
-              <div id="viscosity-result" class="result-panel" style="display: none;"></div>
-            </div>
-          </div>
-          
-          <div class="theory-container">
-            <h3>Tipos de Fluidos No Newtonianos</h3>
-            
-            <div class="info-card">
-              <h4>Pseudoplástico (Shear-thinning)</h4>
-              <p>La viscosidad disminuye al aumentar la velocidad de corte. Ejemplos: Ketchup, pinturas, sangre.</p>
-              <div class="formula">τ = K · γ̇ⁿ (donde n < 1)</div>
-            </div>
-            
-            <div class="info-card">
-              <h4>Dilatante (Shear-thickening)</h4>
-              <p>La viscosidad aumenta al aumentar la velocidad de corte. Ejemplos: Suspensiones concentradas como la maicena en agua.</p>
-              <div class="formula">τ = K · γ̇ⁿ (donde n > 1)</div>
-            </div>
-            
-            <div class="info-card">
-              <h4>Plástico de Bingham</h4>
-              <p>Requiere un esfuerzo de fluencia inicial para comenzar a fluir, luego se comporta como un fluido newtoniano.</p>
-              <div class="formula">τ = τ₀ + μ · γ̇</div>
-            </div>
-            
-            <h3>Aplicaciones Prácticas</h3>
-            <p>La comprensión de las propiedades reológicas de los fluidos es crucial en:</p>
-            <ul>
-              <li>Industria alimentaria (salsas, chocolates, productos lácteos)</li>
-              <li>Industria farmacéutica (suspensiones, cremas)</li>
-              <li>Industria de pinturas y recubrimientos</li>
-              <li>Lubricantes y aceites industriales</li>
-              <li>Biomedicina (comportamiento de la sangre)</li>
-            </ul>
-          </div>
-        </div>
-        
-        <div id="flow-animation" class="fluid-animation"></div>
-      </section>
-      
-      <section class="viscosity-section">
-        <h2>Calculadora de Problemas de Viscosidad</h2>
-        <p>Resuelve problemas prácticos de viscosidad con diferentes tipos de fluidos.</p>
-        
-        <div class="interactive-demo">
-          <div class="simulator-container">
-            <h3>Cálculo de Viscosidad Aparente</h3>
-            <form id="viscosity-problem" class="calculator-form">
-              <div class="control-group">
-                <label for="problem-fluid-type">Tipo de Fluido:</label>
-                <select id="problem-fluid-type">
-                  <option value="newtonian">Newtoniano</option>
-                  <option value="pseudoplastic">Pseudoplástico (n < 1)</option>
-                  <option value="dilatant">Dilatante (n > 1)</option>
-                  <option value="bingham">Plástico de Bingham</option>
+        <div class="two-column">
+          <div>
+            <form id="manometer-calculator" class="calculator-form">
+              <div class="form-group">
+                <label for="fluid-type-manometer">Tipo de Fluido:</label>
+                <select id="fluid-type-manometer">
+                  <option value="water">Agua (1000 kg/m³)</option>
+                  <option value="seawater">Agua de mar (1025 kg/m³)</option>
+                  <option value="oil">Aceite (920 kg/m³)</option>
+                  <option value="mercury">Mercurio (13600 kg/m³)</option>
+                  <option value="custom">Personalizado</option>
                 </select>
               </div>
               
-              <div class="control-group">
-                <label for="problem-shear-rate">Velocidad de Corte (γ̇) [s⁻¹]:</label>
-                <input type="number" id="problem-shear-rate" step="0.1" value="50" required>
+              <div class="form-group" id="custom-density-manometer-group" style="display: none;">
+                <label for="custom-density-manometer">Densidad del Fluido (kg/m³):</label>
+                <input type="number" id="custom-density-manometer" min="1" step="1" value="1000">
               </div>
               
-              <div class="control-group">
-                <label for="problem-viscosity">Coeficiente de Viscosidad Base (μ₀) [Pa·s]:</label>
-                <input type="number" id="problem-viscosity" step="0.01" value="1" required>
+              <div class="form-group">
+                <label for="depth-manometer">Profundidad (m):</label>
+                <input type="number" id="depth-manometer" min="0" step="0.1" value="1">
               </div>
               
-              <div class="control-group" id="problem-yield-stress-group">
-                <label for="problem-yield-stress">Esfuerzo de Fluencia (τ₀) [Pa]:</label>
-                <input type="number" id="problem-yield-stress" step="0.1" value="10">
-              </div>
-              
-              <div class="control-group" id="problem-flow-index-group">
-                <label for="problem-flow-index">Índice de Comportamiento de Flujo (n):</label>
-                <input type="number" id="problem-flow-index" step="0.01" value="1" min="0.1" max="1.9">
-              </div>
-              
-              <div class="control-group">
-                <label for="problem-temperature">Temperatura [°C]:</label>
-                <input type="number" id="problem-temperature" step="0.1" value="25">
-              </div>
-              
-              <button type="submit" class="btn">Calcular</button>
-              <div id="problem-result" class="result-panel"></div>
+              <button type="submit">Calcular Presión</button>
             </form>
+            
+            <div id="manometer-result" class="result-panel">
+              <h4>Resultados:</h4>
+              <p><strong>Presión hidrostática:</strong> <span id="hydrostatic-pressure-manometer">0</span> Pa</p>
+              <p><strong>Presión total (incluyendo atmosférica):</strong> <span id="total-pressure-manometer">0</span> Pa</p>
+              <p><strong>Equivalente en otras unidades:</strong></p>
+              <ul>
+                <li><strong>Bar:</strong> <span id="pressure-bar-manometer">0</span> bar</li>
+                <li><strong>Atmósferas:</strong> <span id="pressure-atm-manometer">0</span> atm</li>
+                <li><strong>PSI:</strong> <span id="pressure-psi-manometer">0</span> psi</li>
+                <li><strong>mmHg:</strong> <span id="pressure-mmhg-manometer">0</span> mmHg</li>
+              </ul>
+            </div>
           </div>
           
-          <div class="theory-container">
-            <h3>Ecuaciones Utilizadas</h3>
-            
-            <div class="info-card">
-              <h4>Fluido Newtoniano</h4>
-              <div class="formula">τ = μ · γ̇</div>
-              <div class="formula">μₐₚₐᵣₑₙₜₑ = μ</div>
-            </div>
-            
-            <div class="info-card">
-              <h4>Modelo de Ley de Potencia</h4>
-              <div class="formula">τ = K · γ̇ⁿ</div>
-              <div class="formula">μₐₚₐᵣₑₙₜₑ = K · γ̇ⁿ⁻¹</div>
-              <p>Donde n < 1 para fluidos pseudoplásticos y n > 1 para fluidos dilatantes.</p>
-            </div>
-            
-            <div class="info-card">
-              <h4>Modelo de Bingham</h4>
-              <div class="formula">τ = τ₀ + μ · γ̇ (para τ > τ₀)</div>
-              <div class="formula">μₐₚₐᵣₑₙₜₑ = τ₀/γ̇ + μ</div>
-            </div>
-            
-            <div class="info-card">
-              <h4>Efecto de la Temperatura</h4>
-              <div class="formula">μ = μᵣₑ₁ · exp[B · (1/T - 1/Tᵣₑ₁)]</div>
-              <p>Donde B es una constante del material, T es la temperatura absoluta, y μᵣₑ₁ es la viscosidad a la temperatura de referencia Tᵣₑ₁.</p>
+          <div>
+            <div id="manometer-visualization">
+              <!-- La visualización del manómetro se generará con JavaScript -->
             </div>
           </div>
         </div>
@@ -572,6 +509,6 @@
   </footer>
   
   <script src="js/main.js"></script>
-  <script src="js/viscosity.js"></script>
+  <script src="js/presion.js"></script>
 </body>
 </html>

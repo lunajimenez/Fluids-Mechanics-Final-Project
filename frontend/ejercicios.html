@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ejercicios Interactivos - Mecánica de Fluidos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .hero-section {
+      background: linear-gradient(135deg, #0c4a6e, #0ea5e9);
+      padding: 4rem 0;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><path d="M30 0v60M0 30h60" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></svg>') repeat;
+      opacity: 0.3;
+    }
+    
+    .hero-section h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      position: relative;
+      text-align: center;
+    }
+    
+    .hero-section p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    .content-section {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .content-section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(14,165,233,0.15);
+    }
+    
+    .content-section h2 {
+      color: #0c4a6e;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid rgba(14,165,233,0.1);
+      display: flex;
+      align-items: center;
+    }
+    
+    .content-section h3 {
+      color: #0ea5e9;
+      margin: 1.5rem 0 0.75rem;
+    }
+    
+    .two-column {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+    
+    .info-card {
+      padding: 1.5rem;
+      background: #f0f9ff;
+      border-radius: 10px;
+      margin: 1rem 0;
+      border-left: 4px solid #0ea5e9;
+    }
+    
+    .info-card h4 {
+      color: #0ea5e9;
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+    }
+    
+    .formula {
+      background: rgba(14,165,233,0.05);
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1rem 0;
+      text-align: center;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      color: #0c4a6e;
+      border-left: 4px solid #0ea5e9;
+    }
+    
+    .interactive-container {
+      background: #f0f9ff;
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      margin: 1.5rem 0;
+    }
+    
+    .btn {
+      background: #0ea5e9;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+    }
+    
+    .btn:hover {
+      background: #0c4a6e;
+      transform: translateY(-2px);
+    }
+    
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .control-group label {
+      font-weight: 500;
+      color: #4a5568;
+    }
+    
+    .control-group select,
+    .control-group input[type="number"] {
+      padding: 0.5rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 4px;
+    }
+    
+    @media (max-width: 768px) {
+      .two-column {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav-container">
+      <h1>Mecánica de Fluidos</h1>
+      <nav id="navbar">
+        <ul class="main-menu">
+          <li><a href="index.html">Introducción</a></li>
+          <li class="has-submenu">
+            <a href="#" class="menu-trigger">Propiedades de los Fluidos ▾</a>
+            <ul class="submenu">
+              <li><a href="conversion.html">Conversión de Unidades</a></li>
+              <li><a href="propiedades.html">Propiedades</a></li>
+              <li><a href="viscosidad.html">Viscosidad en Fluidos</a></li>
+            </ul>
+          </li>
+          <li class="has-submenu">
+            <a href="#" class="menu-trigger">Presión e Introducción a la Estática de Fluidos ▾</a>
+            <ul class="submenu">
+              <li><a href="presion.html">Presión</a></li>
+              <li><a href="ejercicios.html" class="active">Ejercicios Interactivos</a></li>
+              <li><a href="flotacion.html">Flotación y Estabilidad</a></li>
+            </ul>
+          </li>
+          <li class="has-submenu">
+            <a href="#" class="menu-trigger">Cinemática de Fluidos ▾</a>
+            <ul class="submenu">
+              <li><a href="#cinematica-1">Descripción del Flujo</a></li>
+              <li><a href="#cinematica-2">Ecuación de Continuidad</a></li>
+              <li><a href="#cinematica-3">Patrones de Flujo</a></li>
+            </ul>
+          </li>
+          <li class="has-submenu">
+            <a href="#" class="menu-trigger">Flujo en Tuberías ▾</a>
+            <ul class="submenu">
+              <li><a href="simulacion-flujo.html">Simulación de Flujo</a></li>
+              <li><a href="#tuberias-2">Pérdidas por Fricción</a></li>
+              <li><a href="#tuberias-3">Sistemas de Tuberías</a></li>
+            </ul>
+          </li>
+          <li class="has-submenu">
+            <a href="#" class="menu-trigger">Potencia y Eficiencia de Máquinas de Flujo ▾</a>
+            <ul class="submenu">
+              <li><a href="#maquinas-1">Bombas</a></li>
+              <li><a href="#maquinas-2">Turbinas</a></li>
+              <li><a href="#maquinas-3">Compresores</a></li>
+            </ul>
+          </li>
+          <li class="has-submenu">
+            <a href="#" class="menu-trigger">Análisis Dimensional ▾</a>
+            <ul class="submenu">
+              <li><a href="#dimensional-1">Teorema Pi de Buckingham</a></li>
+              <li><a href="#dimensional-2">Números Adimensionales</a></li>
+              <li><a href="#dimensional-3">Análisis de Modelos</a></li>
+            </ul>
+          </li>
+          <li><a href="simulacion-flujo.html">Multimedia</a></li>
+        </ul>
+      </nav>
+      <div id="menu-toggle">☰</div>
+    </div>
+  </header>
+  
+  <main>
+    <section class="hero-section">
+      <div class="container">
+        <h1>Ejercicios Interactivos</h1>
+        <p>Calculadoras y simuladores para practicar conceptos de presión hidrostática, fuerzas sobre superficies sumergidas y el principio de Pascal.</p>
+      </div>
+    </section>
+    
+    <div class="container">
+      <section class="content-section">
+        <h2>Ejercicios Interactivos</h2>
+        
+        <p>Esta sección contiene ejercicios interactivos para practicar conceptos relacionados con la presión y la estática de fluidos.</p>
+        
+        <div class="interactive-container">
+          <h3>Calculadora de Presión Hidrostática</h3>
+          <p>Calcula la presión a diferentes profundidades en distintos fluidos.</p>
+          
+          <div class="two-column">
+            <div>
+              <form id="hydrostatic-calculator" class="calculator-form">
+                <div class="control-group">
+                  <label for="fluid-type">Tipo de Fluido:</label>
+                  <select id="fluid-type">
+                    <option value="water">Agua (1000 kg/m³)</option>
+                    <option value="seawater">Agua de Mar (1025 kg/m³)</option>
+                    <option value="oil">Aceite (920 kg/m³)</option>
+                    <option value="mercury">Mercurio (13600 kg/m³)</option>
+                    <option value="custom">Personalizado</option>
+                  </select>
+                </div>
+                
+                <div class="control-group" id="custom-density-group" style="display: none;">
+                  <label for="custom-density">Densidad Personalizada (kg/m³):</label>
+                  <input type="number" id="custom-density" step="1" min="1" value="1000">
+                </div>
+                
+                <div class="control-group">
+                  <label for="depth">Profundidad (m):</label>
+                  <input type="number" id="depth" step="0.1" min="0" value="10">
+                </div>
+                
+                <div class="control-group">
+                  <label for="surface-pressure">Presión en la superficie (Pa):</label>
+                  <input type="number" id="surface-pressure" step="100" value="101325">
+                </div>
+                
+                <button type="submit" class="btn">Calcular Presión</button>
+                
+                <div id="pressure-result" class="result-panel" style="display: none; margin-top: 1rem; padding: 1rem; background: rgba(14,165,233,0.1); border-radius: 8px;">
+                  <p><strong>Presión total:</strong> <span id="total-pressure">0</span> Pa</p>
+                  <p><strong>Presión hidrostática:</strong> <span id="hydrostatic-pressure">0</span> Pa</p>
+                  <p><strong>Presión en otras unidades:</strong></p>
+                  <ul>
+                    <li><span id="pressure-bar">0</span> bar</li>
+                    <li><span id="pressure-atm">0</span> atm</li>
+                    <li><span id="pressure-psi">0</span> psi</li>
+                  </ul>
+                </div>
+              </form>
+            </div>
+            
+            <div>
+              <div class="info-card">
+                <h4>Cómo funciona la calculadora</h4>
+                <p>Esta calculadora utiliza la ecuación fundamental de la presión hidrostática:</p>
+                <div class="formula">P = P₀ + ρgh</div>
+                <p>La presión aumenta linealmente con la profundidad y depende de la densidad del fluido.</p>
+              </div>
+              
+              <div id="pressure-visualization" style="width: 100%; height: 200px; background: linear-gradient(to bottom, #bae6fd, #0284c7); border-radius: 10px; position: relative; overflow: hidden; margin-top: 1rem;">
+                <div id="pressure-indicator" style="position: absolute; left: 10%; width: 80%; height: 2px; background-color: white; top: 50%;"></div>
+                <div id="pressure-value" style="position: absolute; right: 10%; color: white; font-weight: bold; top: 47%;">0 Pa</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="interactive-container">
+          <h3>Cálculo de Fuerzas Hidrostáticas sobre Superficies Sumergidas</h3>
+          
+          <div class="two-column">
+            <div>
+              <form id="hydrostatic-force-calculator" class="calculator-form">
+                <div class="control-group">
+                  <label for="surface-shape">Forma de la Superficie:</label>
+                  <select id="surface-shape">
+                    <option value="rectangle">Rectangular</option>
+                    <option value="circle">Circular</option>
+                    <option value="triangle">Triangular</option>
+                  </select>
+                </div>
+                
+                <div id="rectangle-dims">
+                  <div class="control-group">
+                    <label for="rect-width">Ancho (m):</label>
+                    <input type="number" id="rect-width" step="0.1" min="0.1" value="2">
+                  </div>
+                  <div class="control-group">
+                    <label for="rect-height">Altura (m):</label>
+                    <input type="number" id="rect-height" step="0.1" min="0.1" value="1">
+                  </div>
+                </div>
+                
+                <div id="circle-dims" style="display: none;">
+                  <div class="control-group">
+                    <label for="circle-radius">Radio (m):</label>
+                    <input type="number" id="circle-radius" step="0.1" min="0.1" value="1">
+                  </div>
+                </div>
+                
+                <div id="triangle-dims" style="display: none;">
+                  <div class="control-group">
+                    <label for="triangle-base">Base (m):</label>
+                    <input type="number" id="triangle-base" step="0.1" min="0.1" value="2">
+                  </div>
+                  <div class="control-group">
+                    <label for="triangle-height">Altura (m):</label>
+                    <input type="number" id="triangle-height" step="0.1" min="0.1" value="1">
+                  </div>
+                </div>
+                
+                <div class="control-group">
+                  <label for="top-depth">Profundidad de la parte superior (m):</label>
+                  <input type="number" id="top-depth" step="0.1" min="0" value="1">
+                </div>
+                
+                <div class="control-group">
+                  <label for="fluid-density-force">Densidad del fluido (kg/m³):</label>
+                  <input type="number" id="fluid-density-force" step="1" min="1" value="1000">
+                </div>
+                
+                <button type="submit" class="btn">Calcular Fuerza</button>
+                
+                <div id="force-result" class="result-panel" style="display: none; margin-top: 1rem; padding: 1rem; background: rgba(14,165,233,0.1); border-radius: 8px;">
+                  <p><strong>Fuerza hidrostática total:</strong> <span id="total-force">0</span> N</p>
+                  <p><strong>Punto de aplicación (centro de presión):</strong></p>
+                  <ul>
+                    <li>Profundidad: <span id="cp-depth">0</span> m desde la superficie</li>
+                    <li>Distancia: <span id="cp-distance">0</span> m desde la parte superior de la superficie</li>
+                  </ul>
+                </div>
+              </form>
+            </div>
+            
+            <div>
+              <div class="info-card">
+                <h4>Centro de Presión</h4>
+                <p>El centro de presión es el punto donde se puede considerar que actúa la fuerza hidrostática resultante. Siempre está por debajo del centroide de la superficie sumergida.</p>
+                <p>Para una placa rectangular vertical con su borde superior a una profundidad h₁ y altura L:</p>
+                <div class="formula">y₁ = h₁ + L/2 + I/A(y)</div>
+                <p>Donde:</p>
+                <ul>
+                  <li>y₁ = Distancia desde la superficie libre al centro de presión</li>
+                  <li>I = Momento de inercia de la superficie respecto a su eje centroidal</li>
+                  <li>A = Área de la superficie</li>
+                  <li>y = Distancia desde la superficie libre al centroide</li>
+                </ul>
+              </div>
+              
+              <div id="force-visualization" style="width: 100%; height: 250px; background: linear-gradient(to bottom, #bae6fd, #0284c7); border-radius: 10px; position: relative; overflow: hidden; margin-top: 1rem;">
+                <div id="surface-representation" style="position: absolute; left: 25%; top: 20%; width: 50%; height: 60%; background-color: rgba(255, 255, 255, 0.3); border: 2px solid white;"></div>
+                <div id="force-arrow" style="position: absolute; left: 50%; top: 50%; width: 30%; height: 4px; background-color: yellow; transform: translateY(-50%);">&#10132;</div>
+                <div id="center-pressure" style="position: absolute; left: 50%; top: 50%; width: 8px; height: 8px; background-color: red; border-radius: 50%; transform: translate(-50%, -50%);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="interactive-container">
+          <h3>Principio de Pascal - Simulador de Prensa Hidráulica</h3>
+          
+          <div class="two-column">
+            <div>
+              <form id="pascal-simulator" class="calculator-form">
+                <div class="control-group">
+                  <label for="small-piston-area">Area del pistón pequeño (cm²):</label>
+                  <input type="number" id="small-piston-area" step="0.1" min="0.1" value="10">
+                </div>
+                
+                <div class="control-group">
+                  <label for="large-piston-area">Area del pistón grande (cm²):</label>
+                  <input type="number" id="large-piston-area" step="0.1" min="0.1" value="100">
+                </div>
+                
+                <div class="control-group">
+                  <label for="input-force">Fuerza aplicada al pistón pequeño (N):</label>
+                  <input type="number" id="input-force" step="1" min="1" value="100">
+                </div>
+                
+                <button type="submit" class="btn">Calcular</button>
+                
+                <div id="pascal-result" class="result-panel" style="display: none; margin-top: 1rem; padding: 1rem; background: rgba(14,165,233,0.1); border-radius: 8px;">
+                  <p><strong>Fuerza de salida:</strong> <span id="output-force">0</span> N</p>
+                  <p><strong>Presión en el sistema:</strong> <span id="system-pressure">0</span> Pa</p>
+                  <p><strong>Ventaja mecánica:</strong> <span id="mechanical-advantage">0</span></p>
+                  <p><strong>Distancia recorrida por el pistón pequeño:</strong> <span id="small-distance">10</span> cm</p>
+                  <p><strong>Distancia recorrida por el pistón grande:</strong> <span id="large-distance">0</span> cm</p>
+                </div>
+              </form>
+            </div>
+            
+            <div>
+              <div class="info-card">
+                <h4>Principio de Pascal en Acción</h4>
+                <p>Una prensa hidráulica es una aplicación directa del principio de Pascal. Permite amplificar una fuerza pequeña para generar una fuerza mucho mayor.</p>
+                <p>La relación entre las fuerzas es proporcional a la relación entre las áreas de los pistones:</p>
+                <div class="formula">F₂/F₁ = A₂/A₁</div>
+                <p>Mientras que las distancias recorridas son inversamente proporcionales:</p>
+                <div class="formula">d₁/d₂ = A₂/A₁</div>
+              </div>
+              
+              <div id="hydraulic-visualization" style="width: 100%; height: 200px; position: relative; background-color: #f0f9ff; border-radius: 10px; margin-top: 1rem; overflow: hidden;">
+                <!-- Representación visual de la prensa hidráulica -->
+                <div style="position: absolute; left: 20%; bottom: 20%; width: 15%; height: 40%; background-color: #0ea5e9; border-radius: 10px 10px 0 0;"></div>
+                <div style="position: absolute; left: 20%; bottom: 60%; width: 15%; height: 10%; background-color: #6b7280; border-radius: 5px;"></div>
+                
+                <div style="position: absolute; left: 65%; bottom: 20%; width: 25%; height: 20%; background-color: #0ea5e9; border-radius: 10px 10px 0 0;"></div>
+                <div style="position: absolute; left: 65%; bottom: 40%; width: 25%; height: 10%; background-color: #6b7280; border-radius: 5px;"></div>
+                
+                <div style="position: absolute; left: 35%; bottom: 30%; width: 30%; height: 5px; background-color: #0ea5e9;"></div>
+                
+                <div id="small-piston" style="position: absolute; left: 20%; bottom: 65%; width: 15%; height: 5%; background-color: #ef4444; border-radius: 5px;">&#8595;</div>
+                <div id="large-piston" style="position: absolute; left: 65%; bottom: 45%; width: 25%; height: 5%; background-color: #ef4444; border-radius: 5px;">&#8593;</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  
+  <footer>
+    <div class="container">
+      <p>Grupo 4 Mecánica de Fluidos</p>
+    </div>
+  </footer>
+  
+  <script src="js/main.js"></script>
+  <script src="js/presion.js"></script>
+</body>
+</html> 

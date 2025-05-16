@@ -228,9 +228,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const unitSet = units[currentDimension];
     if (!unitSet || !(fromUnit in unitSet) || !(toUnit in unitSet)) {
       outputValue.value = 'Error';
-      return;
-    }
-    
+                        return;
+                    }
+
     // Realizar la conversión
     const valueInBase = value * unitSet[fromUnit];
     const result = valueInBase / unitSet[toUnit];
@@ -324,8 +324,8 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // Realizar conversión
       performConversion();
-      
-      // Guardar en historial
+        
+        // Guardar en historial
       saveToHistory();
     }
     
@@ -380,31 +380,31 @@ document.addEventListener('DOMContentLoaded', () => {
   // Función para actualizar visualización del historial
   function updateHistoryDisplay(history) {
     if (history.length === 0) {
-      historyList.innerHTML = '<p class="empty-history">No hay conversiones guardadas</p>';
-      return;
-    }
-    
-    historyList.innerHTML = '';
-    
+            historyList.innerHTML = '<p class="empty-history">No hay conversiones guardadas</p>';
+            return;
+        }
+        
+        historyList.innerHTML = '';
+        
     history.forEach((item, index) => {
-      const historyItem = document.createElement('div');
-      historyItem.className = 'history-item';
+            const historyItem = document.createElement('div');
+            historyItem.className = 'history-item';
       
       const date = new Date(item.timestamp);
       const formattedDate = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
       
-      historyItem.innerHTML = `
-        <div class="history-item-header">
+            historyItem.innerHTML = `
+                <div class="history-item-header">
           <span class="history-type">${capitalizeFirstLetter(item.dimension)}</span>
           <span class="history-time">${formattedDate}</span>
-        </div>
-        <div class="history-conversion">
+                </div>
+                <div class="history-conversion">
           ${item.fromValue} ${item.fromUnit} = ${item.toValue} ${item.toUnit}
-        </div>
+                </div>
         <button class="reuse-conversion" data-index="${index}">Reutilizar</button>
-      `;
-      
-      historyList.appendChild(historyItem);
+            `;
+            
+            historyList.appendChild(historyItem);
     });
     
     // Añadir event listeners para botones de reutilización
@@ -412,10 +412,10 @@ document.addEventListener('DOMContentLoaded', () => {
       button.addEventListener('click', () => {
         const index = parseInt(button.dataset.index);
         reuseConversion(index);
-      });
-    });
-  }
-  
+            });
+        });
+    }
+    
   // Función para reutilizar una conversión del historial
   function reuseConversion(index) {
     const history = JSON.parse(localStorage.getItem('conversionHistory') || '[]');
@@ -433,10 +433,10 @@ document.addEventListener('DOMContentLoaded', () => {
       for (let i = 0; i < fromUnitSelect.options.length; i++) {
         if (fromUnitSelect.options[i].value === item.fromUnit) {
           fromUnitSelect.selectedIndex = i;
-          break;
-        }
-      }
-      
+                                break;
+                            }
+                        }
+                        
       for (let i = 0; i < toUnitSelect.options.length; i++) {
         if (toUnitSelect.options[i].value === item.toUnit) {
           toUnitSelect.selectedIndex = i;

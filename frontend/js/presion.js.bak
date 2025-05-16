@@ -1,0 +1,386 @@
+// JavaScript para las funcionalidades relacionadas con presión hidrostática, fuerzas sobre superficies sumergidas y flotabilidad
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Calculadora de Presión Hidrostática
+  const hydrostaticCalculator = document.getElementById('hydrostatic-calculator');
+  if (hydrostaticCalculator) {
+    const fluidType = document.getElementById('fluid-type');
+    const customDensityGroup = document.getElementById('custom-density-group');
+    const customDensity = document.getElementById('custom-density');
+    const depth = document.getElementById('depth');
+    const surfacePressure = document.getElementById('surface-pressure');
+    const pressureResult = document.getElementById('pressure-result');
+    const totalPressure = document.getElementById('total-pressure');
+    const hydrostaticPressure = document.getElementById('hydrostatic-pressure');
+    const pressureBar = document.getElementById('pressure-bar');
+    const pressureAtm = document.getElementById('pressure-atm');
+    const pressurePsi = document.getElementById('pressure-psi');
+    const pressureIndicator = document.getElementById('pressure-indicator');
+    const pressureValue = document.getElementById('pressure-value');
+    
+    // Mostrar/ocultar campo de densidad personalizada
+    fluidType.addEventListener('change', function() {
+      if (this.value === 'custom') {
+        customDensityGroup.style.display = 'block';
+      } else {
+        customDensityGroup.style.display = 'none';
+      }
+    });
+    
+    // Calcular presión hidrostática
+    hydrostaticCalculator.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Obtener densidad según el tipo de fluido seleccionado
+      let density;
+      switch(fluidType.value) {
+        case 'water':
+          density = 1000; // kg/m³
+          break;
+        case 'seawater':
+          density = 1025; // kg/m³
+          break;
+        case 'oil':
+          density = 920; // kg/m³
+          break;
+        case 'mercury':
+          density = 13600; // kg/m³
+          break;
+        case 'custom':
+          density = parseFloat(customDensity.value);
+          break;
+      }
+      
+      const depthValue = parseFloat(depth.value);
+      const surfacePressureValue = parseFloat(surfacePressure.value);
+      const g = 9.81; // m/s²
+      
+      // Calcular presión hidrostática: P = P₀ + ρgh
+      const hydrostaticPressureValue = density * g * depthValue;
+      const totalPressureValue = surfacePressureValue + hydrostaticPressureValue;
+      
+      // Convertir a otras unidades
+      const barValue = totalPressureValue / 100000;
+      const atmValue = totalPressureValue / 101325;
+      const psiValue = totalPressureValue / 6895;
+      
+      // Mostrar resultados
+      totalPressure.textContent = totalPressureValue.toLocaleString(undefined, {maximumFractionDigits: 2});
+      hydrostaticPressure.textContent = hydrostaticPressureValue.toLocaleString(undefined, {maximumFractionDigits: 2});
+      pressureBar.textContent = barValue.toLocaleString(undefined, {maximumFractionDigits: 4});
+      pressureAtm.textContent = atmValue.toLocaleString(undefined, {maximumFractionDigits: 4});
+      pressurePsi.textContent = psiValue.toLocaleString(undefined, {maximumFractionDigits: 4});
+      
+      pressureResult.style.display = 'block';
+      
+      // Actualizar visualización
+      const maxDepth = 100; // Para normalizar la visualización
+      const normalizedDepth = Math.min(depthValue / maxDepth, 1);
+      pressureIndicator.style.top = `${normalizedDepth * 100}%`;
+      pressureValue.style.top = `${normalizedDepth * 100 - 3}%`;
+      pressureValue.textContent = `${totalPressureValue.toLocaleString(undefined, {maximumFractionDigits: 0})} Pa`;
+    });
+  }
+  
+  // Calculadora de Fuerzas Hidrostáticas sobre Superficies Sumergidas
+  const hydrostaticForceCalculator = document.getElementById('hydrostatic-force-calculator');
+  if (hydrostaticForceCalculator) {
+    const surfaceShape = document.getElementById('surface-shape');
+    const rectDims = document.getElementById('rectangle-dims');
+    const circleDims = document.getElementById('circle-dims');
+    const triangleDims = document.getElementById('triangle-dims');
+    const rectWidth = document.getElementById('rect-width');
+    const rectHeight = document.getElementById('rect-height');
+    const circleRadius = document.getElementById('circle-radius');
+    const triangleBase = document.getElementById('triangle-base');
+    const triangleHeight = document.getElementById('triangle-height');
+    const topDepth = document.getElementById('top-depth');
+    const fluidDensityForce = document.getElementById('fluid-density-force');
+    const forceResult = document.getElementById('force-result');
+    const totalForce = document.getElementById('total-force');
+    const cpDepth = document.getElementById('cp-depth');
+    const cpDistance = document.getElementById('cp-distance');
+    const surfaceRepresentation = document.getElementById('surface-representation');
+    const forceArrow = document.getElementById('force-arrow');
+    const centerPressure = document.getElementById('center-pressure');
+    
+    // Mostrar/ocultar campos según la forma seleccionada
+    surfaceShape.addEventListener('change', function() {
+      rectDims.style.display = 'none';
+      circleDims.style.display = 'none';
+      triangleDims.style.display = 'none';
+      
+      switch(this.value) {
+        case 'rectangle':
+          rectDims.style.display = 'block';
+          break;
+        case 'circle':
+          circleDims.style.display = 'block';
+          break;
+        case 'triangle':
+          triangleDims.style.display = 'block';
+          break;
+      }
+    });
+    
+    // Calcular fuerza hidrostática
+    hydrostaticForceCalculator.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const shape = surfaceShape.value;
+      const topDepthValue = parseFloat(topDepth.value);
+      const density = parseFloat(fluidDensityForce.value);
+      const g = 9.81; // m/s²
+      
+      let area, centroidDepth, momentOfInertia, width, height;
+      
+      // Calcular según la forma
+      switch(shape) {
+        case 'rectangle':
+          width = parseFloat(rectWidth.value);
+          height = parseFloat(rectHeight.value);
+          area = width * height;
+          centroidDepth = topDepthValue + height / 2;
+          momentOfInertia = (width * Math.pow(height, 3)) / 12;
+          break;
+        case 'circle':
+          const radius = parseFloat(circleRadius.value);
+          area = Math.PI * Math.pow(radius, 2);
+          centroidDepth = topDepthValue + radius;
+          momentOfInertia = (Math.PI * Math.pow(radius, 4)) / 4;
+          width = radius * 2;
+          height = radius * 2;
+          break;
+        case 'triangle':
+          width = parseFloat(triangleBase.value);
+          height = parseFloat(triangleHeight.value);
+          area = (width * height) / 2;
+          centroidDepth = topDepthValue + height / 3;
+          momentOfInertia = (width * Math.pow(height, 3)) / 36;
+          break;
+      }
+      
+      // Calcular fuerza hidrostática: F = ρgAh_c
+      const force = density * g * area * centroidDepth;
+      
+      // Calcular centro de presión
+      const cpDistanceValue = momentOfInertia / (area * centroidDepth);
+      const cpDepthValue = centroidDepth + cpDistanceValue;
+      
+      // Mostrar resultados
+      totalForce.textContent = force.toLocaleString(undefined, {maximumFractionDigits: 2});
+      cpDepth.textContent = cpDepthValue.toLocaleString(undefined, {maximumFractionDigits: 3});
+      cpDistance.textContent = cpDistanceValue.toLocaleString(undefined, {maximumFractionDigits: 3});
+      
+      forceResult.style.display = 'block';
+      
+      // Actualizar visualización
+      if (surfaceRepresentation && forceArrow && centerPressure) {
+        // Ajustar representación de la superficie
+        let topPosition, leftPosition, surfaceWidth, surfaceHeight;
+        
+        switch(shape) {
+          case 'rectangle':
+            topPosition = 20;
+            leftPosition = 25;
+            surfaceWidth = 50;
+            surfaceHeight = 60;
+            surfaceRepresentation.style.borderRadius = '0';
+            break;
+          case 'circle':
+            topPosition = 20;
+            leftPosition = 25;
+            surfaceWidth = 50;
+            surfaceHeight = 50;
+            surfaceRepresentation.style.borderRadius = '50%';
+            break;
+          case 'triangle':
+            topPosition = 20;
+            leftPosition = 25;
+            surfaceWidth = 50;
+            surfaceHeight = 60;
+            // Usar un clip-path para el triángulo
+            surfaceRepresentation.style.clipPath = 'polygon(50% 0%, 0% 100%, 100% 100%)';
+            break;
+        }
+        
+        surfaceRepresentation.style.top = `${topPosition}%`;
+        surfaceRepresentation.style.left = `${leftPosition}%`;
+        surfaceRepresentation.style.width = `${surfaceWidth}%`;
+        surfaceRepresentation.style.height = `${surfaceHeight}%`;
+        
+        // Posicionar el centro de presión
+        const cpPositionFromTop = topPosition + (cpDistanceValue / height) * surfaceHeight;
+        centerPressure.style.top = `${cpPositionFromTop}%`;
+        centerPressure.style.left = '50%';
+        
+        // Posicionar la flecha de fuerza
+        forceArrow.style.top = `${cpPositionFromTop}%`;
+        forceArrow.style.left = '50%';
+      }
+    });
+  }
+  
+  // Simulador de Prensa Hidráulica
+  const pascalSimulator = document.getElementById('pascal-simulator');
+  if (pascalSimulator) {
+    const smallPistonArea = document.getElementById('small-piston-area');
+    const largePistonArea = document.getElementById('large-piston-area');
+    const inputForce = document.getElementById('input-force');
+    const pascalResult = document.getElementById('pascal-result');
+    const outputForce = document.getElementById('output-force');
+    const systemPressure = document.getElementById('system-pressure');
+    const mechanicalAdvantage = document.getElementById('mechanical-advantage');
+    const smallDistance = document.getElementById('small-distance');
+    const largeDistance = document.getElementById('large-distance');
+    const smallPiston = document.getElementById('small-piston');
+    const largePiston = document.getElementById('large-piston');
+    
+    pascalSimulator.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const smallArea = parseFloat(smallPistonArea.value) / 10000; // cm² a m²
+      const largeArea = parseFloat(largePistonArea.value) / 10000; // cm² a m²
+      const force = parseFloat(inputForce.value);
+      
+      // Calcular según el principio de Pascal
+      const pressure = force / smallArea; // Pa
+      const outputForceValue = pressure * largeArea; // N
+      const advantage = largeArea / smallArea;
+      
+      // Calcular distancias (conservación del trabajo)
+      const smallDistanceValue = 10; // cm, valor fijo para visualización
+      const largeDistanceValue = smallDistanceValue * (smallArea / largeArea);
+      
+      // Mostrar resultados
+      outputForce.textContent = outputForceValue.toLocaleString(undefined, {maximumFractionDigits: 2});
+      systemPressure.textContent = pressure.toLocaleString(undefined, {maximumFractionDigits: 2});
+      mechanicalAdvantage.textContent = advantage.toLocaleString(undefined, {maximumFractionDigits: 2});
+      smallDistance.textContent = smallDistanceValue.toFixed(2);
+      largeDistance.textContent = largeDistanceValue.toFixed(2);
+      
+      pascalResult.style.display = 'block';
+      
+      // Actualizar visualización
+      if (smallPiston && largePiston) {
+        smallPiston.style.bottom = '65%';
+        largePiston.style.bottom = `${45 + largeDistanceValue}%`;
+      }
+    });
+  }
+  
+  // Calculadora de Flotabilidad
+  const buoyancyCalculator = document.getElementById('buoyancy-calculator');
+  if (buoyancyCalculator) {
+    const objectMass = document.getElementById('object-mass');
+    const objectVolume = document.getElementById('object-volume');
+    const fluidDensityBuoyancy = document.getElementById('fluid-density-buoyancy');
+    const customFluidDensity = document.getElementById('custom-fluid-density');
+    const customFluidDensityValue = document.getElementById('custom-fluid-density-value');
+    const buoyancyResult = document.getElementById('buoyancy-result');
+    const objectDensity = document.getElementById('object-density');
+    const buoyancyForce = document.getElementById('buoyancy-force');
+    const objectWeight = document.getElementById('object-weight');
+    const netForce = document.getElementById('net-force');
+    const forceDirection = document.getElementById('force-direction');
+    const buoyancyState = document.getElementById('buoyancy-state');
+    const submergedPercentage = document.getElementById('submerged-percentage');
+    const floatingObject = document.getElementById('floating-object');
+    const weightArrow = document.getElementById('weight-arrow');
+    const buoyancyArrow = document.getElementById('buoyancy-arrow');
+    
+    // Mostrar/ocultar campo de densidad personalizada
+    fluidDensityBuoyancy.addEventListener('change', function() {
+      if (this.value === 'custom') {
+        customFluidDensity.style.display = 'block';
+      } else {
+        customFluidDensity.style.display = 'none';
+      }
+    });
+    
+    // Calcular flotabilidad
+    buoyancyCalculator.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+      const mass = parseFloat(objectMass.value); // kg
+      const volume = parseFloat(objectVolume.value); // m³
+      
+      // Obtener densidad del fluido
+      let fluidDensity;
+      if (fluidDensityBuoyancy.value === 'custom') {
+        fluidDensity = parseFloat(customFluidDensityValue.value);
+      } else {
+        fluidDensity = parseFloat(fluidDensityBuoyancy.value);
+      }
+      
+      const g = 9.81; // m/s²
+      
+      // Calcular densidad del objeto
+      const objectDensityValue = mass / volume; // kg/m³
+      
+      // Calcular peso y empuje
+      const weightValue = mass * g; // N
+      const maxBuoyancyForceValue = fluidDensity * g * volume; // N
+      
+      // Determinar si flota o se hunde
+      let netForceValue, submergPercentage, state;
+      
+      if (objectDensityValue < fluidDensity) {
+        // El objeto flota parcialmente sumergido
+        submergPercentage = (objectDensityValue / fluidDensity) * 100;
+        netForceValue = 0; // En equilibrio
+        state = "Flotando parcialmente sumergido";
+      } else if (objectDensityValue === fluidDensity) {
+        // El objeto flota completamente sumergido
+        submergPercentage = 100;
+        netForceValue = 0; // En equilibrio
+        state = "Flotando completamente sumergido (equilibrio neutro)";
+      } else {
+        // El objeto se hunde
+        submergPercentage = 100;
+        netForceValue = weightValue - maxBuoyancyForceValue; // Fuerza neta hacia abajo
+        state = "Hundiéndose";
+      }
+      
+      // Mostrar resultados
+      objectDensity.textContent = objectDensityValue.toLocaleString(undefined, {maximumFractionDigits: 2});
+      buoyancyForce.textContent = maxBuoyancyForceValue.toLocaleString(undefined, {maximumFractionDigits: 2});
+      objectWeight.textContent = weightValue.toLocaleString(undefined, {maximumFractionDigits: 2});
+      netForce.textContent = Math.abs(netForceValue).toLocaleString(undefined, {maximumFractionDigits: 2});
+      forceDirection.textContent = netForceValue > 0 ? "(hacia abajo)" : netForceValue < 0 ? "(hacia arriba)" : "(en equilibrio)";
+      buoyancyState.textContent = state;
+      submergedPercentage.textContent = submergPercentage.toLocaleString(undefined, {maximumFractionDigits: 1});
+      
+      buoyancyResult.style.display = 'block';
+      
+      // Actualizar visualización
+      if (floatingObject && weightArrow && buoyancyArrow) {
+        // Posicionar el objeto según su flotabilidad
+        const waterLevel = 40; // % desde arriba
+        
+        if (objectDensityValue < fluidDensity) {
+          // Flotando parcialmente
+          const submergedHeight = (submergPercentage / 100) * 60; // 60px es el alto del objeto
+          floatingObject.style.top = `${waterLevel - (60 - submergedHeight) / 2}%`;
+          floatingObject.style.backgroundColor = '#fcd34d';
+        } else if (objectDensityValue === fluidDensity) {
+          // Equilibrio neutro
+          floatingObject.style.top = `${waterLevel}%`;
+          floatingObject.style.backgroundColor = '#a3e635';
+        } else {
+          // Hundiéndose
+          floatingObject.style.top = `${waterLevel + 20}%`;
+          floatingObject.style.backgroundColor = '#f87171';
+        }
+        
+        // Ajustar flechas de fuerza
+        const objectPosition = parseFloat(floatingObject.style.top);
+        weightArrow.style.top = `${objectPosition}%`;
+        weightArrow.style.height = `${weightValue / 10}px`;
+        
+        buoyancyArrow.style.top = `${objectPosition}%`;
+        buoyancyArrow.style.height = `${maxBuoyancyForceValue / 10}px`;
+      }
+    });
+  }
+});
