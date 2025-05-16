@@ -39,48 +39,16 @@
       margin: 0 auto;
     }
 
-    .calculator-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-      padding: 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .calculator-card {
+    .unified-converter {
       background: white;
       border-radius: 20px;
       padding: 2rem;
       box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-      transition: all 0.4s ease;
-      position: relative;
-      overflow: hidden;
+      max-width: 900px;
+      margin: 2rem auto;
     }
 
-    .calculator-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background: linear-gradient(to right, #4364f7, #6fb1fc);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.3s ease;
-    }
-
-    .calculator-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 20px 40px rgba(67,100,247,0.15);
-    }
-
-    .calculator-card:hover::before {
-      transform: scaleX(1);
-    }
-
-    .calculator-header {
+    .converter-header {
       display: flex;
       align-items: center;
       margin-bottom: 1.5rem;
@@ -88,7 +56,7 @@
       border-bottom: 2px solid rgba(67,100,247,0.1);
     }
 
-    .calculator-icon {
+    .converter-icon {
       width: 50px;
       height: 50px;
       background: rgba(67,100,247,0.1);
@@ -99,168 +67,121 @@
       font-size: 1.5rem;
       margin-right: 1rem;
       color: #4364f7;
-      transition: all 0.3s ease;
     }
 
-    .calculator-card:hover .calculator-icon {
-      background: #4364f7;
-      color: white;
-      transform: scale(1.1) rotate(10deg);
-    }
-
-    .calculator-title {
-      font-size: 1.25rem;
+    .converter-title {
+      font-size: 1.5rem;
       font-weight: 600;
       color: #2d3748;
     }
 
-    .input-group {
-      margin-bottom: 1.5rem;
-      position: relative;
+    .dimension-selector {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
     }
 
-    .input-group label {
-      display: block;
+    .dimension-btn {
+      padding: 0.75rem 1.25rem;
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 30px;
+      font-size: 0.9rem;
       font-weight: 500;
       color: #4a5568;
-      margin-bottom: 0.5rem;
+      cursor: pointer;
       transition: all 0.3s ease;
     }
 
-    .input-group select,
-    .input-group input {
+    .dimension-btn:hover {
+      background: rgba(67,100,247,0.05);
+      border-color: rgba(67,100,247,0.2);
+      transform: translateY(-2px);
+    }
+
+    .dimension-btn.active {
+      background: #4364f7;
+      color: white;
+      border-color: #4364f7;
+      box-shadow: 0 4px 10px rgba(67,100,247,0.3);
+    }
+
+    .conversion-panel {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .input-side, .output-side {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .input-value, .output-value {
+      padding: 1rem;
+      font-size: 1.5rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      width: 100%;
+      transition: all 0.3s ease;
+      background: #f8fafc;
+    }
+
+    .input-value:focus {
+      border-color: #4364f7;
+      box-shadow: 0 0 0 3px rgba(67,100,247,0.2);
+      outline: none;
+      background: white;
+    }
+
+    .output-value {
+      background: #f3f6ff;
+      border-color: rgba(67,100,247,0.2);
+      color: #4364f7;
+      font-weight: 600;
+      cursor: text;
+    }
+
+    .unit-select {
       width: 100%;
       padding: 0.85rem;
       border: 2px solid #e2e8f0;
       border-radius: 12px;
       font-size: 1rem;
+      background-color: white;
+      cursor: pointer;
       transition: all 0.3s ease;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-      background-color: #f8fafc;
     }
 
-    .input-group select:focus,
-    .input-group input:focus {
+    .unit-select:focus {
       border-color: #4364f7;
       box-shadow: 0 0 0 3px rgba(67,100,247,0.2);
       outline: none;
-      background-color: white;
     }
 
-    .input-group:focus-within label {
-      color: #4364f7;
-      font-weight: 600;
-    }
-
-    .result-display {
-      background: linear-gradient(135deg, #f3f6ff, #e6edff);
-      padding: 1.25rem;
-      border-radius: 12px;
-      margin-top: 1.5rem;
-      text-align: center;
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #4364f7;
-      transition: all 0.3s ease;
-      box-shadow: inset 0 2px 5px rgba(67,100,247,0.05);
-      border: 1px solid rgba(67,100,247,0.1);
-    }
-
-    .conversion-table {
-      margin-top: 3rem;
-      background: white;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-    }
-
-    .conversion-table h2 {
-      padding: 1.5rem;
-      margin: 0;
-      background: linear-gradient(135deg, #4364f7, #6fb1fc);
-      color: white;
-    }
-
-    .table-responsive {
-      overflow-x: auto;
-      padding: 1.5rem;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    th, td {
-      padding: 1rem;
-      text-align: left;
-      border-bottom: 1px solid #e2e8f0;
-    }
-
-    th {
-      font-weight: 600;
-      color: #2d3748;
-      background: #f8fafc;
-      position: sticky;
-      top: 0;
-    }
-
-    tr:last-child td {
-      border-bottom: none;
-    }
-
-    tr:hover td {
-      background: #f3f6ff;
-    }
-
-    .quick-convert {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
+    .swap-button {
+      width: 40px;
+      height: 40px;
       background: #4364f7;
       color: white;
-      width: 60px;
-      height: 60px;
+      border: none;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.5rem;
-      border-radius: 50%;
-      box-shadow: 0 10px 20px rgba(67,100,247,0.3);
+      font-size: 1.25rem;
       cursor: pointer;
       transition: all 0.3s ease;
-      z-index: 1000;
-      border: none;
+      box-shadow: 0 4px 8px rgba(67,100,247,0.3);
     }
 
-    .quick-convert:hover {
-      transform: scale(1.1) rotate(15deg);
-      box-shadow: 0 15px 30px rgba(67,100,247,0.4);
-    }
-
-    @media (max-width: 768px) {
-      .calculator-grid {
-        grid-template-columns: 1fr;
-        padding: 1rem;
-      }
-
-      .conversion-hero h1 {
-        font-size: 2rem;
-      }
-
-      .conversion-hero p {
-        font-size: 1rem;
-      }
-    }
-
-    .update-flash {
-      animation: flash 0.5s ease-out;
-    }
-
-    @keyframes flash {
-      0% { transform: scale(1); background-color: rgba(67,100,247,0.3); }
-      50% { transform: scale(1.05); background-color: rgba(67,100,247,0.1); }
-      100% { transform: scale(1); background-color: transparent; }
+    .swap-button:hover {
+      transform: rotate(180deg);
+      background: #6fb1fc;
+      box-shadow: 0 6px 12px rgba(67,100,247,0.4);
     }
 
     .common-conversions {
@@ -303,68 +224,6 @@
       box-shadow: 0 5px 15px rgba(67,100,247,0.2);
     }
 
-    /* Swap Button Styles */
-    .swap-btn {
-      position: absolute;
-      right: -10px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: #4364f7;
-      color: white;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 1rem;
-      box-shadow: 0 4px 8px rgba(67,100,247,0.2);
-      transition: all 0.3s ease;
-      z-index: 10;
-    }
-
-    .swap-btn:hover {
-      background: #6fb1fc;
-      transform: translateY(-50%) scale(1.1);
-      box-shadow: 0 6px 12px rgba(67,100,247,0.3);
-    }
-
-    /* Highlight Animation */
-    .highlight {
-      animation: highlight-pulse 1.5s ease;
-    }
-
-    @keyframes highlight-pulse {
-      0% { box-shadow: 0 0 0 0 rgba(67,100,247,0.4); }
-      70% { box-shadow: 0 0 0 15px rgba(67,100,247,0); }
-      100% { box-shadow: 0 0 0 0 rgba(67,100,247,0); }
-    }
-
-    /* Toast Notification */
-    .toast-notification {
-      position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #4364f7;
-      color: white;
-      padding: 1rem 2rem;
-      border-radius: 50px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-      z-index: 9999;
-      font-weight: 500;
-      opacity: 1;
-      transition: all 0.3s ease;
-    }
-
-    .toast-notification.fade-out {
-      opacity: 0;
-      transform: translateX(-50%) translateY(20px);
-    }
-
-    /* Historial de Conversiones */
     .conversion-history {
       margin-top: 3rem;
       padding: 2rem;
@@ -471,74 +330,29 @@
       transform: translateY(-2px);
     }
 
-    /* Botón de Guardar Conversión */
-    .save-conversion-btn {
-      background: linear-gradient(135deg, #4364f7, #6fb1fc);
-      color: white;
-      border: none;
-      padding: 0.75rem;
-      border-radius: 12px;
-      font-weight: 500;
-      cursor: pointer;
-      width: 100%;
-      margin-top: 1rem;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 8px rgba(67,100,247,0.2);
+    .update-flash {
+      animation: flash 0.5s ease-out;
     }
 
-    .save-conversion-btn:hover {
-      background: linear-gradient(135deg, #3b5ae0, #4364f7);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(67,100,247,0.3);
+    @keyframes flash {
+      0% { transform: scale(1); background-color: rgba(67,100,247,0.3); }
+      50% { transform: scale(1.05); background-color: rgba(67,100,247,0.1); }
+      100% { transform: scale(1); background-color: transparent; }
     }
 
-    .save-conversion-btn:active {
-      transform: translateY(0);
-      box-shadow: 0 2px 4px rgba(67,100,247,0.2);
-    }
-
-    .conversion-form {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-    
-    .units-container {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      gap: 1rem;
-      position: relative;
-    }
-    
-    .convert-btn {
-      background: linear-gradient(135deg, #4364f7, #6fb1fc);
-      color: white;
-      border: none;
-      padding: 0.85rem;
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 1.1rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 8px rgba(67,100,247,0.2);
-      margin-top: 1rem;
-    }
-    
-    .convert-btn:hover {
-      background: linear-gradient(135deg, #3b5ae0, #4364f7);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(67,100,247,0.3);
-    }
-    
-    .convert-btn:active {
-      transform: translateY(0);
-      box-shadow: 0 2px 4px rgba(67,100,247,0.2);
-    }
-    
-    #dimension {
-      font-weight: 600;
-      color: #4364f7;
+    @media (max-width: 768px) {
+      .conversion-panel {
+        grid-template-columns: 1fr;
+      }
+      
+      .swap-button {
+        margin: 0 auto;
+        transform: rotate(90deg);
+      }
+      
+      .swap-button:hover {
+        transform: rotate(270deg);
+      }
     }
   </style>
 </head>
@@ -612,164 +426,65 @@
       </div>
     </section>
 
-    <div class="calculator-grid">
-      <div class="calculator-card" style="grid-column: 1 / -1; max-width: 800px; margin: 0 auto;">
-        <div class="calculator-header">
-          <div class="calculator-icon">🔄️</div>
-          <h2 class="calculator-title">Convertidor Universal de Unidades</h2>
+    <div class="container">
+      <div class="unified-converter">
+        <div class="converter-header">
+          <div class="converter-icon">🔄️</div>
+          <h2 class="converter-title">Convertidor Universal de Unidades</h2>
         </div>
         
-        <div class="input-group">
-          <label for="dimension">Dimensión:</label>
-          <select id="dimension">
-            <option value="longitud">Longitud</option>
-            <option value="masa">Masa</option>
-            <option value="area">Área</option>
-            <option value="tiempo">Tiempo</option>
-            <option value="corriente">Intensidad de Corriente Eléctrica</option>
-            <option value="temperatura">Temperatura</option>
-            <option value="sustancia">Cantidad de Sustancia</option>
-            <option value="luminosa">Intensidad Luminosa</option>
-            <option value="volumen">Volumen</option>
-            <option value="velocidad">Velocidad</option>
-            <option value="aceleracion">Aceleración</option>
-            <option value="fuerza">Fuerza</option>
-            <option value="presion" selected>Presión</option>
-            <option value="trabajo">Trabajo/Energía</option>
-            <option value="potencia">Potencia</option>
-          </select>
+        <div class="dimension-selector" id="dimensionSelector">
+          <button class="dimension-btn active" data-dimension="longitud">Longitud</button>
+          <button class="dimension-btn" data-dimension="masa">Masa</button>
+          <button class="dimension-btn" data-dimension="area">Área</button>
+          <button class="dimension-btn" data-dimension="volumen">Volumen</button>
+          <button class="dimension-btn" data-dimension="tiempo">Tiempo</button>
+          <button class="dimension-btn" data-dimension="velocidad">Velocidad</button>
+          <button class="dimension-btn" data-dimension="aceleracion">Aceleración</button>
+          <button class="dimension-btn" data-dimension="fuerza">Fuerza</button>
+          <button class="dimension-btn" data-dimension="presion">Presión</button>
+          <button class="dimension-btn" data-dimension="trabajo">Energía</button>
+          <button class="dimension-btn" data-dimension="potencia">Potencia</button>
+          <button class="dimension-btn" data-dimension="temperatura">Temperatura</button>
         </div>
         
-        <div class="conversion-form">
-          <div class="input-group">
-            <label for="inputValue">Valor:</label>
-            <input type="number" id="inputValue" placeholder="Ingrese el valor a convertir" step="any">
+        <div class="conversion-panel">
+          <div class="input-side">
+            <input type="number" id="inputValue" class="input-value" placeholder="Ingrese valor" step="any">
+            <select id="fromUnit" class="unit-select"></select>
           </div>
           
-          <div class="units-container">
-            <div class="input-group">
-              <label for="fromUnit">De:</label>
-              <select id="fromUnit"></select>
-            </div>
-            
-            <button class="swap-btn" id="swapUnits" title="Intercambiar unidades">⇄</button>
-            
-            <div class="input-group">
-              <label for="toUnit">A:</label>
-              <select id="toUnit"></select>
-            </div>
-          </div>
+          <button id="swapUnits" class="swap-button">⇄</button>
           
-          <button class="convert-btn" id="convertBtn">Convertir</button>
+          <div class="output-side">
+            <input type="text" id="outputValue" class="output-value" readonly>
+            <select id="toUnit" class="unit-select"></select>
+          </div>
         </div>
-        
-        <div class="result-display" id="result">Resultado de la conversión</div>
-        <button class="save-conversion-btn" id="saveConversion">Guardar Conversión</button>
+      </div>
+
+      <div class="common-conversions">
+        <h3>Conversiones Comunes</h3>
+        <div class="conversion-chips">
+          <div class="conversion-chip" data-from="atm" data-to="pascal" data-dimension="presion" data-value="1">1 atm = 101.325 kPa</div>
+          <div class="conversion-chip" data-from="bar" data-to="pascal" data-dimension="presion" data-value="1">1 bar = 100 kPa</div>
+          <div class="conversion-chip" data-from="m/s" data-to="km/h" data-dimension="velocidad" data-value="1">1 m/s = 3.6 km/h</div>
+          <div class="conversion-chip" data-from="g/cm³" data-to="kg/m³" data-dimension="densidad" data-value="1">1 g/cm³ = 1000 kg/m³</div>
+          <div class="conversion-chip" data-from="psi" data-to="pascal" data-dimension="presion" data-value="1">1 psi = 6.895 kPa</div>
+          <div class="conversion-chip" data-from="mph" data-to="m/s" data-dimension="velocidad" data-value="1">1 mph = 0.447 m/s</div>
+          <div class="conversion-chip" data-from="nudo" data-to="m/s" data-dimension="velocidad" data-value="1">1 knot = 0.514 m/s</div>
+          <div class="conversion-chip" data-from="pie" data-to="metro" data-dimension="longitud" data-value="1">1 pie = 0.3048 m</div>
+        </div>
+      </div>
+
+      <div class="conversion-history">
+        <h3>Historial de Conversiones</h3>
+        <div class="history-list" id="historyList">
+          <p class="empty-history">No hay conversiones guardadas</p>
+        </div>
+        <button id="clearHistory" class="clear-history-btn">Limpiar Historial</button>
       </div>
     </div>
-
-    <div class="common-conversions">
-      <h3>Conversiones Comunes</h3>
-      <div class="conversion-chips">
-        <div class="conversion-chip">1 atm = 101.325 kPa</div>
-        <div class="conversion-chip">1 bar = 100 kPa</div>
-        <div class="conversion-chip">1 m/s = 3.6 km/h</div>
-        <div class="conversion-chip">1 cP = 0.001 Pa·s</div>
-        <div class="conversion-chip">1 g/cm³ = 1000 kg/m³</div>
-        <div class="conversion-chip">1 psi = 6.895 kPa</div>
-        <div class="conversion-chip">1 mph = 0.447 m/s</div>
-        <div class="conversion-chip">1 knot = 0.514 m/s</div>
-      </div>
-    </div>
-
-    <div class="conversion-history">
-      <h3>Historial de Conversiones</h3>
-      <div class="history-list" id="historyList">
-        <p class="empty-history">No hay conversiones guardadas</p>
-      </div>
-      <button id="clearHistory" class="clear-history-btn">Limpiar Historial</button>
-    </div>
-
-    <div class="conversion-table">
-      <h2>Tabla de Factores de Conversión</h2>
-      <div class="table-responsive">
-        <table>
-          <thead>
-            <tr>
-              <th>Tipo</th>
-              <th>Unidad</th>
-              <th>Equivalencia en SI</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td rowspan="4">Presión</td>
-              <td>atm</td>
-              <td>101,325 Pa</td>
-            </tr>
-            <tr>
-              <td>bar</td>
-              <td>100,000 Pa</td>
-            </tr>
-            <tr>
-              <td>mmHg</td>
-              <td>133.322 Pa</td>
-            </tr>
-            <tr>
-              <td>psi</td>
-              <td>6,894.76 Pa</td>
-            </tr>
-            <tr>
-              <td rowspan="4">Velocidad</td>
-              <td>km/h</td>
-              <td>0.277778 m/s</td>
-            </tr>
-            <tr>
-              <td>mph</td>
-              <td>0.44704 m/s</td>
-            </tr>
-            <tr>
-              <td>ft/s</td>
-              <td>0.3048 m/s</td>
-            </tr>
-            <tr>
-              <td>knot</td>
-              <td>0.514444 m/s</td>
-            </tr>
-            <tr>
-              <td rowspan="3">Viscosidad</td>
-              <td>cP</td>
-              <td>0.001 Pa·s</td>
-            </tr>
-            <tr>
-              <td>P</td>
-              <td>0.1 Pa·s</td>
-            </tr>
-            <tr>
-              <td>mPa·s</td>
-              <td>0.001 Pa·s</td>
-            </tr>
-            <tr>
-              <td rowspan="3">Densidad</td>
-              <td>g/cm³</td>
-              <td>1000 kg/m³</td>
-            </tr>
-            <tr>
-              <td>lb/ft³</td>
-              <td>16.0185 kg/m³</td>
-            </tr>
-            <tr>
-              <td>g/mL</td>
-              <td>1000 kg/m³</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <button class="quick-convert">
-      <span class="material-icons">calculate</span>
-    </button>
   </main>
 
   <footer>

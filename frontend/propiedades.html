@@ -7,6 +7,212 @@
   <title>Propiedades de los Fluidos</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .properties-hero {
+      background: linear-gradient(135deg, #4364f7, #6fb1fc);
+      padding: 4rem 0;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    
+    .properties-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><path d="M30 0v60M0 30h60" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></svg>') repeat;
+      opacity: 0.3;
+    }
+    
+    .properties-hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      position: relative;
+      text-align: center;
+    }
+    
+    .properties-hero p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    .properties-detail {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .properties-detail:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(67,100,247,0.15);
+    }
+    
+    .properties-detail h2 {
+      color: #2d3748;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid rgba(67,100,247,0.1);
+      display: flex;
+      align-items: center;
+    }
+    
+    .properties-detail h2::before {
+      content: '🔹';
+      margin-right: 0.5rem;
+      font-size: 1.5rem;
+    }
+    
+    .properties-detail h3 {
+      color: #4364f7;
+      margin: 1.5rem 0 0.75rem;
+    }
+    
+    .properties-detail figure {
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+    
+    .properties-detail figcaption {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: #718096;
+      font-style: italic;
+    }
+    
+    .properties-detail img {
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      max-width: 100%;
+      height: auto;
+    }
+    
+    .formula {
+      background: rgba(67,100,247,0.05);
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1rem 0;
+      text-align: center;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      color: #4364f7;
+      border-left: 4px solid #4364f7;
+    }
+    
+    .interactive-demo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    
+    .demo-container, .theory-container {
+      background: #f8fafc;
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    
+    .calculator-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .form-group label {
+      font-weight: 500;
+      color: #4a5568;
+    }
+    
+    .form-group input {
+      padding: 0.75rem;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    
+    .form-group input:focus {
+      border-color: #4364f7;
+      box-shadow: 0 0 0 3px rgba(67,100,247,0.2);
+      outline: none;
+    }
+    
+    .btn {
+      background: #4364f7;
+      color: white;
+      border: none;
+      padding: 0.75rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn:hover {
+      background: #3b5ae0;
+      transform: translateY(-2px);
+    }
+    
+    .result {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: rgba(67,100,247,0.1);
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .result p {
+      margin: 0.5rem 0;
+    }
+    
+    .error {
+      color: #e53e3e;
+    }
+    
+    .density-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+    
+    .density-table th, .density-table td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    
+    .density-table th {
+      background: #f8fafc;
+      font-weight: 600;
+      color: #2d3748;
+    }
+    
+    .density-table tr:hover td {
+      background: rgba(67,100,247,0.05);
+    }
+    
+    @media (max-width: 768px) {
+      .interactive-demo {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -70,61 +276,34 @@
     </div>
   </header>
   <main>
+    <section class="properties-hero">
+      <div class="container">
+        <h1>Propiedades de los Fluidos</h1>
+        <p>Las propiedades de los fluidos son características físicas fundamentales que determinan su comportamiento bajo diferentes condiciones. Estas propiedades son esenciales para el diseño y análisis de sistemas de ingeniería que involucran fluidos.</p>
+      </div>
+    </section>
+    
     <div class="container">
       <section class="properties-detail">
-        <h2>Viscosidad</h2>
+        <h2>Densidad</h2>
         <figure>
-          <img src="images/viscosidad.jpg" alt="Viscosidad" height="300" width="400">
-          <figcaption>Comparativa de líquidos con diferentes viscosidades.</figcaption>
+          <img src="images/densidad.jpg" alt="Densidad" height="300" width="400">
+          <figcaption>Comparación de densidades de diferentes materiales.</figcaption>
         </figure>
-        <p>La viscosidad mide la resistencia interna de un fluido al flujo. Se distinguen dos tipos:</p>
+        <p>La densidad indica cuánta masa hay en un volumen determinado de un material. Se calcula como:</p>
+        <div class="formula">ρ = m/V [kg/m³]</div>
+        <p>Se expresa en kg/m³ (Sistema Internacional) o g/cm³ (Sistema CGS).</p>
+        
+        <h3>Aplicaciones</h3>
+        <p>La densidad determina si un objeto flota o se hunde en un fluido, según el principio de Arquímedes. Es esencial en industrias como la metalúrgica, petrolera y alimentaria para caracterizar materiales y controlar procesos.</p>
+        
+        <h3>Ejemplos comparativos</h3>
         <ul>
-          <li><strong>Viscosidad dinámica</strong> (μ): relación entre el esfuerzo cortante y el gradiente de velocidad. Unidades: Pa·s.</li>
-          <li><strong>Viscosidad cinemática</strong> (ν): cociente entre la dinámica y la densidad ρ, ν = μ/ρ. Unidades: m²/s.</li>
+          <li>Agua: 1000 kg/m³ (1 g/cm³)</li>
+          <li>Plomo: 11340 kg/m³ (11.34 g/cm³)</li>
+          <li>Aire: 1.2 kg/m³ (a nivel del mar)</li>
         </ul>
-        <h3>Fluidos newtonianos vs no newtonianos</h3>
-        <p>En los newtonianos, la viscosidad permanece constante (agua, aceite mineral). En los no newtonianos, cambia con la velocidad de corte (p. ej., pintura, fluidos tixotrópicos, pseudoplásticos y dilatantes).</p>
-        <h3>Factores que influyen</h3>
-        <p>La temperatura, la presión y la composición química alteran la viscosidad. Normalmente, al aumentar la temperatura, disminuye μ.</p>
-        <h3>Aplicaciones prácticas</h3>
-        <p>Diseño de tuberías, lubricación de máquinas y procesos industriales (petróleo, alimentos), donde el control de viscosidad es crítico.</p>
-      </section>
-      <section class="properties-detail">
-        <h2>Tensión Superficial</h2>
-        <figure>
-          <img src="images/tension_superficial.jpg" alt="Tensión Superficial" height="300" width="400">
-          <figcaption>Diagrama de fuerzas en la superficie de un líquido.</figcaption>
-        </figure>
-        <p>Es la energía necesaria para aumentar la superficie de un líquido en una unidad de área. Fórmula: <em>γ = F / L</em> (N/m).</p>
-        <h3>Origen molecular</h3>
-        <p>Las moléculas en la superficie están desbalanceadas y ejercen fuerzas de cohesión que generan una «piel» superficial.</p>
-        <h3>Variaciones con la temperatura</h3>
-        <p>γ disminuye al elevar la temperatura porque las moléculas adquieren más energía cinética y reducen la cohesión.</p>
-        <h3>Ejemplos cotidianos</h3>
-        <ul>
-          <li>Formación de gotas en agua y mercurio.</li>
-          <li>Capacidad de algunos insectos para caminar sobre el agua.</li>
-        </ul>
-      </section>
-      <section class="properties-detail">
-        <h2>Capilaridad</h2>
-        <figure>
-          <img src="images/capilaridad.jpg" alt="Capilaridad" height="300" width="450">
-          <figcaption>Elevación del líquido en un tubo capilar.</figcaption>
-        </figure>
-        <p>Movimiento de un líquido en tubos finos por fuerzas de cohesión y adhesión. Ecuación: <em>h = (2 γ cos θ) / (ρ g r)</em>.</p>
-        <h3>Derivación breve</h3>
-        <p>Equilibrio entre la presión hidrostática ρgh y la presión debida a la curvatura de la superficie. θ es el ángulo de contacto.</p>
-        <h3>Importancia en la naturaleza</h3>
-        <p>Transporte de agua en plantas, suelos y rocas porosos. Influye en la ingeniería civil (consolidación de suelos) y extracción petrolera.</p>
-        <h3>Efectos asociados</h3>
-        <ul>
-          <li><strong>Histeresis capilar</strong>: diferencia entre ascenso y descenso del líquido.</li>
-          <li><strong>Estructuras porosas</strong>: distribución de humedad en materiales.</li>
-        </ul>
-      </section>
-      <section class="properties-detail">
-        <h2>Densidad y Peso Específico</h2>
+        
         <div class="interactive-demo">
           <div class="demo-container">
             <h3>Calculadora de Densidad y Peso Específico</h3>
@@ -150,6 +329,7 @@
             <p>donde g es la aceleración de la gravedad (9.81 m/s²)</p>
           </div>
         </div>
+        
         <h3>Tabla de Densidades Comunes</h3>
         <table class="density-table">
           <thead>
@@ -180,8 +360,111 @@
               <td>13600</td>
               <td>133416</td>
             </tr>
+            <tr>
+              <td>Plomo</td>
+              <td>11340</td>
+              <td>111245</td>
+            </tr>
+            <tr>
+              <td>Oro</td>
+              <td>19300</td>
+              <td>189333</td>
+            </tr>
           </tbody>
         </table>
+      </section>
+
+      <section class="properties-detail">
+        <h2>Viscosidad</h2>
+        <figure>
+          <img src="images/viscosidad.jpg" alt="Viscosidad" height="300" width="400">
+          <figcaption>Comparativa de líquidos con diferentes viscosidades.</figcaption>
+        </figure>
+        <p>La viscosidad mide la resistencia de un fluido a fluir. Fluidos como el agua tienen baja viscosidad, mientras que la miel es muy viscosa. Se distinguen dos tipos:</p>
+        <ul>
+          <li><strong>Viscosidad dinámica</strong> (μ): relación entre el esfuerzo cortante y el gradiente de velocidad. Unidades: Pa·s.</li>
+          <li><strong>Viscosidad cinemática</strong> (ν): cociente entre la dinámica y la densidad ρ, ν = μ/ρ. Unidades: m²/s.</li>
+        </ul>
+        
+        <h3>Medición con viscosímetro de cilindros concéntricos</h3>
+        <p>Consiste en dos cilindros, uno dentro del otro: el exterior permanece fijo mientras el interior gira. El fluido ocupa el espacio entre ambos, y al girar el cilindro interior, se genera un esfuerzo cortante. La resistencia que el fluido ofrece al movimiento se mide como torque, permitiendo calcular la viscosidad mediante el análisis del balance de momentos en coordenadas cilíndricas.</p>
+        
+        <h3>Comportamiento con la temperatura</h3>
+        <p>En líquidos, la viscosidad disminuye al aumentar la temperatura, mientras que en gases aumenta. Este concepto es clave en lubricantes, transporte de fluidos en tuberías y procesos industriales como la fabricación de pinturas, alimentos y cosméticos.</p>
+      </section>
+
+      <section class="properties-detail">
+        <h2>Gravedad Específica</h2>
+        <figure>
+          <img src="images/gravedad_especifica.jpg" alt="Gravedad Específica" height="300" width="400">
+          <figcaption>Medición de gravedad específica con hidrómetro.</figcaption>
+        </figure>
+        <p>La gravedad específica (o densidad relativa) es una medida adimensional que compara la densidad de una sustancia con la de una referencia, generalmente agua para sólidos y líquidos (1 g/cm³) o aire para gases.</p>
+        <div class="formula">GE = ρ<sub>sustancia</sub>/ρ<sub>referencia</sub></div>
+        
+        <h3>Aplicaciones</h3>
+        <p>Esta propiedad se usa en geología para identificar minerales, en la industria petrolera para clasificar combustibles y en la elaboración de bebidas alcohólicas para medir concentraciones. No tiene unidades y permite identificar materiales sin necesidad de convertir medidas.</p>
+        
+        <h3>Ejemplos</h3>
+        <ul>
+          <li>Oro: 19.3 (19.3 veces más denso que el agua)</li>
+          <li>Gasolina: 0.7-0.8</li>
+          <li>Aceite de oliva: 0.92</li>
+        </ul>
+      </section>
+
+      <section class="properties-detail">
+        <h2>Tensión Superficial</h2>
+        <figure>
+          <img src="images/tension_superficial.jpg" alt="Tensión Superficial" height="300" width="400">
+          <figcaption>Diagrama de fuerzas en la superficie de un líquido.</figcaption>
+        </figure>
+        <p>La tensión superficial es una fuerza que actúa en la superficie de los líquidos debido a las fuerzas intermoleculares, y busca minimizar el área superficial del líquido. Fórmula: <em>γ = F / L</em> (N/m).</p>
+        
+        <h3>Fenómenos capilares</h3>
+        <p>Se observa en fenómenos capilares, como el ascenso del agua en tubos delgados. El líquido asciende hasta que la tensión superficial equilibra el peso de la columna. Cuando un líquido asciende entre placas paralelas debido a la capilaridad, lo hace hasta un punto en el que la componente vertical de la tensión superficial iguala el peso de la columna líquida. El ascenso o descenso del fluido depende del ángulo de contacto, que determina si el menisco es cóncavo o convexo.</p>
+        
+        <h3>Aplicaciones</h3>
+        <p>El control de la tensión superficial es vital en procesos de humectación, recubrimiento, y en la formulación de productos farmacéuticos, cosméticos, detergentes y soluciones limpiadoras.</p>
+      </section>
+
+      <section class="properties-detail">
+        <h2>Fuerzas Hidrostáticas en Superficies Planas</h2>
+        <figure>
+          <img src="images/fuerzas_hidrostaticas.jpg" alt="Fuerzas Hidrostáticas" height="300" width="450">
+          <figcaption>Distribución de presión en superficies sumergidas.</figcaption>
+        </figure>
+        <p>La fuerza hidrostática sobre una superficie plana sumergida proviene del peso del fluido y actúa perpendicularmente a la superficie. Esta fuerza actúa sobre superficies sumergidas como compuertas o muros de tanques, y se debe a la presión del fluido en reposo. Para una superficie plana vertical, la fuerza total se calcula como:</p>
+        <div class="formula">F = ρ·g·h·A</div>
+        <p>Donde ρ es la densidad del fluido, g la aceleración de la gravedad, h la profundidad del centroide y A el área de la superficie.</p>
+        
+        <h3>Centro de presión</h3>
+        <p>Actúa perpendicular a la superficie, y su punto de aplicación se llama centro de presión (más profundo que el centroide). En compuertas con bisagras, también se calcula el momento para conocer la fuerza externa necesaria que equilibra el sistema. Es clave en el diseño de infraestructura hidráulica.</p>
+      </section>
+
+      <section class="properties-detail">
+        <h2>Fuerzas Hidrostáticas en Superficies Curvas</h2>
+        <figure>
+          <img src="images/superficies_curvas.jpg" alt="Fuerzas en Superficies Curvas" height="300" width="450">
+          <figcaption>Descomposición de fuerzas en una superficie curva sumergida.</figcaption>
+        </figure>
+        <p>En superficies como compuertas cilíndricas o esféricas, la fuerza ejercida por un fluido sobre una superficie curva puede descomponerse en dos componentes:</p>
+        
+        <h3>Fuerza horizontal (F<sub>h</sub>)</h3>
+        <div class="formula">F<sub>h</sub> = ρ·g·h·A<sub>proyectada</sub></div>
+        <p>Equivalente a la fuerza sobre la proyección vertical de la superficie.</p>
+        
+        <h3>Fuerza vertical (F<sub>v</sub>)</h3>
+        <p>Para cilindros:</p>
+        <div class="formula">F<sub>v</sub> = γ × A × L × sinθ</div>
+        <p>Para esferas:</p>
+        <div class="formula">F<sub>v</sub> = γ × (4/3)πR³</div>
+        <p>Igual al peso del volumen de fluido directamente encima de la superficie curva.</p>
+        
+        <h3>Fuerza resultante</h3>
+        <div class="formula">F<sub>r</sub> = √(F<sub>h</sub>² + F<sub>v</sub>²)</div>
+        <div class="formula">Ángulo de aplicación: α = arctan(F<sub>v</sub>/F<sub>h</sub>)</div>
+        <p>Este análisis considera tanto la presión hidrostática como el empuje, y se usa para estructuras sumergidas en diseño de presas y compuertas curvas.</p>
       </section>
     </div>
   </main>

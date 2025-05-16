@@ -99,116 +99,154 @@ document.addEventListener('DOMContentLoaded', () => {
       kilowatt: 1000,
       caballo_de_fuerza: 745.7,
       BTU_h: 0.293071
+    },
+    densidad: {
+      "kg/m³": 1,
+      "g/cm³": 1000,
+      "lb/ft³": 16.0185,
+      "g/mL": 1000
     }
   };
 
   // Obtener elementos del DOM
-  const dimensionSelect = document.getElementById('dimension');
+  const dimensionButtons = document.querySelectorAll('.dimension-btn');
   const inputValue = document.getElementById('inputValue');
+  const outputValue = document.getElementById('outputValue');
   const fromUnitSelect = document.getElementById('fromUnit');
   const toUnitSelect = document.getElementById('toUnit');
-  const convertBtn = document.getElementById('convertBtn');
-  const resultDisplay = document.getElementById('result');
   const swapUnitsBtn = document.getElementById('swapUnits');
-  const saveConversionBtn = document.getElementById('saveConversion');
-
-  // Inicializar selectores de unidades
-  updateUnitOptions();
-
+  const conversionChips = document.querySelectorAll('.conversion-chip');
+  const historyList = document.getElementById('historyList');
+  const clearHistoryBtn = document.getElementById('clearHistory');
+  
+  // Estado actual
+  let currentDimension = 'longitud';
+  
+  // Inicializar la interfaz
+  initializeInterface();
+  
   // Event listeners
-  dimensionSelect.addEventListener('change', updateUnitOptions);
-  convertBtn.addEventListener('click', performConversion);
-  swapUnitsBtn.addEventListener('click', swapUnits);
-  saveConversionBtn.addEventListener('click', saveConversion);
-  inputValue.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      performConversion();
-    }
+  dimensionButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      setActiveDimension(button.dataset.dimension);
+    });
   });
-
+  
+  inputValue.addEventListener('input', performConversion);
+  fromUnitSelect.addEventListener('change', performConversion);
+  toUnitSelect.addEventListener('change', performConversion);
+  swapUnitsBtn.addEventListener('click', swapUnits);
+  clearHistoryBtn.addEventListener('click', clearHistory);
+  
+  conversionChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      useConversionChip(chip);
+    });
+  });
+  
+  // Cargar historial desde localStorage
+  loadHistory();
+  
+  // Función para inicializar la interfaz
+  function initializeInterface() {
+    setActiveDimension('longitud');
+  }
+  
+  // Función para establecer la dimensión activa
+  function setActiveDimension(dimension) {
+    // Actualizar estado
+    currentDimension = dimension;
+    
+    // Actualizar botones
+    dimensionButtons.forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.dimension === dimension);
+    });
+    
+    // Actualizar selectores de unidades
+    updateUnitOptions(dimension);
+    
+    // Limpiar valores
+    inputValue.value = '';
+    outputValue.value = '';
+  }
+  
   // Función para actualizar las opciones de unidades según la dimensión seleccionada
-  function updateUnitOptions() {
-    const dimension = dimensionSelect.value;
+  function updateUnitOptions(dimension) {
     const unitSet = units[dimension];
-
+    
     if (!unitSet) return;
-
+    
     // Limpiar selectores
     fromUnitSelect.innerHTML = '';
     toUnitSelect.innerHTML = '';
-
+    
     // Poblar selectores con nuevas opciones
     for (const unit in unitSet) {
       const fromOption = document.createElement('option');
       fromOption.value = unit;
       fromOption.textContent = unit;
       fromUnitSelect.appendChild(fromOption);
-
+      
       const toOption = document.createElement('option');
       toOption.value = unit;
       toOption.textContent = unit;
       toUnitSelect.appendChild(toOption);
     }
-
+    
     // Seleccionar opciones diferentes por defecto si es posible
     if (toUnitSelect.options.length > 1) {
       toUnitSelect.selectedIndex = 1;
     }
   }
-
+  
   // Función para realizar la conversión
   function performConversion() {
-    const dimension = dimensionSelect.value;
     const value = parseFloat(inputValue.value);
-    const fromUnit = fromUnitSelect.value;
-    const toUnit = toUnitSelect.value;
-
+    
     if (isNaN(value)) {
-      resultDisplay.textContent = "Por favor ingresa un número válido";
-      resultDisplay.classList.add('error');
+      outputValue.value = '';
       return;
     }
-
-    resultDisplay.classList.remove('error');
-
+    
+    const fromUnit = fromUnitSelect.value;
+    const toUnit = toUnitSelect.value;
+    
     // Manejar conversión de temperatura de forma especial
-    if (dimension === 'temperatura') {
+    if (currentDimension === 'temperatura') {
       const result = convertTemperature(value, fromUnit, toUnit);
       if (result !== null) {
-        resultDisplay.textContent = `${value} ${fromUnit} = ${result.toFixed(4)} ${toUnit}`;
-        resultDisplay.classList.add('update-flash');
-        setTimeout(() => resultDisplay.classList.remove('update-flash'), 300);
+        outputValue.value = result.toFixed(6);
+        outputValue.classList.add('update-flash');
+        setTimeout(() => outputValue.classList.remove('update-flash'), 300);
       } else {
-        resultDisplay.textContent = "Error en la conversión de temperatura";
-        resultDisplay.classList.add('error');
+        outputValue.value = 'Error';
       }
       return;
     }
-
+    
     // Conversión normal para otras dimensiones
-    const unitSet = units[dimension];
+    const unitSet = units[currentDimension];
     if (!unitSet || !(fromUnit in unitSet) || !(toUnit in unitSet)) {
-      resultDisplay.textContent = "Conversión no válida";
-      resultDisplay.classList.add('error');
+      outputValue.value = 'Error';
       return;
     }
-
+    
     // Realizar la conversión
     const valueInBase = value * unitSet[fromUnit];
     const result = valueInBase / unitSet[toUnit];
-
+    
     // Mostrar el resultado
-    resultDisplay.textContent = `${value} ${fromUnit} = ${result.toFixed(6)} ${toUnit}`;
+    outputValue.value = result.toFixed(6);
     
     // Añadir efecto visual
-    resultDisplay.classList.add('update-flash');
-    setTimeout(() => resultDisplay.classList.remove('update-flash'), 300);
+    outputValue.classList.add('update-flash');
+    setTimeout(() => outputValue.classList.remove('update-flash'), 300);
   }
-
+  
   // Función para convertir temperaturas
   function convertTemperature(value, fromUnit, toUnit) {
     if (fromUnit === toUnit) return value;
-
+    
     // Convertir a Celsius primero
     let celsius;
     switch (fromUnit) {
@@ -224,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
       default:
         return null;
     }
-
+    
     // Convertir de Celsius a la unidad de destino
     switch (toUnit) {
       case 'celsius':
@@ -237,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return null;
     }
   }
-
+  
   // Función para intercambiar unidades
   function swapUnits() {
     const fromIndex = fromUnitSelect.selectedIndex;
@@ -249,58 +287,106 @@ document.addEventListener('DOMContentLoaded', () => {
     if (inputValue.value) {
       performConversion();
     }
-  }
-
-  // Función para guardar la conversión en el historial
-  function saveConversion() {
-    if (!inputValue.value) return;
     
-    const dimension = dimensionSelect.value;
+    // Efecto visual
+    swapUnitsBtn.classList.add('update-flash');
+    setTimeout(() => swapUnitsBtn.classList.remove('update-flash'), 300);
+  }
+  
+  // Función para usar un chip de conversión
+  function useConversionChip(chip) {
+    const dimension = chip.dataset.dimension;
+    const fromUnit = chip.dataset.from;
+    const toUnit = chip.dataset.to;
+    const value = parseFloat(chip.dataset.value);
+    
+    if (dimension && fromUnit && toUnit && !isNaN(value)) {
+      // Cambiar a la dimensión correspondiente
+      setActiveDimension(dimension);
+      
+      // Establecer valores
+      inputValue.value = value;
+      
+      // Seleccionar unidades
+      for (let i = 0; i < fromUnitSelect.options.length; i++) {
+        if (fromUnitSelect.options[i].value === fromUnit) {
+          fromUnitSelect.selectedIndex = i;
+          break;
+        }
+      }
+      
+      for (let i = 0; i < toUnitSelect.options.length; i++) {
+        if (toUnitSelect.options[i].value === toUnit) {
+          toUnitSelect.selectedIndex = i;
+          break;
+        }
+      }
+      
+      // Realizar conversión
+      performConversion();
+      
+      // Guardar en historial
+      saveToHistory();
+    }
+    
+    // Efecto visual
+    chip.classList.add('update-flash');
+    setTimeout(() => chip.classList.remove('update-flash'), 300);
+  }
+  
+  // Función para guardar conversión en historial
+  function saveToHistory() {
     const value = parseFloat(inputValue.value);
-    const fromUnit = fromUnitSelect.value;
-    const toUnit = toUnitSelect.value;
     
     if (isNaN(value)) return;
     
-    // Obtener historial existente o crear uno nuevo
-    let conversionHistory = JSON.parse(localStorage.getItem('conversionHistory')) || [];
+    const fromUnit = fromUnitSelect.value;
+    const toUnit = toUnitSelect.value;
+    const result = outputValue.value;
     
-    // Añadir nueva conversión
-    conversionHistory.push({
-      dimension: dimension,
-      value: value,
+    const conversion = {
+      dimension: currentDimension,
+      fromValue: value,
       fromUnit: fromUnit,
+      toValue: parseFloat(result),
       toUnit: toUnit,
-      result: resultDisplay.textContent,
       timestamp: new Date().toISOString()
-    });
+    };
+    
+    // Obtener historial existente
+    let history = JSON.parse(localStorage.getItem('conversionHistory') || '[]');
+    
+    // Añadir nueva conversión al principio
+    history.unshift(conversion);
     
     // Limitar a 10 entradas
-    if (conversionHistory.length > 10) {
-      conversionHistory = conversionHistory.slice(-10);
+    if (history.length > 10) {
+      history = history.slice(0, 10);
     }
     
     // Guardar en localStorage
-    localStorage.setItem('conversionHistory', JSON.stringify(conversionHistory));
+    localStorage.setItem('conversionHistory', JSON.stringify(history));
     
-    // Actualizar la visualización del historial
-    updateHistoryDisplay();
+    // Actualizar visualización
+    updateHistoryDisplay(history);
   }
-
-  // Función para actualizar la visualización del historial
-  function updateHistoryDisplay() {
-    const historyList = document.getElementById('historyList');
-    const conversionHistory = JSON.parse(localStorage.getItem('conversionHistory')) || [];
-    
-    if (conversionHistory.length === 0) {
+  
+  // Función para cargar historial
+  function loadHistory() {
+    const history = JSON.parse(localStorage.getItem('conversionHistory') || '[]');
+    updateHistoryDisplay(history);
+  }
+  
+  // Función para actualizar visualización del historial
+  function updateHistoryDisplay(history) {
+    if (history.length === 0) {
       historyList.innerHTML = '<p class="empty-history">No hay conversiones guardadas</p>';
       return;
     }
     
     historyList.innerHTML = '';
     
-    // Mostrar conversiones en orden inverso (más recientes primero)
-    conversionHistory.slice().reverse().forEach((item, index) => {
+    history.forEach((item, index) => {
       const historyItem = document.createElement('div');
       historyItem.className = 'history-item';
       
@@ -309,62 +395,68 @@ document.addEventListener('DOMContentLoaded', () => {
       
       historyItem.innerHTML = `
         <div class="history-item-header">
-          <span class="history-type">${item.dimension}</span>
+          <span class="history-type">${capitalizeFirstLetter(item.dimension)}</span>
           <span class="history-time">${formattedDate}</span>
         </div>
-        <div class="history-conversion">${item.result}</div>
-        <button class="reuse-conversion" data-index="${conversionHistory.length - 1 - index}">Usar esta conversión</button>
+        <div class="history-conversion">
+          ${item.fromValue} ${item.fromUnit} = ${item.toValue} ${item.toUnit}
+        </div>
+        <button class="reuse-conversion" data-index="${index}">Reutilizar</button>
       `;
       
       historyList.appendChild(historyItem);
     });
     
-    // Añadir event listeners a los botones de reutilización
+    // Añadir event listeners para botones de reutilización
     document.querySelectorAll('.reuse-conversion').forEach(button => {
-      button.addEventListener('click', function() {
-        const index = parseInt(this.getAttribute('data-index'));
+      button.addEventListener('click', () => {
+        const index = parseInt(button.dataset.index);
         reuseConversion(index);
       });
     });
   }
-
+  
   // Función para reutilizar una conversión del historial
   function reuseConversion(index) {
-    const conversionHistory = JSON.parse(localStorage.getItem('conversionHistory')) || [];
-    const item = conversionHistory[index];
+    const history = JSON.parse(localStorage.getItem('conversionHistory') || '[]');
     
-    if (!item) return;
-    
-    // Establecer los valores en el formulario
-    dimensionSelect.value = item.dimension;
-    updateUnitOptions();
-    
-    // Encontrar y establecer las unidades
-    Array.from(fromUnitSelect.options).forEach((option, i) => {
-      if (option.value === item.fromUnit) {
-        fromUnitSelect.selectedIndex = i;
+    if (index >= 0 && index < history.length) {
+      const item = history[index];
+      
+      // Cambiar a la dimensión correspondiente
+      setActiveDimension(item.dimension);
+      
+      // Establecer valores
+      inputValue.value = item.fromValue;
+      
+      // Seleccionar unidades
+      for (let i = 0; i < fromUnitSelect.options.length; i++) {
+        if (fromUnitSelect.options[i].value === item.fromUnit) {
+          fromUnitSelect.selectedIndex = i;
+          break;
+        }
       }
-    });
-    
-    Array.from(toUnitSelect.options).forEach((option, i) => {
-      if (option.value === item.toUnit) {
-        toUnitSelect.selectedIndex = i;
+      
+      for (let i = 0; i < toUnitSelect.options.length; i++) {
+        if (toUnitSelect.options[i].value === item.toUnit) {
+          toUnitSelect.selectedIndex = i;
+          break;
+        }
       }
-    });
-    
-    inputValue.value = item.value;
-    performConversion();
+      
+      // Realizar conversión
+      performConversion();
+    }
   }
-
-  // Botón para limpiar el historial
-  const clearHistoryBtn = document.getElementById('clearHistory');
-  if (clearHistoryBtn) {
-    clearHistoryBtn.addEventListener('click', function() {
-      localStorage.removeItem('conversionHistory');
-      updateHistoryDisplay();
-    });
+  
+  // Función para limpiar historial
+  function clearHistory() {
+    localStorage.removeItem('conversionHistory');
+    updateHistoryDisplay([]);
   }
-
-  // Inicializar la visualización del historial al cargar la página
-  updateHistoryDisplay();
+  
+  // Función auxiliar para capitalizar primera letra
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 });
