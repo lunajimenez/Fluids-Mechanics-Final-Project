@@ -3,14 +3,257 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Presión</title>
+  <title>Viscosidad en Fluidos Newtonianos y no Newtonianos</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+  <style>
+    .viscosity-hero {
+      background: linear-gradient(135deg, #6b46c1, #9f7aea);
+      padding: 4rem 0;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    
+    .viscosity-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><path d="M30 0v60M0 30h60" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></svg>') repeat;
+      opacity: 0.3;
+    }
+    
+    .viscosity-hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      position: relative;
+      text-align: center;
+    }
+    
+    .viscosity-hero p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    .viscosity-section {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .viscosity-section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(107,70,193,0.15);
+    }
+    
+    .viscosity-section h2 {
+      color: #2d3748;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid rgba(107,70,193,0.1);
+      display: flex;
+      align-items: center;
+    }
+    
+    .viscosity-section h2::before {
+      content: '💧';
+      margin-right: 0.5rem;
+      font-size: 1.5rem;
+    }
+    
+    .viscosity-section h3 {
+      color: #6b46c1;
+      margin: 1.5rem 0 0.75rem;
+    }
+    
+    .interactive-demo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    
+    .simulator-container, .theory-container {
+      background: #f8fafc;
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    
+    .chart-container {
+      width: 100%;
+      height: 300px;
+      position: relative;
+      margin: 1.5rem 0;
+    }
+    
+    .simulator-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .control-group label {
+      font-weight: 500;
+      color: #4a5568;
+    }
+    
+    .control-group input[type="range"] {
+      width: 100%;
+      accent-color: #6b46c1;
+    }
+    
+    .control-value {
+      font-size: 0.9rem;
+      color: #6b46c1;
+      font-weight: 500;
+    }
+    
+    .fluid-type-selector {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .fluid-option {
+      flex: 1;
+      padding: 0.75rem;
+      background: #edf2f7;
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+    
+    .fluid-option.active {
+      background: #6b46c1;
+      color: white;
+    }
+    
+    .formula {
+      background: rgba(107,70,193,0.05);
+      padding: 1rem;
+      border-radius: 10px;
+      margin: 1rem 0;
+      text-align: center;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      color: #6b46c1;
+      border-left: 4px solid #6b46c1;
+    }
+    
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+    }
+    
+    .comparison-table th, .comparison-table td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    
+    .comparison-table th {
+      background: #f8fafc;
+      font-weight: 600;
+      color: #2d3748;
+    }
+    
+    .comparison-table tr:hover td {
+      background: rgba(107,70,193,0.05);
+    }
+    
+    .fluid-animation {
+      width: 100%;
+      height: 300px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      margin: 1.5rem 0;
+    }
+    
+    .btn {
+      background: #6b46c1;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+    }
+    
+    .btn:hover {
+      background: #553c9a;
+      transform: translateY(-2px);
+    }
+    
+    .result-panel {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: rgba(107,70,193,0.1);
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .result-panel p {
+      margin: 0.5rem 0;
+    }
+    
+    .two-column {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+    
+    .info-card {
+      padding: 1.5rem;
+      background: #f8fafc;
+      border-radius: 10px;
+      margin: 1rem 0;
+      border-left: 4px solid #6b46c1;
+    }
+    
+    .info-card h4 {
+      color: #6b46c1;
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+    }
+    
+    @media (max-width: 768px) {
+      .interactive-demo, .two-column {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
   <header>
     <div class="container nav-container">
-      <h1>Presión</h1>
+      <h1>Mecánica de Fluidos</h1>
       <nav id="navbar">
         <ul class="main-menu">
           <li><a href="index.html">Introducción</a></li>
@@ -19,13 +262,13 @@
             <ul class="submenu">
               <li><a href="conversion.html">Conversión de Unidades</a></li>
               <li><a href="propiedades.html">Propiedades</a></li>
-              <li><a href="presion.html" class="active">Presión</a></li>
+              <li><a href="presion.html" class="active">Viscosidad en Fluidos</a></li>
             </ul>
           </li>
           <li class="has-submenu">
             <a href="#" class="menu-trigger">Presión e Introducción a la Estática de Fluidos ▾</a>
             <ul class="submenu">
-              <li><a href="presion.html">Presión</a></li>
+              <li><a href="presion.html">Viscosidad en Fluidos</a></li>
               <li><a href="#estatica-fluidos">Estática de Fluidos</a></li>
               <li><a href="#principio-pascal">Principio de Pascal</a></li>
             </ul>
@@ -68,66 +311,267 @@
       <div id="menu-toggle">☰</div>
     </div>
   </header>
+  
   <main>
+    <section class="viscosity-hero">
+      <div class="container">
+        <h1>Viscosidad en Fluidos Newtonianos y no Newtonianos</h1>
+        <p>La viscosidad es una propiedad física fundamental que determina cómo los fluidos resisten el flujo cuando se les aplica una fuerza. Esta característica varía enormemente entre diferentes fluidos y condiciones, afectando directamente cómo interactuamos con ellos en la vida cotidiana y en aplicaciones de ingeniería.</p>
+      </div>
+    </section>
+    
     <div class="container">
-      <section class="theory">
-        <h2>Teoría de la Presión</h2>
-        <p>La presión es la fuerza ejercida perpendicularmente sobre una superficie, por unidad de área. Matemáticamente:
-          <strong>P = F / A</strong>, donde:</p>
-        <ul>
-          <li><strong>P:</strong> Presión (Pa, N/m²).</li>
-          <li><strong>F:</strong> Fuerza normal (N).</li>
-          <li><strong>A:</strong> Área de la superficie (m²).</li>
-        </ul>
-        <h3>Tipos de presión</h3>
-        <ul>
-          <li><strong>Presión absoluta:</strong> medida respecto al vacío absoluto (P_abs = P_man + P_atm).</li>
-          <li><strong>Presión manométrica:</strong> diferencia respecto a la presión atmosférica.</li>
-          <li><strong>Presión diferencial:</strong> diferencia entre dos puntos en un fluido.</li>
-        </ul>
-        <h3>Ley de Pascal</h3>
-        <p>Establece que un cambio de presión aplicado a un fluido confinado se transmite íntegramente en todas las direcciones. Principio básico de sistemas hidráulicos y prensas.</p>
-        <h3>Presión hidrostática</h3>
-        <p>En un punto sumergido a profundidad h en un fluido de densidad ρ bajo gravedad g:
-          <em>P = ρ g h</em>. Esta ecuación explica fenómenos como la variación de presión con la profundidad en estanques y océanos.</p>
-        <h3>Manometría</h3>
-        <p>Los manómetros (de tubo en U, de columna) permiten medir presión relativa observando la diferencia de alturas de columnas de líquido manométrico.</p>
-        <h3>Unidades y conversión</h3>
-        <p>Además del Pa, se usan atm (1 atm = 101325 Pa), bar (1 bar = 10^5 Pa), psi (lbf/in²). Es clave convertir correctamente para cálculos en ingeniería.</p>
-        <h3>Ejemplos prácticos</h3>
-        <ol>
-          <li>Cálculo de la presión en el fondo de un tanque de agua de 10 m: P = 1000 kg/m³·9.81 m/s²·10 m ≈ 98100 Pa.</li>
-          <li>Sistema de elevador hidráulico: relación de áreas y fuerzas según la Ley de Pascal.</li>
-        </ol>
+      <section class="viscosity-section">
+        <h2>Fundamentos de la Viscosidad</h2>
+        <p>La viscosidad es la resistencia interna de un fluido al movimiento o al flujo. Representa la fricción interna entre las capas moleculares del fluido cuando estas se deslizan una sobre otra.</p>
+        
+        <div class="two-column">
+          <div>
+            <h3>Esfuerzo Cortante y Velocidad de Corte</h3>
+            <p>Para entender la viscosidad, es fundamental comprender la relación entre:</p>
+            <ul>
+              <li><strong>Esfuerzo cortante (τ):</strong> La fuerza por unidad de área aplicada tangencialmente al fluido.</li>
+              <li><strong>Velocidad de corte (γ̇):</strong> El gradiente de velocidad perpendicular a la dirección del esfuerzo cortante.</li>
+            </ul>
+            <div class="formula">τ = μ · γ̇</div>
+            <p>Donde μ es el coeficiente de viscosidad (dinámica), medido en Pa·s o Poise.</p>
+          </div>
+          <div>
+            <div id="viscosity-concept" class="fluid-animation"></div>
+          </div>
+        </div>
       </section>
-      <section class="exercise">
-        <h2>Ejercicio Interactivo Avanzado</h2>
-        <p>Calcula la presión hidrostática <em>P = ρ · g · h</em> introduciendo:</p>
-        <form id="formPresion">
-          <div class="form-group">
-            <label for="densidad">Densidad ρ (kg/m³):</label>
-            <input type="number" id="densidad" required step="any">
+      
+      <section class="viscosity-section">
+        <h2>Fluidos Newtonianos vs. No Newtonianos</h2>
+        
+        <div class="two-column">
+          <div>
+            <div class="info-card">
+              <h4>Fluidos Newtonianos</h4>
+              <p>En los fluidos newtonianos, la viscosidad permanece constante independientemente de la fuerza aplicada. La relación entre el esfuerzo cortante y la velocidad de corte es lineal, pasando por el origen, siendo la constante de proporcionalidad el coeficiente de viscosidad.</p>
+              <p><strong>Ejemplos:</strong> Agua, aire, aceite mineral, gasolina.</p>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="gravedad">Gravedad g (m/s²):</label>
-            <input type="number" id="gravedad" required step="any" value="9.81">
+          <div>
+            <div class="info-card">
+              <h4>Fluidos No Newtonianos</h4>
+              <p>Los fluidos no newtonianos tienen viscosidades que cambian según la fuerza aplicada. La relación entre el esfuerzo cortante y la velocidad de corte es no lineal o dependiente del tiempo. No es posible definir un coeficiente de viscosidad constante como ocurre con los fluidos newtonianos.</p>
+              <p><strong>Ejemplos:</strong> Ketchup, maicena con agua, sangre, pintura.</p>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="altura">Altura h (m):</label>
-            <input type="number" id="altura" required step="any">
+        </div>
+        
+        <h3>Comparación de Comportamientos</h3>
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Característica</th>
+              <th>Fluidos Newtonianos</th>
+              <th>Fluidos No Newtonianos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Relación esfuerzo-velocidad</td>
+              <td>Lineal</td>
+              <td>No lineal o dependiente del tiempo</td>
+            </tr>
+            <tr>
+              <td>Coeficiente de viscosidad</td>
+              <td>Constante</td>
+              <td>Variable</td>
+            </tr>
+            <tr>
+              <td>Dependencia de la fuerza</td>
+              <td>Independiente</td>
+              <td>La viscosidad cambia con la fuerza aplicada</td>
+            </tr>
+            <tr>
+              <td>Medición</td>
+              <td>Relativamente simple</td>
+              <td>Requiere reómetros especializados</td>
+            </tr>
+            <tr>
+              <td>Modelado matemático</td>
+              <td>Simple (ecuaciones lineales)</td>
+              <td>Complejo (ecuaciones no lineales)</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      
+      <section class="viscosity-section">
+        <h2>Simulador Interactivo de Viscosidad</h2>
+        <p>Explora cómo se comportan diferentes tipos de fluidos bajo distintas condiciones de esfuerzo cortante y velocidad de corte.</p>
+        
+        <div class="fluid-type-selector">
+          <div class="fluid-option active" data-type="newtonian">Fluido Newtoniano</div>
+          <div class="fluid-option" data-type="pseudoplastic">Pseudoplástico</div>
+          <div class="fluid-option" data-type="dilatant">Dilatante</div>
+          <div class="fluid-option" data-type="bingham">Plástico de Bingham</div>
+        </div>
+        
+        <div class="interactive-demo">
+          <div class="simulator-container">
+            <div class="chart-container">
+              <canvas id="viscosity-chart"></canvas>
+            </div>
+            
+            <div class="simulator-controls">
+              <div class="control-group">
+                <label for="shear-rate">Velocidad de Corte (γ̇) [s⁻¹]:</label>
+                <input type="range" id="shear-rate" min="0" max="100" value="50">
+                <div class="control-value">Valor: <span id="shear-rate-value">50</span> s⁻¹</div>
+              </div>
+              
+              <div class="control-group">
+                <label for="viscosity-coef">Coeficiente de Viscosidad Base (μ₀) [Pa·s]:</label>
+                <input type="range" id="viscosity-coef" min="0.1" max="10" step="0.1" value="1">
+                <div class="control-value">Valor: <span id="viscosity-coef-value">1</span> Pa·s</div>
+              </div>
+              
+              <div class="control-group" id="yield-stress-control" style="display: none;">
+                <label for="yield-stress">Esfuerzo de Fluencia (τ₀) [Pa]:</label>
+                <input type="range" id="yield-stress" min="0" max="50" value="10">
+                <div class="control-value">Valor: <span id="yield-stress-value">10</span> Pa</div>
+              </div>
+              
+              <div class="control-group" id="flow-index-control">
+                <label for="flow-index">Índice de Comportamiento de Flujo (n):</label>
+                <input type="range" id="flow-index" min="0.1" max="1.9" step="0.1" value="1">
+                <div class="control-value">Valor: <span id="flow-index-value">1</span></div>
+              </div>
+              
+              <button id="calc-viscosity" class="btn">Calcular Viscosidad Aparente</button>
+              <div id="viscosity-result" class="result-panel" style="display: none;"></div>
+            </div>
           </div>
-          <button type="submit" class="btn">Calcular P</button>
-        </form>
-        <div id="resultado" class="result"></div>
+          
+          <div class="theory-container">
+            <h3>Tipos de Fluidos No Newtonianos</h3>
+            
+            <div class="info-card">
+              <h4>Pseudoplástico (Shear-thinning)</h4>
+              <p>La viscosidad disminuye al aumentar la velocidad de corte. Ejemplos: Ketchup, pinturas, sangre.</p>
+              <div class="formula">τ = K · γ̇ⁿ (donde n < 1)</div>
+            </div>
+            
+            <div class="info-card">
+              <h4>Dilatante (Shear-thickening)</h4>
+              <p>La viscosidad aumenta al aumentar la velocidad de corte. Ejemplos: Suspensiones concentradas como la maicena en agua.</p>
+              <div class="formula">τ = K · γ̇ⁿ (donde n > 1)</div>
+            </div>
+            
+            <div class="info-card">
+              <h4>Plástico de Bingham</h4>
+              <p>Requiere un esfuerzo de fluencia inicial para comenzar a fluir, luego se comporta como un fluido newtoniano.</p>
+              <div class="formula">τ = τ₀ + μ · γ̇</div>
+            </div>
+            
+            <h3>Aplicaciones Prácticas</h3>
+            <p>La comprensión de las propiedades reológicas de los fluidos es crucial en:</p>
+            <ul>
+              <li>Industria alimentaria (salsas, chocolates, productos lácteos)</li>
+              <li>Industria farmacéutica (suspensiones, cremas)</li>
+              <li>Industria de pinturas y recubrimientos</li>
+              <li>Lubricantes y aceites industriales</li>
+              <li>Biomedicina (comportamiento de la sangre)</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div id="flow-animation" class="fluid-animation"></div>
+      </section>
+      
+      <section class="viscosity-section">
+        <h2>Calculadora de Problemas de Viscosidad</h2>
+        <p>Resuelve problemas prácticos de viscosidad con diferentes tipos de fluidos.</p>
+        
+        <div class="interactive-demo">
+          <div class="simulator-container">
+            <h3>Cálculo de Viscosidad Aparente</h3>
+            <form id="viscosity-problem" class="calculator-form">
+              <div class="control-group">
+                <label for="problem-fluid-type">Tipo de Fluido:</label>
+                <select id="problem-fluid-type">
+                  <option value="newtonian">Newtoniano</option>
+                  <option value="pseudoplastic">Pseudoplástico (n < 1)</option>
+                  <option value="dilatant">Dilatante (n > 1)</option>
+                  <option value="bingham">Plástico de Bingham</option>
+                </select>
+              </div>
+              
+              <div class="control-group">
+                <label for="problem-shear-rate">Velocidad de Corte (γ̇) [s⁻¹]:</label>
+                <input type="number" id="problem-shear-rate" step="0.1" value="50" required>
+              </div>
+              
+              <div class="control-group">
+                <label for="problem-viscosity">Coeficiente de Viscosidad Base (μ₀) [Pa·s]:</label>
+                <input type="number" id="problem-viscosity" step="0.01" value="1" required>
+              </div>
+              
+              <div class="control-group" id="problem-yield-stress-group">
+                <label for="problem-yield-stress">Esfuerzo de Fluencia (τ₀) [Pa]:</label>
+                <input type="number" id="problem-yield-stress" step="0.1" value="10">
+              </div>
+              
+              <div class="control-group" id="problem-flow-index-group">
+                <label for="problem-flow-index">Índice de Comportamiento de Flujo (n):</label>
+                <input type="number" id="problem-flow-index" step="0.01" value="1" min="0.1" max="1.9">
+              </div>
+              
+              <div class="control-group">
+                <label for="problem-temperature">Temperatura [°C]:</label>
+                <input type="number" id="problem-temperature" step="0.1" value="25">
+              </div>
+              
+              <button type="submit" class="btn">Calcular</button>
+              <div id="problem-result" class="result-panel"></div>
+            </form>
+          </div>
+          
+          <div class="theory-container">
+            <h3>Ecuaciones Utilizadas</h3>
+            
+            <div class="info-card">
+              <h4>Fluido Newtoniano</h4>
+              <div class="formula">τ = μ · γ̇</div>
+              <div class="formula">μₐₚₐᵣₑₙₜₑ = μ</div>
+            </div>
+            
+            <div class="info-card">
+              <h4>Modelo de Ley de Potencia</h4>
+              <div class="formula">τ = K · γ̇ⁿ</div>
+              <div class="formula">μₐₚₐᵣₑₙₜₑ = K · γ̇ⁿ⁻¹</div>
+              <p>Donde n < 1 para fluidos pseudoplásticos y n > 1 para fluidos dilatantes.</p>
+            </div>
+            
+            <div class="info-card">
+              <h4>Modelo de Bingham</h4>
+              <div class="formula">τ = τ₀ + μ · γ̇ (para τ > τ₀)</div>
+              <div class="formula">μₐₚₐᵣₑₙₜₑ = τ₀/γ̇ + μ</div>
+            </div>
+            
+            <div class="info-card">
+              <h4>Efecto de la Temperatura</h4>
+              <div class="formula">μ = μᵣₑ₁ · exp[B · (1/T - 1/Tᵣₑ₁)]</div>
+              <p>Donde B es una constante del material, T es la temperatura absoluta, y μᵣₑ₁ es la viscosidad a la temperatura de referencia Tᵣₑ₁.</p>
+            </div>
+          </div>
+        </div>
       </section>
     </div>
   </main>
+  
   <footer>
     <div class="container">
       <p>Grupo 4 Mecánica de Fluidos</p>
     </div>
   </footer>
+  
   <script src="js/main.js"></script>
-  <script src="js/presion.js"></script>
+  <script src="js/viscosity.js"></script>
 </body>
 </html>

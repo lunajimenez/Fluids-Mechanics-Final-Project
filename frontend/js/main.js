@@ -149,6 +149,255 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
     }
   });
+
+  // Calculadora de viscosidad (si existe en la página)
+  const viscosityCalculator = document.getElementById('viscosity-calculator');
+  
+  viscosityCalculator?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Obtener valores del formulario
+    const L = parseFloat(document.getElementById('cylinder-length').value) / 100;  // Convertir a metros
+    const D_exterior = parseFloat(document.getElementById('outer-diameter').value) / 100;  // Convertir a metros
+    const brecha = parseFloat(document.getElementById('gap').value) / 100;  // Convertir a metros
+    const rpm = parseFloat(document.getElementById('rpm').value);
+    const torque = parseFloat(document.getElementById('torque').value);
+    
+    if (L && D_exterior && brecha && rpm && torque) {
+      // Cálculos intermedios
+      const R = D_exterior / 2;                       // Radio exterior (m)
+      const r = R - brecha;                           // Radio interior (m)
+      const omega = rpm * (2 * Math.PI) / 60;         // Velocidad angular (rad/s)
+      
+      // Fórmula para calcular la viscosidad
+      const mu = (torque * brecha) / (2 * Math.PI * omega * Math.pow(r, 3) * L);  // Viscosidad en Pa·s
+      const mu_mN = mu * 1000;                        // Conversión a mN·s/m²
+      
+      const resultDiv = document.getElementById('viscosity-result');
+      resultDiv.style.opacity = '0';
+      
+      setTimeout(() => {
+        resultDiv.innerHTML = `
+          <p><strong>Radio exterior (R):</strong> ${R.toFixed(5)} m</p>
+          <p><strong>Radio interior (r):</strong> ${r.toFixed(5)} m</p>
+          <p><strong>Velocidad angular (ω):</strong> ${omega.toFixed(3)} rad/s</p>
+          <p><strong>Viscosidad (μ):</strong> ${mu.toFixed(6)} Pa·s</p>
+          <p><strong>Viscosidad:</strong> ${mu_mN.toFixed(4)} mN·s/m²</p>
+        `;
+        resultDiv.style.opacity = '1';
+      }, 150);
+      
+      // Actualizar la simulación del viscosímetro
+      if (viscosimeterScene) {
+        updateViscosimeterSimulation(L, R, r, omega);
+      }
+    } else {
+      document.getElementById('viscosity-result').innerHTML = `
+        <p class="error">Por favor, ingrese todos los valores requeridos.</p>
+      `;
+    }
+  });
+  
+  // Simulación 3D del viscosímetro con Three.js
+  let viscosimeterScene, viscosimeterCamera, viscosimeterRenderer;
+  let outerCylinder, innerCylinder, fluidLayer;
+  let animationId;
+  
+  function initViscosimeterSimulation() {
+    const container = document.getElementById('viscometer-canvas');
+    
+    if (!container) return;
+    
+    // Inicializar la escena
+    viscosimeterScene = new THREE.Scene();
+    viscosimeterScene.background = new THREE.Color(0xf8f9fa);
+    
+    // Cámara
+    const aspect = container.clientWidth / container.clientHeight;
+    viscosimeterCamera = new THREE.PerspectiveCamera(45, aspect, 0.1, 1000);
+    viscosimeterCamera.position.set(0, 0, 1.5);
+    
+    // Renderer
+    viscosimeterRenderer = new THREE.WebGLRenderer({ antialias: true });
+    viscosimeterRenderer.setSize(container.clientWidth, container.clientHeight);
+    viscosimeterRenderer.setPixelRatio(window.devicePixelRatio);
+    container.innerHTML = '';
+    container.appendChild(viscosimeterRenderer.domElement);
+    
+    // Luz
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    viscosimeterScene.add(ambientLight);
+    
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    directionalLight.position.set(1, 1, 1);
+    viscosimeterScene.add(directionalLight);
+    
+    // Obtener valores iniciales del formulario si están disponibles
+    let L = 0.779; // Valor por defecto
+    let R = 0.0905; // Valor por defecto
+    let r = 0.0905 - 0.00139; // Valor por defecto
+    let omega = 32.99; // Valor por defecto
+    
+    const lengthInput = document.getElementById('cylinder-length');
+    const diameterInput = document.getElementById('outer-diameter');
+    const gapInput = document.getElementById('gap');
+    const rpmInput = document.getElementById('rpm');
+    
+    if (lengthInput && diameterInput && gapInput && rpmInput) {
+      L = parseFloat(lengthInput.value) / 100;
+      R = parseFloat(diameterInput.value) / 200;
+      r = R - parseFloat(gapInput.value) / 100;
+      omega = parseFloat(rpmInput.value) * (2 * Math.PI) / 60;
+
+      // Añadir event listeners para actualizar la simulación en tiempo real
+      lengthInput.addEventListener('input', updateSimulationFromInputs);
+      diameterInput.addEventListener('input', updateSimulationFromInputs);
+      gapInput.addEventListener('input', updateSimulationFromInputs);
+      rpmInput.addEventListener('input', updateSimulationFromInputs);
+    }
+    
+    // Crear cilindros
+    createViscosimeterCylinders(L, R, r);
+    
+    // Rotación de la escena para mejor visualización
+    viscosimeterScene.rotation.x = Math.PI / 6;
+    
+    // Agregar rotación interactiva a la escena
+    let isDragging = false;
+    let previousMousePosition = { x: 0, y: 0 };
+    
+    container.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      previousMousePosition = { x: e.clientX, y: e.clientY };
+    });
+    
+    container.addEventListener('mousemove', (e) => {
+      if (isDragging) {
+        const deltaMove = {
+          x: e.clientX - previousMousePosition.x,
+          y: e.clientY - previousMousePosition.y
+        };
+        
+        viscosimeterScene.rotation.y += deltaMove.x * 0.01;
+        viscosimeterScene.rotation.x += deltaMove.y * 0.01;
+        
+        previousMousePosition = { x: e.clientX, y: e.clientY };
+      }
+    });
+    
+    container.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+    
+    container.addEventListener('mouseleave', () => {
+      isDragging = false;
+    });
+    
+    // Responsive handler
+    window.addEventListener('resize', onWindowResize);
+    
+    // Iniciar animación
+    animateViscosimeter(omega);
+  }
+  
+  function createViscosimeterCylinders(L, R, r) {
+    // Limpiar cilindros existentes si los hay
+    if (outerCylinder) viscosimeterScene.remove(outerCylinder);
+    if (innerCylinder) viscosimeterScene.remove(innerCylinder);
+    if (fluidLayer) viscosimeterScene.remove(fluidLayer);
+    
+    // Geometrías
+    const outerGeometry = new THREE.CylinderGeometry(R, R, L, 32, 1, true);
+    const innerGeometry = new THREE.CylinderGeometry(r, r, L * 0.95, 32);
+    const fluidGeometry = new THREE.CylinderGeometry(R - 0.001, R - 0.001, L, 32, 1, true);
+    
+    // Materiales
+    const outerMaterial = new THREE.MeshPhongMaterial({ 
+      color: 0xcccccc, 
+      transparent: true, 
+      opacity: 0.7,
+      side: THREE.DoubleSide 
+    });
+    
+    const innerMaterial = new THREE.MeshPhongMaterial({ 
+      color: 0x4364f7
+    });
+    
+    const fluidMaterial = new THREE.MeshPhongMaterial({ 
+      color: 0x6fb1fc, 
+      transparent: true, 
+      opacity: 0.3,
+      side: THREE.DoubleSide 
+    });
+    
+    // Mallas
+    outerCylinder = new THREE.Mesh(outerGeometry, outerMaterial);
+    innerCylinder = new THREE.Mesh(innerGeometry, innerMaterial);
+    fluidLayer = new THREE.Mesh(fluidGeometry, fluidMaterial);
+    
+    // Añadir a la escena
+    viscosimeterScene.add(outerCylinder);
+    viscosimeterScene.add(innerCylinder);
+    viscosimeterScene.add(fluidLayer);
+  }
+  
+  function updateViscosimeterSimulation(L, R, r, omega) {
+    // Detener animación actual
+    if (animationId) {
+      cancelAnimationFrame(animationId);
+    }
+    
+    // Recrear cilindros con nuevas dimensiones
+    createViscosimeterCylinders(L, R, r);
+    
+    // Reiniciar animación con nueva velocidad
+    animateViscosimeter(omega);
+  }
+  
+  function animateViscosimeter(omega) {
+    animationId = requestAnimationFrame(() => animateViscosimeter(omega));
+    
+    // Rotar el cilindro interior
+    if (innerCylinder) {
+      innerCylinder.rotation.y += omega / 60; // Reducir velocidad para visualización
+    }
+    
+    // Renderizar escena
+    if (viscosimeterRenderer && viscosimeterScene && viscosimeterCamera) {
+      viscosimeterRenderer.render(viscosimeterScene, viscosimeterCamera);
+    }
+  }
+  
+  function onWindowResize() {
+    const container = document.getElementById('viscometer-canvas');
+    if (!container || !viscosimeterCamera || !viscosimeterRenderer) return;
+    
+    viscosimeterCamera.aspect = container.clientWidth / container.clientHeight;
+    viscosimeterCamera.updateProjectionMatrix();
+    viscosimeterRenderer.setSize(container.clientWidth, container.clientHeight);
+  }
+  
+  function updateSimulationFromInputs() {
+    const lengthInput = document.getElementById('cylinder-length');
+    const diameterInput = document.getElementById('outer-diameter');
+    const gapInput = document.getElementById('gap');
+    const rpmInput = document.getElementById('rpm');
+    
+    if (lengthInput && diameterInput && gapInput && rpmInput) {
+      const L = parseFloat(lengthInput.value) / 100;
+      const R = parseFloat(diameterInput.value) / 200;
+      const r = R - parseFloat(gapInput.value) / 100;
+      const omega = parseFloat(rpmInput.value) * (2 * Math.PI) / 60;
+      
+      // Solo actualizar si los valores son válidos
+      if (L > 0 && R > 0 && r > 0 && r < R && omega >= 0) {
+        updateViscosimeterSimulation(L, R, r, omega);
+      }
+    }
+  }
+  
+  // Inicializar simulación cuando se cargue la página
+  initViscosimeterSimulation();
   
   const units = {
     longitud: {

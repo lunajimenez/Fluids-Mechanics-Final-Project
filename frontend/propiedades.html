@@ -7,6 +7,7 @@
   <title>Propiedades de los Fluidos</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
   <style>
     .properties-hero {
       background: linear-gradient(135deg, #4364f7, #6fb1fc);
@@ -207,6 +208,30 @@
       background: rgba(67,100,247,0.05);
     }
     
+    .viscometer-simulation {
+      margin: 2rem 0;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+    
+    .viscometer-simulation h3 {
+      color: #4364f7;
+      margin-bottom: 1rem;
+    }
+    
+    .simulation-info {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: #718096;
+      line-height: 1.5;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
     @media (max-width: 768px) {
       .interactive-demo {
         grid-template-columns: 1fr;
@@ -224,16 +249,16 @@
           <li class="has-submenu">
             <a href="#" class="menu-trigger">Propiedades de los Fluidos ▾</a>
             <ul class="submenu">
-              <li><a href="conversion.html">Conversión de Unidades</a></li>
+              <li><a href="conversion.html">Conversiu00f3n de Unidades</a></li>
               <li><a href="propiedades.html" class="active">Propiedades</a></li>
-              <li><a href="presion.html">Presión</a></li>
+              <li><a href="presion.html">Viscosidad en Fluidos</a></li>
             </ul>
           </li>
           <li class="has-submenu">
-            <a href="#" class="menu-trigger">Presión e Introducción a la Estática de Fluidos ▾</a>
+            <a href="#" class="menu-trigger">Presiu00f3n e Introducciu00f3n a la Estu00e1tica de Fluidos u25be</a>
             <ul class="submenu">
-              <li><a href="presion.html">Presión</a></li>
-              <li><a href="#estatica-fluidos">Estática de Fluidos</a></li>
+              <li><a href="presion.html">Viscosidad en Fluidos</a></li>
+              <li><a href="#estatica-fluidos">Estu00e1tica de Fluidos</a></li>
               <li><a href="#principio-pascal">Principio de Pascal</a></li>
             </ul>
           </li>
@@ -388,6 +413,56 @@
         
         <h3>Medición con viscosímetro de cilindros concéntricos</h3>
         <p>Consiste en dos cilindros, uno dentro del otro: el exterior permanece fijo mientras el interior gira. El fluido ocupa el espacio entre ambos, y al girar el cilindro interior, se genera un esfuerzo cortante. La resistencia que el fluido ofrece al movimiento se mide como torque, permitiendo calcular la viscosidad mediante el análisis del balance de momentos en coordenadas cilíndricas.</p>
+        
+        <div class="interactive-demo">
+          <div class="demo-container">
+            <h3>Calculadora de Viscosidad con Viscosímetro</h3>
+            <form id="viscosity-calculator" class="calculator-form">
+              <div class="form-group">
+                <label for="cylinder-length">Longitud de los cilindros [cm]:</label>
+                <input type="number" id="cylinder-length" step="0.1" value="77.9" required>
+              </div>
+              <div class="form-group">
+                <label for="outer-diameter">Diámetro interior del cilindro exterior [cm]:</label>
+                <input type="number" id="outer-diameter" step="0.01" value="18.1" required>
+              </div>
+              <div class="form-group">
+                <label for="gap">Brecha entre los cilindros [cm]:</label>
+                <input type="number" id="gap" step="0.001" value="0.139" required>
+              </div>
+              <div class="form-group">
+                <label for="rpm">Velocidad de rotación (cilindro interior) [rpm]:</label>
+                <input type="number" id="rpm" step="1" value="315" required>
+              </div>
+              <div class="form-group">
+                <label for="torque">Par de torsión medido [N·m]:</label>
+                <input type="number" id="torque" step="0.001" value="1.122" required>
+              </div>
+              <button type="submit" class="btn">Calcular</button>
+              <div id="viscosity-result" class="result"></div>
+            </form>
+          </div>
+          <div class="theory-container">
+            <h3>Conceptos del Viscosímetro</h3>
+            <p>La viscosidad puede medirse con un viscosímetro de cilindros concéntricos usando la fórmula:</p>
+            <div class="formula">μ = (T × δ) / (2π × ω × r³ × L)</div>
+            <p>Donde:</p>
+            <ul>
+              <li>T = par de torsión [N·m]</li>
+              <li>δ = brecha entre cilindros [m]</li>
+              <li>ω = velocidad angular [rad/s]</li>
+              <li>r = radio interior [m]</li>
+              <li>L = longitud de los cilindros [m]</li>
+            </ul>
+            <p>Este método es ideal para fluidos no newtonianos y de alta viscosidad.</p>
+          </div>
+        </div>
+        
+        <div class="viscometer-simulation">
+          <h3>Simulación del Viscosímetro</h3>
+          <div id="viscometer-canvas" style="width:100%; height:400px; border-radius:10px; overflow:hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1);"></div>
+          <p class="simulation-info">La simulación muestra los cilindros concéntricos del viscosímetro. El cilindro interior (azul) gira a la velocidad angular calculada mientras el exterior (gris) permanece estático. El espacio entre ambos representa el fluido cuya viscosidad se está midiendo.</p>
+        </div>
         
         <h3>Comportamiento con la temperatura</h3>
         <p>En líquidos, la viscosidad disminuye al aumentar la temperatura, mientras que en gases aumenta. Este concepto es clave en lubricantes, transporte de fluidos en tuberías y procesos industriales como la fabricación de pinturas, alimentos y cosméticos.</p>
