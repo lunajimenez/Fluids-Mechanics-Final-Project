@@ -132,6 +132,14 @@ Este proyecto fue desarrollado como proyecto final para:
 - **Bootcamp Talento Tech: Programación** - Aplicando conocimientos de desarrollo web frontend.
 - **Curso de Mecánica de Fluidos** - Implementando conceptos teóricos en aplicaciones prácticas interactivas.
 
-## 👥 Equipo de Desarrollo
+## 👥 Equipo de Desarrollo - Grupo 4 Mecánica de Fluidos
+* Luna Katalina Quintero Jiménez [Github aquí](https://github.com/lunajimenez)
+* Luis Esteban Martínez Urrego [Github aquí](https://github.com/luusprogame) 
+* Juan Andrés Abreo Jiménez
+* Diana Carolina Barrios Marriaga
+* Avril Maria Lujan Alvarez
+* Iván Enrique Argel Ríos
 
-- Grupo 4 - Mecánica de Fluidos
+---
+
+> Este proyecto ha sido desarrollado como un proyecto final de curso de la asignatura Mecánica de Fluidos y como proyecto final del Bootcamp de Programación. Todas estos espacios de aprendizaje brindados e impartidos por la Universidad Tecnológica de Bolívar y MinTic, en Colombia. Su desarrollo se centra en el área de desarrollo web.
