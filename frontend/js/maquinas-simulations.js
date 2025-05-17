@@ -46,6 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inicializar simulación
     updatePotenciaSimulation();
   }
+  
+  // Inicializar el ejercicio de potencia del motor de fluido
+  setupMotorFluidoExercise();
 });
 
 // Simulación de Potencia Hidráulica
@@ -393,4 +396,33 @@ class PotenciaSimulation {
     this.flowRate = caudal;
     this.head = altura;
   }
+}
+
+// Función para inicializar el ejercicio de potencia del motor de fluido
+function setupMotorFluidoExercise() {
+  const calcularButton = document.getElementById('calcular-potencia');
+  if (!calcularButton) return; // Si no existe el botón, salir
+  
+  calcularButton.addEventListener('click', () => {
+    // Obtener valores de entrada
+    const densidadRelativa = parseFloat(document.getElementById('densidad-relativa').value);
+    const caudal = parseFloat(document.getElementById('caudal').value);
+    const diametroTuberia = parseFloat(document.getElementById('diametro-tuberia').value);
+    const alturaH = parseFloat(document.getElementById('altura-h').value);
+    
+    // Constantes físicas
+    const gravedad = 9.81; // m/s²
+    
+    // Cálculo de la potencia hidráulica recibida (SOLO CONSIDERA ALTURA h)
+    const H = alturaH; // Se omite la cabeza de velocidad
+    const potenciaRecibida = densidadRelativa * 1000 * gravedad * caudal * H;
+    
+    // Cálculo de la potencia transmitida con 65% de eficiencia
+    const eficiencia = 0.65;
+    const potenciaTransmitida = potenciaRecibida * eficiencia;
+    
+    // Mostrar resultados
+    document.getElementById('potencia-recibida').textContent = `${potenciaRecibida.toFixed(2)} W`;
+    document.getElementById('potencia-transmitida').textContent = `${potenciaTransmitida.toFixed(2)} W`;
+  });
 }

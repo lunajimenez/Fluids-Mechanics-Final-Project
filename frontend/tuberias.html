@@ -36,7 +36,7 @@
   </script>
   <style>
     .tuberias-hero {
-      background: linear-gradient(135deg, #3494e6, #ec6ead);
+      background: linear-gradient(135deg, #3b82f6, #60a5fa);
       padding: 5rem 0;
       color: white;
       position: relative;
@@ -303,6 +303,79 @@
       .simulation-controls {
         grid-template-columns: 1fr;
       }
+    }
+
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+    
+    .results-table td, .results-table th {
+      padding: 0.8rem;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    
+    .results-table tr:last-child td {
+      border-bottom: none;
+    }
+    
+    .results-table td:first-child {
+      font-weight: 600;
+      color: #3b82f6;
+    }
+    
+    .header-row {
+      background: rgba(59,130,246,0.05);
+    }
+    
+    .header-row th {
+      text-align: left;
+      color: #2d3748;
+      font-size: 1.1rem;
+      padding: 1rem 0.8rem;
+    }
+    
+    .info-card {
+      background: #f8fafc;
+      border-radius: 10px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border-left: 4px solid #3b82f6;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    
+    .info-card h4 {
+      color: #3b82f6;
+      margin-top: 0;
+      margin-bottom: 1rem;
+    }
+    
+    .info-card ul {
+      padding-left: 1.5rem;
+      margin-bottom: 0;
+    }
+    
+    .info-card li {
+      margin-bottom: 0.5rem;
+    }
+    
+    .simulation-button {
+      background: linear-gradient(135deg, #3b82f6, #60a5fa);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 1rem;
+      box-shadow: 0 3px 10px rgba(59,130,246,0.2);
+    }
+    
+    .simulation-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(59,130,246,0.3);
     }
   </style>
 </head>
@@ -707,6 +780,123 @@
       <section id="sistemas-tuberias" class="flow-section">
         <h2>4. Sistemas de Tuberías</h2>
         <p>Los sistemas de tuberías son conjuntos de conductos interconectados que transportan fluidos. El análisis de estos sistemas requiere considerar tanto las pérdidas por fricción como las pérdidas menores.</p>
+        
+        <h3>4.1 Tuberías en Paralelo</h3>
+        <p>En un sistema de tuberías en paralelo, el flujo se divide en dos o más ramales que parten de un punto común y se reúnen posteriormente. En estos sistemas, la pérdida de carga es igual en todos los ramales, mientras que el caudal total es la suma de los caudales en cada ramal.</p>
+        
+        <div class="formula-block">
+          <div class="formula-title">Principios de Tuberías en Paralelo</div>
+          <div class="formula">
+            <p>Caudal total: $$Q_{total} = Q_1 + Q_2 + ... + Q_n$$</p>
+            <p>Pérdida de carga: $$h_{L1} = h_{L2} = ... = h_{Ln}$$</p>
+          </div>
+        </div>
+        
+        <div class="simulation-container">
+          <h3>Simulación de Tuberías en Paralelo</h3>
+          <p>Este ejercicio permite calcular la distribución de caudal en un sistema de tuberías en paralelo utilizando el método de Newton-Raphson.</p>
+          
+          <div class="simulation-controls">
+            <div class="control-group">
+              <label class="control-label" for="paralelo-caudal">Caudal total (L/s):</label>
+              <input type="number" id="paralelo-caudal" min="1" max="100" value="10">
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="paralelo-d1">Diámetro ramal 1 (mm):</label>
+              <input type="number" id="paralelo-d1" min="10" max="500" value="50">
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="paralelo-d2">Diámetro ramal 2 (mm):</label>
+              <input type="number" id="paralelo-d2" min="10" max="500" value="30">
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="paralelo-l1">Longitud ramal 1 (m):</label>
+              <input type="number" id="paralelo-l1" min="1" max="1000" value="50">
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="paralelo-l2">Longitud ramal 2 (m):</label>
+              <input type="number" id="paralelo-l2" min="1" max="1000" value="30">
+            </div>
+            <button id="calculate-paralelo" class="simulation-button">Calcular</button>
+          </div>
+          <div id="paralelo-results" class="simulation-results">
+            <p>Los resultados aparecerán aquí...</p>
+          </div>
+          <div id="paralelo-visualization" class="simulation-canvas"></div>
+          
+          <div class="info-card">
+            <h4>Características del Sistema</h4>
+            <ul>
+              <li>Ramal 1: Contiene una válvula de globo (K=340) y un codo estándar (K=30)</li>
+              <li>Ramal 2: Contiene una válvula de ángulo (K=150) y un codo de radio largo (K=20)</li>
+              <li>Rugosidad: 4.6×10⁻⁵ m (PVC)</li>
+              <li>Fluido: Agua a 25°C</li>
+            </ul>
+          </div>
+        </div>
+        
+        <h3>4.2 Tuberías en Serie</h3>
+        <p>En un sistema de tuberías en serie, el fluido atraviesa secuencialmente diferentes tramos de tubería. En estos sistemas, el caudal es constante en todos los tramos, mientras que la pérdida de carga total es la suma de las pérdidas en cada tramo.</p>
+        
+        <div class="formula-block">
+          <div class="formula-title">Principios de Tuberías en Serie</div>
+          <div class="formula">
+            <p>Caudal: $$Q_1 = Q_2 = ... = Q_n$$</p>
+            <p>Pérdida de carga total: $$h_{L_{total}} = h_{L1} + h_{L2} + ... + h_{Ln}$$</p>
+          </div>
+        </div>
+        
+        <div class="simulation-container">
+          <h3>Simulación de Tuberías en Serie</h3>
+          <p>Este ejercicio permite calcular la presión en un punto de un sistema de tuberías en serie, considerando pérdidas por fricción, pérdidas menores y cambios de sección.</p>
+          
+          <div class="simulation-controls">
+            <div class="control-group">
+              <label class="control-label" for="serie-da">Diámetro tubería 2" (mm):</label>
+              <input type="number" id="serie-da" min="10" max="100" value="50">
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="serie-db">Diámetro tubería 6" (mm):</label>
+              <input type="number" id="serie-db" min="50" max="300" value="150">
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="serie-la">Longitud tubería 2" (m):</label>
+              <input type="number" id="serie-la" min="1" max="100" value="10">
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="serie-lb">Longitud tubería 6" (m):</label>
+              <input type="number" id="serie-lb" min="1" max="100" value="15">
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="serie-pb">Presión en B (MPa):</label>
+              <input type="number" id="serie-pb" min="0.1" max="10" step="0.1" value="1">
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="serie-q">Caudal (L/s):</label>
+              <input type="number" id="serie-q" min="1" max="100" value="10">
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="serie-ha">Altura ha (m):</label>
+              <input type="number" id="serie-ha" min="0" max="100" value="2">
+            </div>
+            <button id="calculate-serie" class="simulation-button">Calcular</button>
+          </div>
+          <div id="serie-results" class="simulation-results">
+            <p>Los resultados aparecerán aquí...</p>
+          </div>
+          <div id="serie-visualization" class="simulation-canvas"></div>
+          
+          <div class="info-card">
+            <h4>Características del Sistema</h4>
+            <ul>
+              <li>El sistema incluye una tubería de 2" seguida de una tubería de 6"</li>
+              <li>Hay dos codos en la tubería de 2" (K=20 cada uno)</li>
+              <li>Expansión súbita entre las tuberías (K interpolado según relación de diámetros)</li>
+              <li>Rugosidad: 4.6×10⁻⁵ m (acero comercial)</li>
+              <li>Fluido: Agua</li>
+            </ul>
+          </div>
+        </div>
       </section>
     </div>
   </main>
@@ -720,5 +910,6 @@
   <script src="js/main.js"></script>
   <script src="js/menu.js"></script>
   <script src="js/tuberias-simulations.js"></script>
+  <script src="js/tuberias-ejercicios.js"></script>
 </body>
 </html> 
