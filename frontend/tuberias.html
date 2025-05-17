@@ -437,7 +437,6 @@
               <li><a href="dimensional.html#analisis-modelos">Análisis de Modelos</a></li>
             </ul>
           </li>
-          <li><a href="simulacion-flujo.html">Multimedia</a></li>
         </ul>
       </nav>
       <div id="menu-toggle">☰</div>
@@ -775,6 +774,212 @@
       <section id="perdidas-friccion" class="flow-section">
         <h2>3. Pérdidas por Fricción</h2>
         <p>Las pérdidas por fricción son las pérdidas de energía que ocurren en el flujo debido a la fricción entre el fluido y las paredes de la tubería.</p>
+        
+        <h3>3.1 Ecuación de Darcy-Weisbach</h3>
+        <p>La ecuación de Darcy-Weisbach es fundamental para calcular las pérdidas por fricción en tuberías. Esta ecuación relaciona la pérdida de carga con el factor de fricción, la longitud de la tubería, el diámetro, y la velocidad del fluido:</p>
+        
+        <div class="formula-block">
+          <div class="formula-title">Ecuación de Darcy-Weisbach</div>
+          <div class="formula">
+            <p>$$\Delta P = f \frac{L}{D} \frac{\rho V^2}{2}$$</p>
+            <p>donde:</p>
+            <p>$\Delta P$ = pérdida de presión [Pa]</p>
+            <p>$f$ = factor de fricción (adimensional)</p>
+            <p>$L$ = longitud de la tubería [m]</p>
+            <p>$D$ = diámetro de la tubería [m]</p>
+            <p>$\rho$ = densidad del fluido [kg/m³]</p>
+            <p>$V$ = velocidad media del flujo [m/s]</p>
+          </div>
+        </div>
+        
+        <p>El factor de fricción (f) depende del régimen de flujo (laminar o turbulento) y de la rugosidad relativa de la tubería.</p>
+        
+        <h3>3.2 Cálculo del Factor de Fricción</h3>
+        <p>Para flujo laminar (Re < 2300), el factor de fricción se calcula directamente como:</p>
+        
+        <div class="formula-block">
+          <div class="formula">
+            <p>$$f = \frac{64}{Re}$$</p>
+          </div>
+        </div>
+        
+        <p>Para flujo turbulento (Re > 4000), el factor de fricción depende tanto del número de Reynolds como de la rugosidad relativa (ε/D). Se puede determinar mediante el diagrama de Moody o utilizando ecuaciones como la de Colebrook-White:</p>
+        
+        <div class="formula-block">
+          <div class="formula">
+            <p>$$\frac{1}{\sqrt{f}} = -2\log_{10}\left(\frac{\varepsilon/D}{3.7} + \frac{2.51}{Re\sqrt{f}}\right)$$</p>
+          </div>
+        </div>
+        
+        <h3>3.3 Diagrama de Moody</h3>
+        <p>El diagrama de Moody es una herramienta gráfica fundamental en la mecánica de fluidos que relaciona el factor de fricción (f) con el número de Reynolds (Re) y la rugosidad relativa (ε/D). Desarrollado por Lewis Ferry Moody en 1944, permite determinar el factor de fricción necesario para calcular las pérdidas de energía en tuberías.</p>
+        
+        <p>En el diagrama, el factor de fricción se representa en el eje vertical en escala logarítmica, mientras que el número de Reynolds se muestra en el eje horizontal, también en escala logarítmica. Las curvas representan diferentes valores de rugosidad relativa, donde ε es la altura promedio de las irregularidades de la superficie y D es el diámetro interior de la tubería.</p>
+        
+        <p>El diagrama de Moody es esencial para ingenieros porque permite determinar el factor de fricción para diferentes regímenes de flujo (laminar, transicional y turbulento) y diversas condiciones de la superficie de la tubería. Al conocer el número de Reynolds y la rugosidad relativa, se puede encontrar el factor de fricción correspondiente, crucial para calcular la pérdida de carga utilizando la ecuación de Darcy-Weisbach.</p>
+        
+        <div class="simulation-container">
+          <h3>Calculadora de Pérdidas por Fricción</h3>
+          <p>Esta herramienta calcula las pérdidas por fricción en tuberías utilizando la ecuación de Darcy-Weisbach, determinando automáticamente el factor de fricción según el régimen de flujo.</p>
+          
+          <div class="two-column" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1.5rem;">
+            <div>
+              <form id="friction-calculator" class="calculator-form">
+                <div class="control-group">
+                  <label for="pipe-diameter">Diámetro de la tubería (mm):</label>
+                  <input type="number" id="pipe-diameter" min="10" max="1000" value="50">
+                </div>
+                
+                <div class="control-group">
+                  <label for="pipe-length">Longitud de la tubería (m):</label>
+                  <input type="number" id="pipe-length" min="1" max="10000" value="100">
+                </div>
+                
+                <div class="control-group">
+                  <label for="flow-rate">Caudal (L/s):</label>
+                  <input type="number" id="flow-rate" min="0.1" max="1000" step="0.1" value="10">
+                </div>
+                
+                <div class="control-group">
+                  <label for="roughness">Rugosidad absoluta (mm):</label>
+                  <select id="roughness">
+                    <option value="0.0015">PVC, plástico (0.0015 mm)</option>
+                    <option value="0.046" selected>Acero comercial (0.046 mm)</option>
+                    <option value="0.26">Acero oxidado (0.26 mm)</option>
+                    <option value="1.5">Hierro fundido (1.5 mm)</option>
+                    <option value="3.0">Hormigón (3.0 mm)</option>
+                    <option value="custom">Personalizado</option>
+                  </select>
+                </div>
+                
+                <div id="custom-roughness-group" class="control-group" style="display: none;">
+                  <label for="custom-roughness">Rugosidad personalizada (mm):</label>
+                  <input type="number" id="custom-roughness" min="0.0001" max="10" step="0.0001" value="0.046">
+                </div>
+                
+                <div class="control-group">
+                  <label for="fluid-density">Densidad del fluido (kg/m³):</label>
+                  <input type="number" id="fluid-density" min="1" max="2000" value="998">
+                </div>
+                
+                <div class="control-group">
+                  <label for="fluid-viscosity">Viscosidad cinemática (m²/s):</label>
+                  <input type="number" id="fluid-viscosity" min="1e-7" max="1e-3" step="1e-7" value="1e-6">
+                </div>
+                
+                <button type="button" id="calculate-friction" class="simulation-button">Calcular Pérdidas</button>
+              </form>
+            </div>
+            
+            <div>
+              <div id="friction-results" class="info-card" style="display: none;">
+                <h4>Resultados del Cálculo</h4>
+                <table class="results-table">
+                  <tr>
+                    <td>Velocidad media:</td>
+                    <td id="result-velocity">- m/s</td>
+                  </tr>
+                  <tr>
+                    <td>Número de Reynolds:</td>
+                    <td id="result-reynolds">-</td>
+                  </tr>
+                  <tr>
+                    <td>Régimen de flujo:</td>
+                    <td id="result-regime">-</td>
+                  </tr>
+                  <tr>
+                    <td>Rugosidad relativa (ε/D):</td>
+                    <td id="result-rel-roughness">-</td>
+                  </tr>
+                  <tr>
+                    <td>Factor de fricción (f):</td>
+                    <td id="result-friction-factor">-</td>
+                  </tr>
+                  <tr>
+                    <td>Pérdida de carga:</td>
+                    <td id="result-head-loss">- m</td>
+                  </tr>
+                  <tr>
+                    <td>Pérdida de presión:</td>
+                    <td id="result-pressure-loss">- kPa</td>
+                  </tr>
+                </table>
+              </div>
+              
+              <div class="info-card">
+                <h4>Rugosidad Típica de Materiales</h4>
+                <table class="results-table" style="font-size: 0.9rem;">
+                  <tr>
+                    <th>Material</th>
+                    <th>Rugosidad (mm)</th>
+                  </tr>
+                  <tr>
+                    <td>PVC, plástico</td>
+                    <td>0.0015</td>
+                  </tr>
+                  <tr>
+                    <td>Cobre, latón</td>
+                    <td>0.0015</td>
+                  </tr>
+                  <tr>
+                    <td>Acero comercial</td>
+                    <td>0.046</td>
+                  </tr>
+                  <tr>
+                    <td>Hierro galvanizado</td>
+                    <td>0.15</td>
+                  </tr>
+                  <tr>
+                    <td>Acero oxidado</td>
+                    <td>0.26</td>
+                  </tr>
+                  <tr>
+                    <td>Hierro fundido</td>
+                    <td>0.26 - 3.0</td>
+                  </tr>
+                  <tr>
+                    <td>Hormigón</td>
+                    <td>0.3 - 3.0</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="simulation-container">
+          <h3>Diagrama de Moody Interactivo</h3>
+          <p>Explore el diagrama de Moody interactivo para determinar el factor de fricción según el número de Reynolds y la rugosidad relativa.</p>
+          
+          <div class="moody-controls" style="margin-bottom: 1.5rem;">
+            <div class="control-group" style="display: inline-block; width: 30%; margin-right: 1rem;">
+              <label for="moody-reynolds">Número de Reynolds:</label>
+              <input type="range" id="moody-reynolds" min="3" max="7" step="0.1" value="5">
+              <span id="moody-reynolds-value">10⁵</span>
+            </div>
+            
+            <div class="control-group" style="display: inline-block; width: 30%; margin-right: 1rem;">
+              <label for="moody-roughness">Rugosidad relativa (ε/D):</label>
+              <input type="range" id="moody-roughness" min="-5" max="-1" step="0.1" value="-3">
+              <span id="moody-roughness-value">0.001</span>
+            </div>
+            
+            <div class="control-group" style="display: inline-block; width: 30%;">
+              <button id="calculate-moody" class="simulation-button">Encontrar Factor</button>
+            </div>
+          </div>
+          
+          <div class="moody-result" style="text-align: center; margin-bottom: 1rem; font-size: 1.2rem; font-weight: bold;">
+            <span>Factor de fricción (f): </span>
+            <span id="moody-friction-factor">-</span>
+          </div>
+          
+          <div id="moody-diagram" style="width: 100%; height: 600px; background: white; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); position: relative;">
+            <img src="images/moody_diagram.png" alt="Diagrama de Moody" style="width: 100%; height: 100%; object-fit: contain;">
+            
+            <div id="moody-marker" style="position: absolute; width: 12px; height: 12px; background: red; border-radius: 50%; transform: translate(-50%, -50%); box-shadow: 0 0 0 3px rgba(255,0,0,0.3); display: none;"></div>
+          </div>
+        </div>
       </section>
 
       <section id="sistemas-tuberias" class="flow-section">
@@ -911,5 +1116,6 @@
   <script src="js/menu.js"></script>
   <script src="js/tuberias-simulations.js"></script>
   <script src="js/tuberias-ejercicios.js"></script>
+  <script src="js/moody-diagram.js"></script>
 </body>
 </html> 

@@ -219,7 +219,6 @@
               <li><a href="dimensional.html#analisis-modelos">Análisis de Modelos</a></li>
             </ul>
           </li>
-          <li><a href="simulacion-flujo.html">Multimedia</a></li>
         </ul>
       </nav>
       <div id="menu-toggle">☰</div>
@@ -420,6 +419,107 @@
             </div>
           </div>
         </div>
+        
+        <section class="content-section">
+          <h2>Ejercicio: Calculadora de Estabilidad de Barcazas</h2>
+          <p>Esta herramienta interactiva permite calcular la estabilidad de una barcaza, incluyendo el centro de flotación (BC), altura metacéntrica (BM) y determinar si la embarcación es estable.</p>
+          
+          <!-- 
+            Basado en el siguiente código Python:
+            """
+            Código Python para ejercicios de flotación y estabilidad de una barcaza,
+            incluye cálculo de BC (centro de flotación), BM y regla de estabilidad.
+            Autor: PuchiGPT
+            Fecha: 14/05/2025
+            """
+          -->
+          
+          <div class="two-column">
+            <div>
+              <h3>Parámetros de la Barcaza</h3>
+              <form id="barcaza-calculator" class="calculator-form">
+                <div class="control-group">
+                  <label for="eslora">Eslora (m):</label>
+                  <input type="number" id="eslora" step="0.1" min="1" value="10">
+                </div>
+                
+                <div class="control-group">
+                  <label for="manga">Manga (m):</label>
+                  <input type="number" id="manga" step="0.1" min="1" value="5">
+                </div>
+                
+                <div class="control-group">
+                  <label for="puntal">Puntal (m):</label>
+                  <input type="number" id="puntal" step="0.1" min="0.5" value="3">
+                </div>
+                
+                <div class="control-group">
+                  <label for="calado">Calado (m):</label>
+                  <input type="number" id="calado" step="0.1" min="0.1" value="1.5">
+                </div>
+                
+                <div class="control-group">
+                  <label for="densidad-relativa">Densidad relativa del fluido:</label>
+                  <input type="number" id="densidad-relativa" step="0.01" min="0.5" max="2" value="1.0">
+                </div>
+                
+                <button type="button" id="calcular-barcaza" class="btn">Calcular Estabilidad</button>
+              </form>
+              
+              <div id="barcaza-result" class="result-panel" style="display: none; margin-top: 1rem; padding: 1rem; background: rgba(14,165,233,0.1); border-radius: 8px;">
+                <p><strong>Volumen sumergido:</strong> <span id="volumen-sumergido">0</span> m³</p>
+                <p><strong>Densidad del fluido:</strong> <span id="densidad-fluido">0</span> kg/m³</p>
+                <p><strong>Fuerza de flotación:</strong> <span id="fuerza-flotacion">0</span> N</p>
+                <p><strong>Altura oblicua h:</strong> <span id="altura-oblicua">0</span> m</p>
+                <p><strong>Momento de inercia mínimo I:</strong> <span id="momento-inercia">0</span> m⁴</p>
+                <p><strong>Altura metacéntrica BM:</strong> <span id="altura-BM">0</span> m</p>
+                <p><strong>Centro de flotación BC:</strong> <span id="centro-BC">0</span> m</p>
+                <p><strong>Estabilidad:</strong> <span id="estabilidad">Calculando...</span></p>
+              </div>
+            </div>
+            
+            <div>
+              <div id="barcaza-visualization" style="width: 100%; height: 300px; background: linear-gradient(to bottom, #7dd3fc 40%, #0c4a6e 100%); border-radius: 10px; position: relative; overflow: hidden; margin-bottom: 1rem;">
+                <!-- La línea del agua -->
+                <div style="position: absolute; left: 0; width: 100%; height: 1px; background-color: white; top: 40%;">
+                  <div style="position: absolute; right: 10px; top: -15px; color: white;">Superficie del agua</div>
+                </div>
+                
+                <!-- La barcaza -->
+                <div id="barcaza-object" style="position: absolute; left: 50%; transform: translate(-50%, 0); width: 200px; height: 80px; background-color: #a16207; border-radius: 10px 10px 0 0; bottom: 40%;">
+                  <!-- Centro de gravedad -->
+                  <div id="centro-gravedad" style="position: absolute; width: 10px; height: 10px; background-color: red; border-radius: 50%; left: 50%; transform: translate(-50%, -50%);">
+                    <div style="position: absolute; left: 15px; top: -5px; color: red; font-weight: bold; font-size: 12px;">G</div>
+                  </div>
+                  
+                  <!-- Centro de flotación -->
+                  <div id="centro-flotacion" style="position: absolute; width: 10px; height: 10px; background-color: blue; border-radius: 50%; left: 50%; transform: translate(-50%, 50%);">
+                    <div style="position: absolute; left: 15px; top: -5px; color: blue; font-weight: bold; font-size: 12px;">B</div>
+                  </div>
+                  
+                  <!-- Metacentro -->
+                  <div id="metacentro" style="position: absolute; width: 10px; height: 10px; background-color: green; border-radius: 50%; left: 50%; transform: translate(-50%, -100%);">
+                    <div style="position: absolute; left: 15px; top: -5px; color: green; font-weight: bold; font-size: 12px;">M</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="info-card">
+                <h4>Teoría de Estabilidad de Barcazas</h4>
+                <p>La estabilidad de una barcaza depende de la relación entre la altura metacéntrica (BM) y el centro de flotación (BC):</p>
+                <ul>
+                  <li><strong>BM > BC:</strong> La barcaza es estable</li>
+                  <li><strong>BM ≤ BC:</strong> La barcaza es inestable</li>
+                </ul>
+                <p>La altura metacéntrica BM se calcula como el momento de inercia mínimo dividido por el volumen sumergido:</p>
+                <div class="formula">BM = I_min / V</div>
+                <p>El centro de flotación BC es la diferencia entre el centro de gravedad y el centro de empuje:</p>
+                <div class="formula">BC = Y_c - Y_b</div>
+                <p>donde Y_c = puntal/2 y Y_b = h/2</p>
+              </div>
+            </div>
+          </div>
+        </section>
       </section>
     </div>
   </main>
@@ -437,5 +537,6 @@
   <!-- Otros scripts -->
   <script src="js/main.js"></script>
   <script src="js/presion.js"></script>
+  <script src="js/barcaza-calculator.js"></script>
 </body>
 </html> 

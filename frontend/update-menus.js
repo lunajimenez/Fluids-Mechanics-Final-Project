@@ -32,6 +32,9 @@ const updatedDimensionalMenu = `<li class="has-submenu">
             </ul>
           </li>`;
 
+// Patrón para eliminar la sección Multimedia
+const multimediaPattern = /<li><a href="simulacion-flujo\.html">Multimedia<\/a><\/li>/;
+
 // Obtener todos los archivos HTML
 const htmlFiles = fs.readdirSync(htmlDir)
   .filter(file => file.endsWith('.html'));
@@ -52,6 +55,9 @@ for (const file of htmlFiles) {
   const dimensionalPattern = /<li class="has-submenu">\s*<a href="#" class="menu-trigger" aria-haspopup="true" aria-expanded="false">Análisis Dimensional<\/a>\s*<ul class="submenu">[\s\S]*?<\/ul>\s*<\/li>/;
   content = content.replace(dimensionalPattern, updatedDimensionalMenu);
   
+  // Eliminar la sección Multimedia
+  content = content.replace(multimediaPattern, '');
+  
   // Guardar si hubo cambios
   if (content !== originalContent) {
     fs.writeFileSync(filePath, content);
@@ -63,4 +69,5 @@ for (const file of htmlFiles) {
 }
 
 console.log(`\nActualización completada. Se actualizaron ${updatedCount} archivos.`);
-console.log('Los menús ahora son consistentes en todos los archivos HTML.'); 
+console.log('Los menús ahora son consistentes en todos los archivos HTML.');
+console.log('Se ha eliminado la sección Multimedia de todos los archivos.'); 
