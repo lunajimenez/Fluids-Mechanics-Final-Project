@@ -247,51 +247,54 @@
         <ul class="main-menu">
           <li><a href="index.html">Introducción</a></li>
           <li class="has-submenu">
-            <a href="#" class="menu-trigger">Propiedades de los Fluidos ▾</a>
+            <a href="#" class="menu-trigger" aria-haspopup="true" aria-expanded="false">Propiedades de los Fluidos</a>
             <ul class="submenu">
-              <li><a href="conversion.html">Conversiu00f3n de Unidades</a></li>
-              <li><a href="propiedades.html" class="active">Propiedades</a></li>
-              <li><a href="presion.html">Viscosidad en Fluidos</a></li>
+              <li><a href="conversion.html">Conversión de Unidades</a></li>
+              <li><a href="propiedades.html">Propiedades</a></li>
+              <li><a href="viscosidad.html">Viscosidad en Fluidos</a></li>
             </ul>
           </li>
           <li class="has-submenu">
-            <a href="#" class="menu-trigger">Presiu00f3n e Introducciu00f3n a la Estu00e1tica de Fluidos u25be</a>
+            <a href="#" class="menu-trigger" aria-haspopup="true" aria-expanded="false">Presión e Introducción a la Estática de Fluidos</a>
             <ul class="submenu">
-              <li><a href="estatica.html#presion">Presiu00f3n</a></li>
-              <li><a href="estatica.html#ejercicios">Ejercicios Interactivos</a></li>
-              <li><a href="estatica.html#flotacion">Flotaciu00f3n y Estabilidad</a></li>
+              <li><a href="presion.html#presion">Presión</a></li>
+              <li><a href="ejercicios.html">Ejercicios Interactivos</a></li>
+              <li><a href="flotacion.html">Flotación y Estabilidad</a></li>
             </ul>
           </li>
           <li class="has-submenu">
-            <a href="#" class="menu-trigger">Cinemática de Fluidos ▾</a>
+            <a href="#" class="menu-trigger" aria-haspopup="true" aria-expanded="false">Cinemática de Fluidos</a>
             <ul class="submenu">
-              <li><a href="#cinematica-1">Descripción del Flujo</a></li>
-              <li><a href="#cinematica-2">Ecuación de Continuidad</a></li>
-              <li><a href="#cinematica-3">Patrones de Flujo</a></li>
+              <li><a href="cinematica.html#descripcion-lagrangiana">Descripción Lagrangiana</a></li>
+              <li><a href="cinematica.html#descripcion-euleriana">Descripción Euleriana</a></li>
+              <li><a href="cinematica.html#patrones-flujo">Patrones de Flujo</a></li>
+              <li><a href="cinematica.html#tasa-flujo">Análisis del Movimiento</a></li>
+              <li><a href="cinematica.html#ecuacion-continuidad">Ecuación de Continuidad</a></li>
+              <li><a href="cinematica.html#bernoulli">Ecuación de Bernoulli</a></li>
             </ul>
           </li>
           <li class="has-submenu">
-            <a href="#" class="menu-trigger">Flujo en Tuberías ▾</a>
+            <a href="#" class="menu-trigger" aria-haspopup="true" aria-expanded="false">Flujo en Tuberías</a>
             <ul class="submenu">
               <li><a href="simulacion-flujo.html">Simulación de Flujo</a></li>
-              <li><a href="#tuberias-2">Pérdidas por Fricción</a></li>
-              <li><a href="#tuberias-3">Sistemas de Tuberías</a></li>
+              <li><a href="tuberias.html#perdidas-friccion">Pérdidas por Fricción</a></li>
+              <li><a href="tuberias.html#sistemas-tuberias">Sistemas de Tuberías</a></li>
             </ul>
           </li>
           <li class="has-submenu">
-            <a href="#" class="menu-trigger">Potencia y Eficiencia de Máquinas de Flujo ▾</a>
+            <a href="#" class="menu-trigger" aria-haspopup="true" aria-expanded="false">Potencia y Eficiencia de Máquinas de Flujo</a>
             <ul class="submenu">
-              <li><a href="#maquinas-1">Bombas</a></li>
-              <li><a href="#maquinas-2">Turbinas</a></li>
-              <li><a href="#maquinas-3">Compresores</a></li>
+              <li><a href="maquinas.html#bombas">Bombas</a></li>
+              <li><a href="maquinas.html#turbinas">Turbinas</a></li>
+              <li><a href="maquinas.html#compresores">Compresores</a></li>
             </ul>
           </li>
           <li class="has-submenu">
-            <a href="#" class="menu-trigger">Análisis Dimensional ▾</a>
+            <a href="#" class="menu-trigger" aria-haspopup="true" aria-expanded="false">Análisis Dimensional</a>
             <ul class="submenu">
-              <li><a href="#dimensional-1">Teorema Pi de Buckingham</a></li>
-              <li><a href="#dimensional-2">Números Adimensionales</a></li>
-              <li><a href="#dimensional-3">Análisis de Modelos</a></li>
+              <li><a href="dimensional.html#teorema-pi">Teorema Pi de Buckingham</a></li>
+              <li><a href="dimensional.html#numeros-adimensionales">Números Adimensionales</a></li>
+              <li><a href="dimensional.html#analisis-modelos">Análisis de Modelos</a></li>
             </ul>
           </li>
           <li><a href="simulacion-flujo.html">Multimedia</a></li>
@@ -509,7 +512,7 @@
       <section class="properties-detail">
         <h2>Gravedad Específica</h2>
         <figure>
-          <img src="images/gravedad_especifica.jpg" alt="Gravedad Específica" height="300" width="400">
+          <img src="images/gravedad_especifica.png" alt="Gravedad Específica" height="300" width="400">
           <figcaption>Medición de gravedad específica con hidrómetro.</figcaption>
         </figure>
         <p>La gravedad específica (o densidad relativa) es una medida adimensional que compara la densidad de una sustancia con la de una referencia, generalmente agua para sólidos y líquidos (1 g/cm³) o aire para gases.</p>
@@ -544,7 +547,7 @@
       <section class="properties-detail">
         <h2>Fuerzas Hidrostáticas en Superficies Planas</h2>
         <figure>
-          <img src="images/fuerzas_hidrostaticas.jpg" alt="Fuerzas Hidrostáticas" height="300" width="450">
+          <img src="images/fuerzas_hidrostaticas.png" alt="Fuerzas Hidrostáticas" height="100" width="250">
           <figcaption>Distribución de presión en superficies sumergidas.</figcaption>
         </figure>
         <p>La fuerza hidrostática sobre una superficie plana sumergida proviene del peso del fluido y actúa perpendicularmente a la superficie. Esta fuerza actúa sobre superficies sumergidas como compuertas o muros de tanques, y se debe a la presión del fluido en reposo. Para una superficie plana vertical, la fuerza total se calcula como:</p>

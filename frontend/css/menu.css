@@ -1,0 +1,228 @@
+/**
+ * menu.css - Menú simple y robusto para todas las páginas
+ */
+
+/* Contenedor del menú */
+.nav-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 1rem;
+}
+
+/* Menú principal */
+.main-menu {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 1rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+  padding-bottom: 5px;
+  flex-wrap: nowrap;
+}
+
+/* Estilo del scrollbar */
+.main-menu::-webkit-scrollbar {
+  height: 4px;
+}
+
+.main-menu::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.1);
+}
+
+.main-menu::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.3);
+  border-radius: 4px;
+}
+
+/* Elementos del menú */
+.main-menu > li {
+  position: relative;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Enlaces del menú */
+.main-menu > li > a,
+.menu-trigger {
+  color: #fff;
+  text-decoration: none;
+  padding: 0.75rem 1rem;
+  display: block;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.3s;
+}
+
+/* Efecto hover simple */
+.main-menu > li > a:hover,
+.menu-trigger:hover {
+  color: #ffdd57;
+}
+
+/* Estilo para elementos con submenú */
+.menu-trigger {
+  padding-right: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+/* Icono de flecha */
+.menu-trigger::after {
+  content: '▾';
+  position: absolute;
+  right: 0.25rem;
+  font-size: 0.8em;
+  transition: transform 0.3s;
+}
+
+/* Rotación de flecha para menú activo */
+.has-submenu.active .menu-trigger::after {
+  transform: rotate(180deg);
+}
+
+/* Submenús */
+.submenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 220px;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity 0.3s, transform 0.3s, visibility 0s 0.3s;
+  z-index: 1000;
+  padding: 0.5rem 0;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* Submenú activo */
+.has-submenu.active .submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity 0.3s, transform 0.3s, visibility 0s;
+}
+
+/* Lista de submenú */
+.submenu li {
+  list-style: none;
+}
+
+/* Enlaces de submenú */
+.submenu a {
+  padding: 0.75rem 1.5rem;
+  display: block;
+  color: #333;
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s;
+  white-space: nowrap;
+}
+
+/* Hover en enlaces de submenú */
+.submenu a:hover {
+  background: rgba(67,100,247,0.05);
+  color: #4364f7;
+}
+
+/* Evitar que submenús se salgan de la pantalla */
+.has-submenu:last-child .submenu,
+.has-submenu:nth-last-child(2) .submenu {
+  left: auto;
+  right: 0;
+}
+
+/* Toggle del menú móvil */
+#menu-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  cursor: pointer;
+  color: white;
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+  z-index: 1010;
+}
+
+/* Estilos para móvil */
+@media (max-width: 768px) {
+  .nav-container {
+    padding: 0.75rem;
+  }
+  
+  #menu-toggle {
+    display: flex;
+  }
+  
+  .main-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(33, 42, 62, 0.95);
+    flex-direction: column;
+    padding: 1rem;
+    gap: 0;
+    z-index: 1000;
+    display: none;
+    max-height: 80vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  }
+  
+  .main-menu > li {
+    width: 100%;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  
+  .main-menu > li:last-child {
+    border-bottom: none;
+  }
+  
+  .submenu {
+    position: static;
+    box-shadow: none;
+    max-height: 0;
+    padding: 0;
+    overflow: hidden;
+    opacity: 1;
+    visibility: hidden;
+    transform: none;
+    transition: max-height 0.3s, padding 0.3s, visibility 0s 0.3s;
+    margin: 0 0.5rem;
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+  }
+  
+  .has-submenu.active .submenu {
+    max-height: 1000px;
+    padding: 0.5rem;
+    visibility: visible;
+    transition: max-height 0.3s, padding 0.3s, visibility 0s;
+  }
+  
+  .submenu a {
+    color: #fff;
+    padding: 0.75rem 1rem;
+  }
+  
+  .submenu a:hover {
+    background: rgba(255,255,255,0.1);
+    color: #ffdd57;
+  }
+} 

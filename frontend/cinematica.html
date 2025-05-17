@@ -1,0 +1,995 @@
+<!DOCTYPE html><html lang="es"><head>  <meta charset="UTF-8">  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Cinemática de Fluidos - Mecánica de Fluidos</title>  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">  <link rel="stylesheet" href="css/style.css">  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>  <script src="https://cdn.jsdelivr.net/npm/mathjs@11.8.0/lib/browser/math.min.js"></script>  <script type="text/javascript" id="MathJax-script" async    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">    </script>    <script>      window.MathJax = {      tex: {        inlineMath: [['$', '$'], ['\\(', '\\)']],        displayMath: [['$$', '$$'], ['\\[', '\\]']],        processEscapes: true,        tags: 'ams'      },      svg: {        fontCache: 'global'      }    };  </script>  <style>    .cinematica-hero {
+      background: linear-gradient(135deg, #4364f7, #6fb1fc);
+      padding: 5rem 0;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 3rem;
+      border-bottom: 5px solid rgba(255,255,255,0.2);
+    }
+    
+    .cinematica-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('data:image/svg+xml,<svg width="80" height="80" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg"><path d="M40 0v80M0 40h80" stroke="rgba(255,255,255,0.1)" stroke-width="1"/><path d="M20 0v80M60 0v80M0 20h80M0 60h80" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/></svg>') repeat;
+      opacity: 0.3;
+      animation: flow-bg 40s linear infinite;
+    }
+    
+    @keyframes flow-bg {
+      from { background-position: 0 0; }
+      to { background-position: 80px 80px; }
+    }
+    
+    .cinematica-hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      text-align: center;
+      text-shadow: 0 3px 5px rgba(0,0,0,0.2);
+      animation: fade-in-up 0.8s ease-out;
+    }
+    
+    .cinematica-hero p {
+      font-size: 1.4rem;
+      opacity: 0.9;
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+      line-height: 1.6;
+      animation: fade-in-up 0.8s ease-out 0.2s backwards;
+    }
+    
+    @keyframes fade-in-up {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .flow-section {
+      background: white;
+      border-radius: 20px;
+      padding: 3rem;
+      margin-bottom: 3rem;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .flow-section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 50px rgba(67,100,247,0.15);
+    }
+    
+    .flow-section h2 {
+      color: #2d3748;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 2px solid rgba(67,100,247,0.1);
+      display: flex;
+      align-items: center;
+      font-size: 2.2rem;
+    }
+    
+    .flow-section h2::before {
+      content: '🌊';
+      margin-right: 1rem;
+      font-size: 2rem;
+    }
+    
+    .flow-section h3 {
+      color: #4364f7;
+      margin: 2rem 0 1rem;
+      font-size: 1.6rem;
+      position: relative;
+      padding-left: 1.2rem;
+    }
+    
+    .flow-section h3::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.3rem;
+      bottom: 0.3rem;
+      width: 5px;
+      background: #4364f7;
+      border-radius: 5px;
+    }
+
+    .flow-section p {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: #4a5568;
+      margin-bottom: 1.5rem;
+    }
+
+    .flow-comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
+      margin: 2.5rem 0;
+    }
+    
+    .approach-container {
+      background: #f8fafc;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(67,100,247,0.1);
+    }
+    
+    .approach-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: linear-gradient(to right, #4364f7, #6fb1fc);
+      border-radius: 5px 5px 0 0;
+    }
+    
+    .approach-title {
+      font-weight: 600;
+      color: #4364f7;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      font-size: 1.5rem;
+    }
+    
+    .approach-title::before {
+      margin-right: 0.8rem;
+      font-size: 1.5rem;
+    }
+    
+    .lagrangian-title::before {
+      content: '🔍';
+    }
+    
+    .eulerian-title::before {
+      content: '📊';
+    }
+    
+    .approach-container ul {
+      padding-left: 1.5rem;
+    }
+    
+    .approach-container li {
+      margin-bottom: 0.8rem;
+      line-height: 1.6;
+    }
+    
+    .approach-container h4 {
+      color: #2d3748;
+      margin: 1.5rem 0 0.8rem;
+      font-size: 1.2rem;
+      border-bottom: 1px dashed rgba(0,0,0,0.1);
+      padding-bottom: 0.5rem;
+    }
+    
+    .flow-pattern-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 2.5rem 0;
+    }
+    
+    .pattern-card {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0,0,0,0.05);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .pattern-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+      border-color: rgba(67,100,247,0.2);
+    }
+    
+    .pattern-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-bottom: 4px solid rgba(67,100,247,0.2);
+    }
+    
+    .pattern-content {
+      padding: 1.8rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .pattern-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid rgba(0,0,0,0.07);
+      padding-bottom: 0.8rem;
+    }
+    
+    .formula {
+      background: rgba(67,100,247,0.05);
+      padding: 1.2rem;
+      border-radius: 10px;
+      margin: 1.5rem 0;
+      text-align: center;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      color: #4364f7;
+      border-left: 4px solid #4364f7;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      box-shadow: 0 3px 10px rgba(67,100,247,0.08);
+    }
+    
+    .simulation-container {
+      background: #f8fafc;
+      border-radius: 15px;
+      padding: 2rem;
+      margin: 2rem 0;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    }
+    
+    .simulation-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .simulation-icon {
+      font-size: 2rem;
+      margin-right: 1rem;
+    }
+    
+    .simulation-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #2d3748;
+    }
+    
+    .simulation-canvas {
+      width: 100%;
+      height: 400px;
+      background: white;
+      border-radius: 10px;
+      margin: 1.5rem 0;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+    
+    .simulation-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    
+    .control-group {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .control-group label {
+      font-weight: 500;
+      color: #4a5568;
+      margin-bottom: 0.5rem;
+    }
+    
+    .control-group input[type="range"] {
+      width: 100%;
+      margin-bottom: 0.5rem;
+      height: 6px;
+      -webkit-appearance: none;
+      background: linear-gradient(to right, #4364f7, #6fb1fc);
+      border-radius: 3px;
+      outline: none;
+    }
+    
+    .control-group input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      background: white;
+      border: 2px solid #4364f7;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: all 0.2s;
+    }
+    
+    .control-group input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
+    
+    .control-value {
+      text-align: center;
+      font-weight: 600;
+      color: #4364f7;
+      background: rgba(67,100,247,0.08);
+      padding: 0.4rem;
+      border-radius: 5px;
+      font-size: 0.9rem;
+    }
+    
+    .simulation-button {
+      padding: 0.8rem 1.5rem;
+      background: #4364f7;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 3px 10px rgba(67,100,247,0.2);
+      margin-top: 1rem;
+    }
+    
+    .simulation-button:hover {
+      background: #3b5ae0;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(67,100,247,0.3);
+    }
+    
+    .simulation-description {
+      background: rgba(255,255,255,0.7);
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin-top: 1.5rem;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+    
+    .simulation-description h4 {
+      color: #2d3748;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+
+    .application-section {
+      background: rgba(67,100,247,0.03);
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin: 2rem 0;
+      border: 1px solid rgba(67,100,247,0.08);
+    }
+    
+    .application-section h4 {
+      color: #4364f7;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .application-section h4::before {
+      content: '🔗';
+      margin-right: 0.5rem;
+    }
+    
+    .application-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .application-item {
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+      display: flex;
+      align-items: center;
+    }
+    
+    .application-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(67,100,247,0.1);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+      color: #4364f7;
+      font-size: 1.2rem;
+    }
+
+    .tab-container {
+      margin-bottom: 2rem;
+    }
+    
+    .tab-buttons {
+      display: flex;
+      border-bottom: 2px solid rgba(67,100,247,0.1);
+      margin-bottom: 1.5rem;
+    }
+    
+    .tab-button {
+      padding: 0.8rem 1.5rem;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      font-weight: 600;
+      color: #718096;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .tab-button.active {
+      color: #4364f7;
+      border-color: #4364f7;
+    }
+    
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.5s ease-in;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+      .flow-comparison {
+        grid-template-columns: 1fr;
+      }
+      
+      .flow-section {
+        padding: 1.5rem;
+      }
+      
+      .simulation-controls {
+        grid-template-columns: 1fr;
+      }
+      
+      .cinematica-hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .cinematica-hero p {
+        font-size: 1.1rem;
+      }
+    }
+
+    .formula-block {
+      background: #f8fafc;
+      padding: 1.5rem;
+      border-radius: 10px;
+      border-left: 4px solid #4364f7;
+      margin: 1.5rem 0;
+    }
+
+    .formula-title {
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 1rem;
+    }
+
+    .simulation-container {
+      background: #f8fafc;
+      border-radius: 15px;
+      padding: 2rem;
+      margin: 2rem 0;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    }
+
+    .simulation-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .simulation-icon {
+      font-size: 2rem;
+      margin-right: 1rem;
+    }
+
+    .simulation-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #2d3748;
+    }
+
+    .simulation-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .control-group {
+      background: white;
+      padding: 1rem;
+      border-radius: 10px;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .control-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #4a5568;
+      font-weight: 500;
+    }
+
+    .simulation-canvas {
+      width: 100%;
+      height: 400px;
+      border-radius: 10px;
+      margin: 1rem 0;
+      background: white;
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .formula-block {
+      background: #f8fafc;
+      padding: 1.5rem;
+      border-radius: 10px;
+      border-left: 4px solid #4364f7;
+      margin: 1.5rem 0;
+    }
+
+    .formula-title {
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 1rem;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      margin: 0.5rem 0;
+    }
+
+    select {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 5px;
+      border: 1px solid rgba(0,0,0,0.2);
+      background: white;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav-container">
+      <h1>Mecánica de Fluidos</h1>
+      <nav id="navbar">
+        <ul class="main-menu">
+          <li><a href="index.html">Introducción</a></li>
+          <li class="has-submenu">
+            <a href="#" class="menu-trigger" aria-haspopup="true" aria-expanded="false">Propiedades de los Fluidos</a>
+            <ul class="submenu">
+              <li><a href="conversion.html">Conversión de Unidades</a></li>
+              <li><a href="propiedades.html">Propiedades</a></li>
+              <li><a href="viscosidad.html">Viscosidad en Fluidos</a></li>
+            </ul>
+          </li>
+          <li class="has-submenu">
+            <a href="#" class="menu-trigger" aria-haspopup="true" aria-expanded="false">Presión e Introducción a la Estática de Fluidos</a>
+            <ul class="submenu">
+              <li><a href="presion.html#presion">Presión</a></li>
+              <li><a href="ejercicios.html">Ejercicios Interactivos</a></li>
+              <li><a href="flotacion.html">Flotación y Estabilidad</a></li>
+            </ul>
+          </li>
+          <li class="has-submenu">
+            <a href="#" class="menu-trigger" aria-haspopup="true" aria-expanded="false">Cinemática de Fluidos</a>
+            <ul class="submenu">
+              <li><a href="cinematica.html#descripcion-lagrangiana">Descripción Lagrangiana</a></li>
+              <li><a href="cinematica.html#descripcion-euleriana">Descripción Euleriana</a></li>
+              <li><a href="cinematica.html#patrones-flujo">Patrones de Flujo</a></li>
+              <li><a href="cinematica.html#analisis-movimiento">Análisis del Movimiento</a></li>
+              <li><a href="cinematica.html#ecuacion-continuidad">Ecuación de Continuidad</a></li>
+              <li><a href="cinematica.html#bernoulli">Ecuación de Bernoulli</a></li>
+            </ul>
+          </li>
+          <li class="has-submenu">
+            <a href="#" class="menu-trigger" aria-haspopup="true" aria-expanded="false">Flujo en Tuberías</a>
+            <ul class="submenu">
+              <li><a href="simulacion-flujo.html">Simulación de Flujo</a></li>
+              <li><a href="tuberias.html#perdidas-friccion">Pérdidas por Fricción</a></li>
+              <li><a href="tuberias.html#sistemas-tuberias">Sistemas de Tuberías</a></li>
+            </ul>
+          </li>
+          <li class="has-submenu">
+            <a href="#" class="menu-trigger" aria-haspopup="true" aria-expanded="false">Potencia y Eficiencia de Máquinas de Flujo</a>
+            <ul class="submenu">
+              <li><a href="maquinas.html#bombas">Bombas</a></li>
+              <li><a href="maquinas.html#turbinas">Turbinas</a></li>
+              <li><a href="maquinas.html#compresores">Compresores</a></li>
+            </ul>
+          </li>
+          <li class="has-submenu">
+            <a href="#" class="menu-trigger" aria-haspopup="true" aria-expanded="false">Análisis Dimensional</a>
+            <ul class="submenu">
+              <li><a href="dimensional.html#teorema-pi">Teorema Pi de Buckingham</a></li>
+              <li><a href="dimensional.html#numeros-adimensionales">Números Adimensionales</a></li>
+              <li><a href="dimensional.html#analisis-modelos">Análisis de Modelos</a></li>
+            </ul>
+          </li>
+          <li><a href="simulacion-flujo.html">Multimedia</a></li>
+        </ul>
+      </nav>
+      <div id="menu-toggle">☰</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="cinematica-hero">
+      <div class="container">
+        <h1>Cinemática de Fluidos</h1>
+        <p>El estudio del movimiento de los fluidos y sus patrones de comportamiento, desde la descripción matemática del flujo hasta la visualización de fenómenos complejos.</p>
+      </div>
+    </section>
+
+    <div class="container">
+      <section id="descripcion-lagrangiana" class="flow-section">
+        <h2>1. Descripción Lagrangiana</h2>
+        <p>La descripción lagrangiana es un método fundamental en la cinemática de fluidos que se centra en seguir el movimiento individual de las partículas del fluido a través del tiempo. Este enfoque, desarrollado por Joseph-Louis Lagrange, es particularmente útil para entender el comportamiento detallado de elementos específicos dentro del flujo.</p>
+
+        <h3>Fundamentos de la Descripción Lagrangiana</h3>
+        <p>En este método, cada partícula de fluido se identifica mediante su posición inicial (x₀, y₀, z₀) en un tiempo t₀, y se sigue su trayectoria a lo largo del tiempo. Las coordenadas de la partícula en cualquier instante posterior t están dadas por funciones del tiempo y la posición inicial:</p>
+
+        <div class="formula-block">
+          <div class="formula-title">Ecuaciones Fundamentales</div>
+          <div class="formula">
+            <p>Posición: \(\vec{x}(t) = f(x_0, y_0, z_0, t)\)</p>
+            <p>Velocidad: \(\vec{v}(t) = \frac{d\vec{x}(t)}{dt}\)</p>
+            <p>Aceleración: \(\vec{a}(t) = \frac{d\vec{v}(t)}{dt}\)</p>
+          </div>
+          </div>
+          
+        <h3>Aplicaciones y Ventajas</h3>
+        <p>La descripción lagrangiana es especialmente útil en:</p>
+        <ul>
+          <li>Análisis de dispersión de contaminantes en fluidos</li>
+          <li>Estudio de mezcla de fluidos</li>
+          <li>Seguimiento de partículas en flujos turbulentos</li>
+          <li>Modelado de procesos de sedimentación</li>
+          <li>Análisis de trayectorias de partículas en aerosoles</li>
+            </ul>
+            
+        <p>Una ventaja significativa de este enfoque es su capacidad para proporcionar información detallada sobre la historia completa del movimiento de cada partícula, lo que es crucial en aplicaciones como el análisis de dispersión de contaminantes o el estudio de procesos de mezcla.</p>
+        
+        <div class="simulation-container">
+          <div class="simulation-header">
+            <div class="simulation-icon">🔍</div>
+            <div class="simulation-title">Simulación Lagrangiana</div>
+            </div>
+          <p>Observa el movimiento de partículas individuales en el fluido:</p>
+          <div class="simulation-controls">
+            <div class="control-group">
+              <label class="control-label" for="particle-count">Número de Partículas</label>
+              <input type="range" id="particle-count" min="10" max="100" value="50">
+          </div>
+            <div class="control-group">
+              <label class="control-label" for="flow-velocity">Velocidad del Flujo</label>
+              <input type="range" id="flow-velocity" min="1" max="10" value="5">
+            </div>
+          </div>
+          <canvas id="lagrangian-simulation" class="simulation-canvas"></canvas>
+        </div>
+      </section>
+
+      <section id="descripcion-euleriana" class="flow-section">
+        <h2>2. Descripción Euleriana</h2>
+        <p>La descripción euleriana, desarrollada por Leonhard Euler, representa un enfoque fundamentalmente diferente para analizar el movimiento de los fluidos. En lugar de seguir partículas individuales, este método se centra en estudiar las propiedades del fluido en puntos fijos del espacio a lo largo del tiempo.</p>
+
+        <h3>Conceptos Fundamentales</h3>
+        <p>En la descripción euleriana, las propiedades del fluido (velocidad, presión, densidad, etc.) se consideran como campos que varían en el espacio y el tiempo. Esto significa que para cada punto (x, y, z) en el espacio y cada instante t, podemos definir:</p>
+
+        <div class="formula-block">
+          <div class="formula-title">Variables de Campo</div>
+                <div class="formula">
+            <p>Campo de velocidades: \(\vec{v}(x,y,z,t)\)</p>
+            <p>Campo de aceleraciones: \(\vec{a}(x,y,z,t)\)</p>
+            <p>Campo de densidades: \(\rho(x,y,z,t)\)</p>
+          </div>
+                </div>
+                
+        <h3>Derivada Material</h3>
+        <p>Un concepto crucial en la descripción euleriana es la derivada material o sustancial, que relaciona los cambios temporales en un punto fijo con los cambios debido al movimiento del fluido:</p>
+        <div class="formula-block">
+          <div class="formula">
+            <p>\[\frac{D}{Dt} = \frac{\partial}{\partial t} + (\vec{v} \cdot \nabla)\]</p>
+          </div>
+        </div>
+
+        <p>Esta expresión combina el cambio local (∂/∂t) con el cambio convectivo (v⋅∇), permitiendo relacionar las descripciones euleriana y lagrangiana.</p>
+
+        <div class="simulation-container">
+          <div class="simulation-header">
+            <div class="simulation-icon">📊</div>
+            <div class="simulation-title">Simulación Euleriana</div>
+              </div>
+          <p>Visualiza el campo de velocidades en un volumen de control:</p>
+          <div class="simulation-controls">
+            <div class="control-group">
+              <label class="control-label" for="flow-type">Tipo de Flujo</label>
+              <select id="flow-type">
+                <option value="uniform">Uniforme</option>
+                <option value="source">Fuente/Sumidero</option>
+                <option value="vortex">Vórtice</option>
+              </select>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="vector-density">Densidad de Vectores</label>
+              <input type="range" id="vector-density" min="10" max="50" value="20">
+            </div>
+          </div>
+          <canvas id="eulerian-simulation" class="simulation-canvas"></canvas>
+        </div>
+      </section>
+
+      <section id="patrones-flujo" class="flow-section">
+        <h2>3. Patrones de Flujo</h2>
+        <p>Los patrones de flujo son configuraciones características que adopta un fluido en movimiento bajo diferentes condiciones. La comprensión de estos patrones es fundamental para el diseño de sistemas de fluidos y la predicción de su comportamiento.</p>
+
+        <h3>Clasificación de Flujos</h3>
+        <p>Los flujos pueden clasificarse según varios criterios:</p>
+        
+        <h4>3.1 Por su Variación Temporal</h4>
+        <ul>
+          <li><strong>Flujo Estacionario:</strong> Las propiedades del fluido en cada punto no varían con el tiempo</li>
+          <li><strong>Flujo No Estacionario:</strong> Las propiedades varían con el tiempo, común en fenómenos transitorios</li>
+                </ul>
+                
+        <h4>3.2 Por su Estructura</h4>
+        <ul>
+          <li><strong>Flujo Laminar:</strong> Movimiento ordenado en capas paralelas</li>
+          <li><strong>Flujo Turbulento:</strong> Movimiento caótico con fluctuaciones aleatorias</li>
+          <li><strong>Flujo Transitorio:</strong> Estado intermedio entre laminar y turbulento</li>
+                </ul>
+                
+        <h4>3.3 Por su Compresibilidad</h4>
+        <ul>
+          <li><strong>Flujo Incompresible:</strong> La densidad permanece constante</li>
+          <li><strong>Flujo Compresible:</strong> La densidad varía significativamente</li>
+        </ul>
+
+        <div class="formula-block">
+          <div class="formula-title">Número de Reynolds</div>
+            <div class="formula">
+            <p>$$Re = \frac{\rho v L}{\mu} = \frac{\text{Fuerzas inerciales}}{\text{Fuerzas viscosas}}$$</p>
+            </div>
+          </div>
+          
+        <h3>Características de los Regímenes de Flujo</h3>
+        <p>El régimen de flujo depende principalmente del número de Reynolds:</p>
+        <ul>
+          <li><strong>Re < 2300:</strong> Flujo laminar, caracterizado por líneas de corriente suaves y paralelas</li>
+          <li><strong>2300 < Re < 4000:</strong> Régimen de transición, donde comienzan a aparecer inestabilidades</li>
+          <li><strong>Re > 4000:</strong> Flujo turbulento, con mezcla intensa y formación de vórtices</li>
+        </ul>
+
+        <div class="simulation-container">
+          <div class="simulation-header">
+            <div class="simulation-icon">🌊</div>
+            <div class="simulation-title">Simulación de Regímenes de Flujo</div>
+                </div>
+          <p>Observa la transición entre flujo laminar y turbulento:</p>
+          <div class="simulation-controls">
+            <div class="control-group">
+              <label class="control-label" for="reynolds-number">Número de Reynolds</label>
+              <input type="range" id="reynolds-number" min="100" max="10000" value="2000">
+              <span id="reynolds-value">Re = 2000</span>
+                </div>
+            <div class="control-group">
+              <label class="control-label" for="obstacle-type">Tipo de Obstáculo</label>
+              <select id="obstacle-type">
+                <option value="cylinder">Cilindro</option>
+                <option value="airfoil">Perfil Aerodinámico</option>
+                <option value="plate">Placa Plana</option>
+              </select>
+                </div>
+                </div>
+          <canvas id="flow-pattern-simulation" class="simulation-canvas"></canvas>
+            </div>
+            
+        <ul>
+          <li><strong>Flujo laminar:</strong> Re bajo, capas paralelas y movimiento ordenado.</li>
+          <li><strong>Flujo turbulento:</strong> Re alto, mezcla intensa y vorticidad.</li>
+            </ul>
+      </section>
+
+      <section id="analisis-movimiento" class="flow-section">
+        <h2>4. Análisis del Movimiento de Fluidos</h2>
+        
+        <h3>4.1 Líneas de Corriente y Trayectorias</h3>
+        <p>En el estudio del movimiento de fluidos, es fundamental distinguir entre diferentes representaciones geométricas del flujo:</p>
+        <ul>
+          <li><strong>Líneas de Corriente:</strong> Curvas tangentes en cada punto al vector velocidad en un instante dado</li>
+          <li><strong>Trayectorias:</strong> Caminos realmente seguidos por las partículas de fluido</li>
+          <li><strong>Líneas de Traza:</strong> Lugares geométricos de las partículas que han pasado por un punto dado</li>
+        </ul>
+
+        <h3>4.2 Vorticidad y Circulación</h3>
+        <p>La vorticidad es una medida de la rotación local del fluido, definida como el rotacional del campo de velocidades:</p>
+        <div class="formula-block">
+              <div class="formula">
+            <p>\[\vec{\omega} = \nabla \times \vec{v}\]</p>
+            </div>
+          </div>
+          
+        <p>La circulación, relacionada con la vorticidad, se define como la integral de línea de la velocidad alrededor de una curva cerrada:</p>
+        <div class="formula-block">
+              <div class="formula">
+            <p>\[\Gamma = \oint \vec{v} \cdot d\vec{l}\]</p>
+            </div>
+          </div>
+          
+        <h3>4.3 Deformación del Fluido</h3>
+        <p>El movimiento de un fluido puede descomponerse en:</p>
+        <ul>
+          <li>Traslación del centro de masa</li>
+          <li>Rotación como cuerpo rígido</li>
+          <li>Deformación pura (estiramiento y cizalladura)</li>
+        </ul>
+
+        <h3>4.4 Aceleración en el Campo Fluido</h3>
+        <p>La aceleración total de una partícula de fluido tiene dos componentes:</p>
+        <ul>
+          <li><strong>Aceleración Local:</strong> Cambio temporal de la velocidad en un punto fijo</li>
+          <li><strong>Aceleración Convectiva:</strong> Cambio de velocidad debido al movimiento a través de un campo de velocidades no uniforme</li>
+        </ul>
+
+        <div class="formula-block">
+              <div class="formula">
+            <p>\[\vec{a} = \frac{\partial \vec{v}}{\partial t} + (\vec{v} \cdot \nabla)\vec{v}\]</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="ecuacion-continuidad" class="flow-section">
+        <h2>5. Ecuación de Continuidad</h2>
+        <p>La ecuación de continuidad es una expresión matemática fundamental del principio de conservación de la masa en mecánica de fluidos. Este principio establece que la masa de un sistema cerrado permanece constante a lo largo del tiempo, independientemente de los procesos que ocurran dentro del sistema.</p>
+
+        <h3>5.1 Formulación General</h3>
+        <p>Para un volumen de control arbitrario, la ecuación de continuidad en su forma más general se expresa como:</p>
+        
+        <div class="formula-block">
+        <div class="formula">
+            <p>Forma diferencial: $$\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \vec{v}) = 0$$</p>
+            <p>Forma integral: $$\frac{d}{dt}\int_V \rho dV + \oint_S \rho \vec{v} \cdot \vec{n} \, dS = 0$$</p>
+        </div>
+          </div>
+          
+        <h3>5.2 Casos Especiales</h3>
+        <p>La ecuación se simplifica en casos particulares:</p>
+        <ul>
+          <li><strong>Flujo Estacionario:</strong> $$\frac{\partial \rho}{\partial t} = 0$$</li>
+          <li><strong>Flujo Incompresible:</strong> $$\nabla \cdot \vec{v} = 0$$</li>
+          <li><strong>Flujo Unidimensional:</strong> $$\rho_1 A_1 v_1 = \rho_2 A_2 v_2$$</li>
+        </ul>
+
+        <h3>5.3 Aplicaciones Prácticas</h3>
+        <p>La ecuación de continuidad tiene numerosas aplicaciones en ingeniería:</p>
+        <ul>
+          <li>Diseño de sistemas de tuberías y canales</li>
+          <li>Cálculo de velocidades en conductos de sección variable</li>
+          <li>Análisis de flujos en toberas y difusores</li>
+          <li>Estudio de sistemas de ventilación</li>
+          <li>Diseño de turbomáquinas</li>
+        </ul>
+
+        <div class="formula-block">
+          <div class="formula-title">Conservación del Caudal</div>
+          <div class="formula">
+            <p>Caudal volumétrico: $$Q = \int_A \vec{v} \cdot \vec{n} \, dA$$</p>
+            <p>Caudal másico: $$\dot{m} = \rho Q = \rho \int_A \vec{v} \cdot \vec{n} \, dA$$</p>
+            </div>
+            </div>
+            
+        <h3>5.4 Implicaciones Físicas</h3>
+        <p>La ecuación de continuidad tiene importantes implicaciones:</p>
+        <ul>
+          <li>En áreas más pequeñas, la velocidad del fluido aumenta para mantener el mismo caudal</li>
+          <li>En flujos compresibles, los cambios de densidad afectan la velocidad del fluido</li>
+          <li>La conservación de masa implica que no hay creación ni destrucción de materia en el flujo</li>
+        </ul>
+      </section>
+
+      <section id="bernoulli" class="flow-section">
+        <h2>6. Ecuación de Bernoulli</h2>
+        <p>La ecuación de Bernoulli es uno de los principios más importantes en mecánica de fluidos, que relaciona la presión, la velocidad y la altura en un flujo estacionario. Esta ecuación es una expresión de la conservación de la energía en fluidos.</p>
+
+        <h3>6.1 Formulación Básica</h3>
+        <p>Para un flujo ideal (incompresible, no viscoso y estacionario) a lo largo de una línea de corriente:</p>
+
+        <div class="formula-block">
+          <div class="formula">
+            <p>$$\frac{p}{\rho} + \frac{v^2}{2} + gz = \text{constante}$$</p>
+            <p>donde cada término representa una forma de energía por unidad de masa:</p>
+            <p>$$\frac{p}{\rho}\text{: energía de presión (trabajo de flujo)}$$</p>
+            <p>$$\frac{v^2}{2}\text{: energía cinética}$$</p>
+            <p>$$gz\text{: energía potencial gravitatoria}$$</p>
+            </div>
+            </div>
+            
+        <h3>6.2 Hipótesis y Limitaciones</h3>
+        <p>La ecuación de Bernoulli es válida bajo ciertas condiciones:</p>
+        <ul>
+          <li>Flujo estacionario</li>
+          <li>Fluido incompresible</li>
+          <li>Flujo no viscoso</li>
+          <li>Flujo a lo largo de una línea de corriente</li>
+          <li>Sin transferencia de calor</li>
+          <li>Sin trabajo mecánico externo</li>
+        </ul>
+
+        <h3>6.3 Aplicaciones Prácticas</h3>
+        <p>La ecuación de Bernoulli tiene numerosas aplicaciones:</p>
+        <ul>
+          <li><strong>Aerodinámica:</strong> Cálculo de fuerzas de sustentación en alas</li>
+          <li><strong>Hidráulica:</strong> Diseño de sistemas de tuberías y canales</li>
+          <li><strong>Medición de Flujo:</strong> Tubos de Pitot, Venturi y rotámetros</li>
+          <li><strong>Diseño de Turbomáquinas:</strong> Bombas, turbinas y ventiladores</li>
+        </ul>
+
+        <h3>6.4 Efectos y Fenómenos Relacionados</h3>
+        <p>La ecuación de Bernoulli explica varios fenómenos:</p>
+        <ul>
+          <li><strong>Efecto Venturi:</strong> Reducción de presión en estrechamientos</li>
+          <li><strong>Sustentación:</strong> Fuerzas en perfiles aerodinámicos</li>
+          <li><strong>Atomización:</strong> Formación de gotas en pulverizadores</li>
+          <li><strong>Cavitación:</strong> Formación de burbujas por baja presión</li>
+        </ul>
+
+        <div class="formula-block">
+          <div class="formula-title">Formas Modificadas</div>
+          <div class="formula">
+            <p>Con pérdidas: $$\frac{p_1}{\rho g} + \frac{v_1^2}{2g} + z_1 = \frac{p_2}{\rho g} + \frac{v_2^2}{2g} + z_2 + h_L$$</p>
+            <p>Con trabajo de bomba: $$\frac{p_1}{\rho g} + \frac{v_1^2}{2g} + z_1 + h_p = \frac{p_2}{\rho g} + \frac{v_2^2}{2g} + z_2$$</p>
+          </div>
+        </div>
+        
+        <h3>6.5 Consideraciones Prácticas</h3>
+        <p>En aplicaciones reales, se deben considerar:</p>
+        <ul>
+          <li>Pérdidas por fricción en tuberías y accesorios</li>
+          <li>Efectos de la viscosidad del fluido</li>
+          <li>Variaciones de densidad en flujos compresibles</li>
+          <li>Trabajo añadido o extraído por máquinas</li>
+        </ul>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Grupo 4 Mecánica de Fluidos</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script src="js/menu.js"></script>
+  <script src="js/menu-fix.js"></script>
+  <script src="js/cinematica-simulations.js"></script>
+  <script src="update-menus.js"></script>
+</body>
+</html> 
