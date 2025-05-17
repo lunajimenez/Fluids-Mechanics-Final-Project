@@ -238,7 +238,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="formula">P<sub>hidrostática</sub> = ρgh = ${density} × ${g.toFixed(2)} × ${pointDepth} = ${hydrostaticPressure.toLocaleString(undefined, {maximumFractionDigits: 0})} Pa</div>
                         <p>La presión total (incluyendo la presión atmosférica) es:</p>
                         <div class="formula">P<sub>total</sub> = P<sub>atm</sub> + ρgh = ${atmosphericPressure} + ${hydrostaticPressure.toLocaleString(undefined, {maximumFractionDigits: 0})} = ${totalPressure.toLocaleString(undefined, {maximumFractionDigits: 0})} Pa</div>
-                        <p>Todos los puntos C, D, E, F y G están a la misma profundidad, por lo tanto tienen exactamente la misma presión, sin importar su posición horizontal:</p>
+                        <p>Todos los puntos A, B, C, D, E, F y G están a la misma profundidad, por lo tanto tienen exactamente la misma presión, sin importar su posición horizontal:</p>
                         <div class="formula">P<sub>C</sub> = P<sub>D</sub> = P<sub>E</sub> = P<sub>F</sub> = P<sub>G</sub></div>
                       </div>`;
         } else {
