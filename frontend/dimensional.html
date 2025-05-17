@@ -327,6 +327,57 @@
           <li>Para flujos con superficie libre: similitud en número de Froude</li>
           <li>Para flujos compresibles: similitud en número de Mach</li>
         </ul>
+        
+        <div class="interactive-container" style="background: #f8fafc; padding: 2rem; border-radius: 15px; margin-top: 2rem; border: 1px solid rgba(102,126,234,0.2);">
+          <h3>Calculadora de Coeficientes Adimensionales</h3>
+          <p>Esta herramienta permite calcular un coeficiente adimensional a partir de variables físicas y sus dimensiones fundamentales (M, L, T).</p>
+          
+          <div class="two-column" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1.5rem;">
+            <div>
+              <form id="dimensional-calculator" class="calculator-form">
+                <div class="control-group">
+                  <label for="num-variables">Número de variables:</label>
+                  <input type="number" id="num-variables" min="2" max="10" value="3" step="1">
+                </div>
+                
+                <div id="variables-container">
+                  <!-- Los campos de entrada para las variables se generarán dinámicamente -->
+                </div>
+                
+                <button type="button" id="calcular-pi" class="btn" style="background: #667eea; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 1.5rem;">Calcular Coeficiente Pi</button>
+              </form>
+            </div>
+            
+            <div>
+              <div class="info-card" style="background: rgba(102,126,234,0.1); padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem;">
+                <h4 style="color: #667eea; margin-top: 0;">Instrucciones</h4>
+                <ol>
+                  <li>Ingrese el número de variables físicas de su problema.</li>
+                  <li>Para cada variable, proporcione:
+                    <ul>
+                      <li>Nombre (por ejemplo: v, L, ρ)</li>
+                      <li>Valor numérico</li>
+                      <li>Exponentes dimensionales para M, L y T</li>
+                    </ul>
+                  </li>
+                  <li>El sistema calculará automáticamente el coeficiente adimensional Pi.</li>
+                </ol>
+                <p><strong>Ejemplo:</strong> Para calcular el número de Reynolds con velocidad v=2 m/s, longitud L=0.5 m y viscosidad cinemática ν=1e-6 m²/s:</p>
+                <ul>
+                  <li>v: valor=2, M=0, L=1, T=-1</li>
+                  <li>L: valor=0.5, M=0, L=1, T=0</li>
+                  <li>ν: valor=1e-6, M=0, L=2, T=-1</li>
+                </ul>
+              </div>
+              
+              <div id="resultado-pi" style="display: none; background: #f0f9ff; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #667eea;">
+                <h4 style="color: #667eea; margin-top: 0;">Resultado del Análisis</h4>
+                <p><strong>Ecuación del número Pi:</strong> <span id="ecuacion-pi">-</span></p>
+                <p><strong>Valor del coeficiente adimensional:</strong> <span id="valor-pi">-</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
     </div>
   </main>
@@ -338,5 +389,6 @@
   </footer>
 
   <script src="js/menu-fix.js"></script>
+  <script src="js/dimensional-calculator.js"></script>
 </body>
 </html> 
