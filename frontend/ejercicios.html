@@ -447,6 +447,262 @@
             </div>
           </div>
         </div>
+        
+        <div class="interactive-container">
+          <h3>Cálculo de Fuerza Hidrostática en Compuerta Cilíndrica</h3>
+          
+          <div class="two-column">
+            <div>
+              <form id="cilindrica-calculator" class="calculator-form">
+                <div class="control-group">
+                  <label for="gamma-cilindrica">Peso específico del fluido (N/m³):</label>
+                  <input type="number" id="gamma-cilindrica" step="1" min="1" value="9810">
+                </div>
+                
+                <div class="control-group">
+                  <label for="h-cilindrica">Profundidad del centroide (m):</label>
+                  <input type="number" id="h-cilindrica" step="0.1" min="0.1" value="3.2">
+                </div>
+                
+                <div class="control-group">
+                  <label for="A-cilindrica">Área proyectada (m²):</label>
+                  <input type="number" id="A-cilindrica" step="0.1" min="0.1" value="2.1">
+                </div>
+                
+                <div class="control-group">
+                  <label for="theta-cilindrica">Ángulo de inclinación (grados):</label>
+                  <input type="number" id="theta-cilindrica" step="1" min="0" max="90" value="45">
+                </div>
+                
+                <div class="control-group">
+                  <label for="L-cilindrica">Longitud de la compuerta (m):</label>
+                  <input type="number" id="L-cilindrica" step="0.1" min="0.1" value="5.5">
+                </div>
+                
+                <button type="button" id="calcular-cilindrica" class="btn">Calcular Fuerzas</button>
+                
+                <div id="cilindrica-result" class="result-panel" style="display: none; margin-top: 1rem; padding: 1rem; background: rgba(14,165,233,0.1); border-radius: 8px;">
+                  <h4>Resultados:</h4>
+                  <p><strong>Componente horizontal (Fh):</strong> <span id="fh-cilindrica">0</span> N</p>
+                  <p><strong>Componente vertical (Fv):</strong> <span id="fv-cilindrica">0</span> N</p>
+                  <p><strong>Fuerza resultante (Fr):</strong> <span id="fr-cilindrica">0</span> N</p>
+                  <p><strong>Dirección de la fuerza:</strong> <span id="alpha-cilindrica">0</span>° desde la horizontal</p>
+                </div>
+              </form>
+            </div>
+            
+            <div>
+              <div class="info-card">
+                <h4>Fuerzas sobre Superficies Curvas</h4>
+                <p>Para superficies curvas, la fuerza hidrostática se descompone en:</p>
+                <ul>
+                  <li><strong>Componente horizontal (Fh):</strong> Igual a la fuerza sobre la proyección vertical de la superficie.</li>
+                  <li><strong>Componente vertical (Fv):</strong> Igual al peso del volumen de fluido sobre la superficie.</li>
+                </ul>
+                <div class="formula">Fh = γ × h × A</div>
+                <div class="formula">Fv = γ × A × L × sin(θ)</div>
+                <div class="formula">Fr = √(Fh² + Fv²)</div>
+              </div>
+              
+              <div id="cilindrica-visualization" style="width: 100%; height: 250px; background: linear-gradient(to bottom, #bae6fd, #0284c7); border-radius: 10px; position: relative; overflow: hidden; margin-top: 1rem;">
+                <!-- Representación visual de la compuerta cilíndrica -->
+                <div style="position: absolute; left: 20%; top: 40%; width: 60%; height: 30%; border: 2px solid white; border-radius: 0 0 100px 100px; border-top: none; background-color: rgba(255,255,255,0.2);"></div>
+                <div id="fh-arrow" style="position: absolute; left: 50%; top: 55%; width: 30%; height: 4px; background-color: yellow; transform: translateY(-50%);">&#10132;</div>
+                <div id="fv-arrow" style="position: absolute; left: 50%; top: 55%; width: 4px; height: 20%; background-color: green; transform: translateX(-50%);">&#8593;</div>
+                <div id="fr-arrow" style="position: absolute; left: 50%; top: 55%; width: 30%; height: 4px; background-color: red; transform: rotate(30deg) translateY(-50%);">&#10132;</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="interactive-container">
+          <h3>Fuerza Mínima para Mantener Cerrada una Compuerta</h3>
+          
+          <div class="two-column">
+            <div>
+              <form id="compuerta-calculator" class="calculator-form">
+                <div class="control-group">
+                  <label for="ancho-compuerta">Ancho de la compuerta (m):</label>
+                  <input type="number" id="ancho-compuerta" step="0.1" min="0.1" value="2">
+                </div>
+                
+                <div class="control-group">
+                  <label for="altura-compuerta">Altura de la compuerta (m):</label>
+                  <input type="number" id="altura-compuerta" step="0.1" min="0.1" value="1.5">
+                </div>
+                
+                <div class="control-group">
+                  <label for="h-fluido">Distancia desde el nivel del fluido hasta la bisagra (m):</label>
+                  <input type="number" id="h-fluido" step="0.1" min="0" value="2">
+                </div>
+                
+                <div class="control-group">
+                  <label for="densidad-relativa">Densidad relativa del fluido:</label>
+                  <input type="number" id="densidad-relativa" step="0.01" min="0.01" value="1">
+                </div>
+                
+                <button type="button" id="calcular-compuerta" class="btn">Calcular Fuerza Mínima</button>
+                
+                <div id="compuerta-result" class="result-panel" style="display: none; margin-top: 1rem; padding: 1rem; background: rgba(14,165,233,0.1); border-radius: 8px;">
+                  <h4>Resultados:</h4>
+                  <p><strong>Fuerza hidrostática total:</strong> <span id="fuerza-hidrostatica">0</span> N</p>
+                  <p><strong>Fuerza mínima requerida:</strong> <span id="fuerza-minima">0</span> kN</p>
+                </div>
+              </form>
+            </div>
+            
+            <div>
+              <div class="info-card">
+                <h4>Compuertas y Momentos</h4>
+                <p>Para mantener cerrada una compuerta, la fuerza aplicada debe generar un momento que contrarreste el momento producido por la fuerza hidrostática.</p>
+                <p>El cálculo considera:</p>
+                <ul>
+                  <li>La fuerza hidrostática total: F = γ × A × hc</li>
+                  <li>El brazo de momento desde la bisagra al centroide</li>
+                  <li>El equilibrio de momentos alrededor de la bisagra</li>
+                </ul>
+              </div>
+              
+              <div id="compuerta-visualization" style="width: 100%; height: 250px; background: linear-gradient(to bottom, #bae6fd, #0284c7); border-radius: 10px; position: relative; overflow: hidden; margin-top: 1rem;">
+                <!-- Representación visual de la compuerta -->
+                <div style="position: absolute; left: 30%; top: 30%; width: 40%; height: 50%; background-color: rgba(255,255,255,0.3); border: 2px solid white; transform-origin: top center;"></div>
+                <div style="position: absolute; left: 30%; top: 30%; width: 40%; height: 2px; background-color: red;"></div>
+                <div id="fuerza-arrow" style="position: absolute; left: 50%; bottom: 20%; width: 4px; height: 20%; background-color: yellow; transform: translateX(-50%);">&#8593;</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="interactive-container">
+          <h3>Fuerza Hidrostática en Superficie Esférica</h3>
+          
+          <div class="two-column">
+            <div>
+              <form id="esferica-calculator" class="calculator-form">
+                <div class="control-group">
+                  <label for="gamma-esferica">Peso específico del fluido (N/m³):</label>
+                  <input type="number" id="gamma-esferica" step="1" min="1" value="9800">
+                </div>
+                
+                <div class="control-group">
+                  <label for="h-esferica">Profundidad hasta la parte superior (m):</label>
+                  <input type="number" id="h-esferica" step="0.1" min="0.1" value="4.5">
+                </div>
+                
+                <div class="control-group">
+                  <label for="R-esferica">Radio de la esfera (m):</label>
+                  <input type="number" id="R-esferica" step="0.1" min="0.1" value="1.2">
+                </div>
+                
+                <div class="control-group">
+                  <label for="H-esferica">Profundidad total del centro (m):</label>
+                  <input type="number" id="H-esferica" step="0.1" min="0.1" value="6.0">
+                </div>
+                
+                <button type="button" id="calcular-esferica" class="btn">Calcular Fuerzas</button>
+                
+                <div id="esferica-result" class="result-panel" style="display: none; margin-top: 1rem; padding: 1rem; background: rgba(14,165,233,0.1); border-radius: 8px;">
+                  <h4>Resultados:</h4>
+                  <p><strong>Fuerza horizontal (Fh):</strong> <span id="fh-esferica">0</span> N</p>
+                  <p><strong>Fuerza vertical (Fv):</strong> <span id="fv-esferica">0</span> N</p>
+                  <p><strong>Fuerza resultante (Fr):</strong> <span id="fr-esferica">0</span> N</p>
+                  <p><strong>Ángulo de inclinación:</strong> <span id="alpha-esferica">0</span>° desde la horizontal</p>
+                </div>
+              </form>
+            </div>
+            
+            <div>
+              <div class="info-card">
+                <h4>Superficies Esféricas Sumergidas</h4>
+                <p>Para una superficie esférica sumergida:</p>
+                <ul>
+                  <li><strong>Fuerza horizontal:</strong> Igual a la presión en el centroide por el área proyectada.</li>
+                  <li><strong>Fuerza vertical:</strong> Igual al peso del volumen de fluido desplazado.</li>
+                </ul>
+                <div class="formula">Fh = γ × hc × A</div>
+                <div class="formula">Fv = γ × Volumen = γ × (4/3)πR³</div>
+                <div class="formula">Fr = √(Fh² + Fv²)</div>
+              </div>
+              
+              <div id="esferica-visualization" style="width: 100%; height: 250px; background: linear-gradient(to bottom, #bae6fd, #0284c7); border-radius: 10px; position: relative; overflow: hidden; margin-top: 1rem;">
+                <!-- Representación visual de la superficie esférica -->
+                <div style="position: absolute; left: 40%; top: 40%; width: 20%; height: 20%; background-color: rgba(255,255,255,0.4); border: 2px solid white; border-radius: 50%;"></div>
+                <div id="fh-esferica-arrow" style="position: absolute; left: 60%; top: 50%; width: 25%; height: 4px; background-color: yellow; transform: translateY(-50%);">&#10132;</div>
+                <div id="fv-esferica-arrow" style="position: absolute; left: 50%; top: 60%; width: 4px; height: 20%; background-color: green; transform: translateX(-50%);">&#8593;</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="interactive-container">
+          <h3>Cálculos para Compuerta Inclinada</h3>
+          
+          <div class="two-column">
+            <div>
+              <form id="inclinada-calculator" class="calculator-form">
+                <div class="control-group">
+                  <label for="peso-inclinada">Peso de la compuerta (lb):</label>
+                  <input type="number" id="peso-inclinada" step="1" min="1" value="100">
+                </div>
+                
+                <div class="control-group">
+                  <label for="ancho-inclinada">Ancho de la compuerta (ft):</label>
+                  <input type="number" id="ancho-inclinada" step="0.1" min="0.1" value="3">
+                </div>
+                
+                <div class="control-group">
+                  <label for="largo-inclinada">Largo/altura inclinada (ft):</label>
+                  <input type="number" id="largo-inclinada" step="0.1" min="0.1" value="4">
+                </div>
+                
+                <div class="control-group">
+                  <label for="beta-inclinada">Ángulo beta (grados):</label>
+                  <input type="number" id="beta-inclinada" step="1" min="0" max="90" value="30">
+                </div>
+                
+                <div class="control-group">
+                  <label for="h1-inclinada">h1 (ft):</label>
+                  <input type="number" id="h1-inclinada" step="0.1" min="0" value="5">
+                </div>
+                
+                <div class="control-group">
+                  <label for="h2-inclinada">h2 (pulgadas):</label>
+                  <input type="number" id="h2-inclinada" step="0.1" min="0" value="6">
+                </div>
+                
+                <button type="button" id="calcular-inclinada" class="btn">Calcular</button>
+                
+                <div id="inclinada-result" class="result-panel" style="display: none; margin-top: 1rem; padding: 1rem; background: rgba(14,165,233,0.1); border-radius: 8px;">
+                  <h4>Resultados:</h4>
+                  <p><strong>Profundidad al centro de presión:</strong> <span id="hp-inclinada">0</span> ft</p>
+                  <p><strong>Fuerza hidrostática:</strong> <span id="fh-inclinada">0</span> lb</p>
+                  <p><strong>Fuerza mínima para abrir:</strong> <span id="fmin-inclinada">0</span> lb</p>
+                </div>
+              </form>
+            </div>
+            
+            <div>
+              <div class="info-card">
+                <h4>Compuertas Inclinadas</h4>
+                <p>Para una compuerta inclinada, el cálculo considera:</p>
+                <ul>
+                  <li>La profundidad al centroide (hc = h1 - h2/2)</li>
+                  <li>El momento de inercia de la superficie</li>
+                  <li>La profundidad al centro de presión (hp = hc + I·sin²β/(A·hc))</li>
+                  <li>El equilibrio de momentos para determinar la fuerza mínima</li>
+                </ul>
+                <p>El sistema utiliza unidades inglesas (lb, ft, in).</p>
+              </div>
+              
+              <div id="inclinada-visualization" style="width: 100%; height: 250px; background: linear-gradient(to bottom, #bae6fd, #0284c7); border-radius: 10px; position: relative; overflow: hidden; margin-top: 1rem;">
+                <!-- Representación visual de la compuerta inclinada -->
+                <div style="position: absolute; left: 30%; top: 30%; width: 40%; height: 50%; background-color: rgba(255,255,255,0.3); border: 2px solid white; transform-origin: top left; transform: rotate(30deg);"></div>
+                <div style="position: absolute; left: 30%; top: 30%; width: 5px; height: 5px; background-color: red; border-radius: 50%;"></div>
+                <div id="cp-marker" style="position: absolute; left: 45%; top: 50%; width: 8px; height: 8px; background-color: yellow; border-radius: 50%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
     </div>
   </main>
@@ -464,5 +720,6 @@
   <!-- Otros scripts -->
   <script src="js/main.js"></script>
   <script src="js/presion.js"></script>
+  <script src="js/fuerzas-hidrostaticas.js"></script>
 </body>
 </html> 
